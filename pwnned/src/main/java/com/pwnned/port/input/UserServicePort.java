@@ -12,4 +12,5 @@ public interface UserServicePort {
     Optional<User> getSingleUser(UUID userId);
     void deleteUser(UUID userId);
     void deleteAllUsers();
+    void promoveUser(UUID userId);
 }

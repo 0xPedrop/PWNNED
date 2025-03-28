@@ -1,5 +1,6 @@
 package com.pwnned.adapter.output.jpa.repository.entity;
 
+import com.pwnned.domain.enums.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,4 +28,8 @@ public class UserEntity {
     private String password;
 
     private String username;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserType userType;
 }

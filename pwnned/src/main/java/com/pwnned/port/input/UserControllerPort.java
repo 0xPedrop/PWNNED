@@ -15,4 +15,5 @@ public interface UserControllerPort {
     ResponseEntity<UserDTO> getSingleUser(@PathVariable UUID userId);
     ResponseEntity<String> deleteUser(@PathVariable UUID userId);
     ResponseEntity<String> deleteAllUsers();
+    ResponseEntity<String> promoveUser(UUID userId);
 }

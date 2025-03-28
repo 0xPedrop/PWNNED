@@ -59,4 +59,11 @@ public class UserController implements UserControllerPort {
         userServicePort.deleteAllUsers();
         return ResponseEntity.ok("All Users Deleted");
     }
+
+    @Override
+    @PutMapping("/{userId}")
+    public ResponseEntity<String> promoveUser(@PathVariable UUID userId) {
+        userServicePort.promoveUser(userId);
+        return ResponseEntity.ok("User " + userId + " is a Premium User Now");
+    }
 }
