@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @RequestMapping("/users")
 @RestController
@@ -40,7 +40,7 @@ public class UserController implements UserControllerPort {
 
     @Override
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getSingleUser(@PathVariable Long userId) {
+    public ResponseEntity<UserDTO> getSingleUser(@PathVariable UUID userId) {
         return userServicePort.getSingleUser(userId)
                 .map(user -> ResponseEntity.ok(UserMapper.INSTANCE.toDTO(user)))
                 .orElse(ResponseEntity.notFound().build());
@@ -48,7 +48,7 @@ public class UserController implements UserControllerPort {
 
     @Override
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable UUID userId) {
         userServicePort.deleteUser(userId);
         return ResponseEntity.ok("User " + userId + " Deleted");
     }
