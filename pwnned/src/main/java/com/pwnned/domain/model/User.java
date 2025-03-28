@@ -1,23 +1,28 @@
 package com.pwnned.domain.model;
 
+import java.util.UUID;
+
 public class User {
-    private Long userId;
+    private UUID userId;
     private String email;
     private String password;
     private String username;
 
-    public User(Long userId, String email, String password, String username) {
+    public User(UUID userId, String email, String password, String username) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.username = username;
     }
 
-    public Long getUserId() {
+    public User() {
+    }
+
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
