@@ -22,6 +22,7 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     public User save(User user) {
         UserEntity userEntity = UserMapper.INSTANCE.toEntity(user);
         UserEntity savedUser = userRepository.save(userEntity);
+        System.out.println("Saving user: " + userEntity);
         return UserMapper.INSTANCE.toModel(savedUser);
     }
 
