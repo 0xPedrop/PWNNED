@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class UserRepositoryAdapter implements UserRepositoryPort {
@@ -32,12 +33,12 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public Optional<User> findById(Long userId) {
+    public Optional<User> findById(UUID userId) {
         return userRepository.findById(userId).map(UserMapper.INSTANCE::toModel);
     }
 
     @Override
-    public void deleteById(Long userId) {
+    public void deleteById(UUID userId) {
         userRepository.deleteById(userId);
     }
 

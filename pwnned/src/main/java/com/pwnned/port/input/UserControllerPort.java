@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserControllerPort {
     ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO);
     ResponseEntity<List<UserDTO>> getAllUsers();
-    ResponseEntity<UserDTO> getSingleUser(@PathVariable Long userId);
-    ResponseEntity<String> deleteUser(@PathVariable Long userId);
+    ResponseEntity<UserDTO> getSingleUser(@PathVariable UUID userId);
+    ResponseEntity<String> deleteUser(@PathVariable UUID userId);
     ResponseEntity<String> deleteAllUsers();
 }
