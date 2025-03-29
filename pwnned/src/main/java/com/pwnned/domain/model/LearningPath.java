@@ -2,26 +2,33 @@ package com.pwnned.domain.model;
 
 import com.pwnned.domain.enums.Difficulty;
 
+import java.util.List;
+import java.util.UUID;
+
 public class LearningPath {
-    private Long pathId;
+    private UUID pathId;
     private String title;
-    private String description;
     private String category;
     private Difficulty difficulty;
+    private List<Laboratory> laboratories;
 
-    public LearningPath(Long pathId, String title, String description, String category, Difficulty difficulty) {
+    public LearningPath(UUID pathId, String title, String category, Difficulty difficulty,
+                        List<Laboratory> laboratories) {
         this.pathId = pathId;
         this.title = title;
-        this.description = description;
         this.category = category;
         this.difficulty = difficulty;
+        this.laboratories = laboratories;
     }
 
-    public Long getPathId() {
+    public LearningPath() {
+    }
+
+    public UUID getPathId() {
         return pathId;
     }
 
-    public void setPathId(Long pathId) {
+    public void setPathId(UUID pathId) {
         this.pathId = pathId;
     }
 
@@ -31,14 +38,6 @@ public class LearningPath {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getCategory() {
@@ -55,6 +54,14 @@ public class LearningPath {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public List<Laboratory> getLaboratories() {
+        return laboratories;
+    }
+
+    public void setLaboratories(List<Laboratory> laboratories) {
+        this.laboratories = laboratories;
     }
 }
 
