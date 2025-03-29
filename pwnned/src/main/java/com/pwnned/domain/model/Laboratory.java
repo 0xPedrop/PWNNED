@@ -1,27 +1,31 @@
 package com.pwnned.domain.model;
 
 import com.pwnned.domain.enums.Difficulty;
+import com.pwnned.domain.enums.LabType;
+
+import java.util.UUID;
 
 public class Laboratory {
-    private Long labId;
+    private UUID labId;
     private String title;
     private Difficulty difficulty;
-    private String instructions;
-    private String videoLesson;
+    private LabType labType;
 
-    public Laboratory(Long labId, String title, Difficulty difficulty, String instructions, String videoLesson) {
+    public Laboratory(UUID labId, String title, Difficulty difficulty, LabType labType) {
         this.labId = labId;
         this.title = title;
         this.difficulty = difficulty;
-        this.instructions = instructions;
-        this.videoLesson = videoLesson;
+        this.labType = labType;
     }
 
-    public Long getLabId() {
+    public Laboratory() {
+    }
+
+    public UUID getLabId() {
         return labId;
     }
 
-    public void setLabId(Long labId) {
+    public void setLabId(UUID labId) {
         this.labId = labId;
     }
 
@@ -41,20 +45,12 @@ public class Laboratory {
         this.difficulty = difficulty;
     }
 
-    public String getInstructions() {
-        return instructions;
+    public LabType getLabType() {
+        return labType;
     }
 
-    public void setInstructions(String instructions) {
-        this.instructions = instructions;
-    }
-
-    public String getVideoLesson() {
-        return videoLesson;
-    }
-
-    public void setVideoLesson(String videoLesson) {
-        this.videoLesson = videoLesson;
+    public void setLabType(LabType labType) {
+        this.labType = labType;
     }
 }
 

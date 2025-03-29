@@ -1,10 +1,12 @@
 package com.pwnned.adapter.input.dto;
 
 import com.pwnned.domain.enums.Difficulty;
+import com.pwnned.domain.enums.LabType;
 
-public record LaboratoryDTO(Long labId, String title, Difficulty difficulty, String instructions,
-                            String videoLesson) {
+import java.util.UUID;
+
+public record LaboratoryDTO(UUID labId, String title, Difficulty difficulty, LabType labType) {
     public LaboratoryDTO() {
-        this(null, null, null, null, null);
+        this(null, null, null, null);
     }
 }
