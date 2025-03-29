@@ -1,5 +1,6 @@
 package com.pwnned.port.output;
 
+import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.model.User;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface UserRepositoryPort {
     Optional<User> findById(UUID userId);
     void deleteById(UUID userId);
     void deleteAll();
+    List<User> getUsersByType(UserType userType);
 }

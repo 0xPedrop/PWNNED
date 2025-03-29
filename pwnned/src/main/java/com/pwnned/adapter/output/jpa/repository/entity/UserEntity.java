@@ -18,9 +18,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "users")
 public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @JdbcTypeCode(SqlTypes.UUID)
     private UUID userId;
 
     private String email;

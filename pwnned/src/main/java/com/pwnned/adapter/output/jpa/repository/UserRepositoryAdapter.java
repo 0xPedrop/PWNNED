@@ -2,6 +2,7 @@ package com.pwnned.adapter.output.jpa.repository;
 
 import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.adapter.output.jpa.repository.entity.UserEntity;
+import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.output.UserRepositoryPort;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,6 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     public User save(User user) {
         UserEntity userEntity = UserMapper.INSTANCE.toEntity(user);
         UserEntity savedUser = userRepository.save(userEntity);
-        System.out.println("Saving user: " + userEntity);
         return UserMapper.INSTANCE.toModel(savedUser);
     }
 
@@ -45,5 +45,10 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     @Override
     public void deleteAll() {
         userRepository.deleteAll();
+    }
+
+    @Override
+    public List<User> getUsersByType(UserType userType) {
+        return userRepository.findByUserType(userType).stream().map(UserMapper.INSTANCE::toModel).toList();
     }
 }

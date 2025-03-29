@@ -1,7 +1,7 @@
 package com.pwnned.domain.service;
 
 import com.pwnned.domain.enums.UserType;
-import com.pwnned.domain.exception.UserTypeException;
+import com.pwnned.domain.exception.UserAlreadyPremiumException;
 import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.UserServicePort;
@@ -62,12 +62,21 @@ public class UserService implements UserServicePort {
     }
 
     @Override
-    public void promoveUser(UUID userId) {
+    public void promoteUser(UUID userId) {
         Optional<User> searchedUser = userRepositoryPort.findById(userId);
         if (searchedUser.isEmpty()) throw new UserNotFoundException("User " + userId + " Not Found");
         User user = searchedUser.get();
-        if (user.getUserType().equals(UserType.PREMIUM)) throw new UserTypeException("User is Already Premium");
+        if (user.getUserType().equals(UserType.PREMIUM)) {
+            throw new UserAlreadyPremiumException("User is Already Premium");
+        }
         user.setUserType(UserType.PREMIUM);
         userRepositoryPort.save(user);
+    }
+
+    @Override
+    public List<User> getUsersByType(UserType userType) {
+        List<User> users = userRepositoryPort.getUsersByType(userType);
+        if (users.isEmpty()) throw new UserNotFoundException("Users Not Found");
+        return users;
     }
 }

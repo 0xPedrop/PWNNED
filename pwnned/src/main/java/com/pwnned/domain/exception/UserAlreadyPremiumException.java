@@ -1,7 +1,7 @@
 package com.pwnned.domain.exception;
 
-public class UserTypeException extends RuntimeException {
-    public UserTypeException(String message) {
+public class UserAlreadyPremiumException extends RuntimeException {
+    public UserAlreadyPremiumException(String message) {
         super("[ERROR] " + message);
     }
 }

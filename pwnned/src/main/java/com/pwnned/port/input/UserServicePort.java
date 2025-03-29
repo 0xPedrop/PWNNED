@@ -1,5 +1,6 @@
 package com.pwnned.port.input;
 
+import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.model.User;
 
 import java.util.List;
@@ -12,5 +13,6 @@ public interface UserServicePort {
     Optional<User> getSingleUser(UUID userId);
     void deleteUser(UUID userId);
     void deleteAllUsers();
-    void promoveUser(UUID userId);
+    void promoteUser(UUID userId);
+    List<User> getUsersByType(UserType userType);
 }
