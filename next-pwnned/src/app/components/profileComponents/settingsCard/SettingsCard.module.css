@@ -1,0 +1,70 @@
+.plainSettings {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+
+.title {
+    font-weight: bold;
+    margin-bottom: 13px;
+}
+
+.plain {
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    padding: 10px;
+    background-color: rgba(0, 128, 0, 0.575);
+    border-radius: 20px;
+    margin-bottom: 12px;
+}
+
+.upgradeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-end;
+    position: relative;
+    padding: 5px;
+    width: 160px;
+    height: 30px;
+    color: #ffffff;
+    font-size: 12px;
+    background-image: linear-gradient(90deg, #290133 0%, #58026D 100%);
+    border-radius: 50px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+.upgradeButton::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+      270deg,
+      rgba(255, 255, 255, 0) 48%,
+      rgba(255, 255, 255, 0.7) 75%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-repeat: no-repeat;
+    transform: skew(-15deg);
+    animation: bg-move 4s linear infinite;
+    z-index: -1;
+  }
+  
+  /* Let's create animation */
+  @keyframes bg-move {
+    0% {
+      background-position: -500px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
