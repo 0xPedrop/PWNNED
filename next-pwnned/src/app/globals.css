@@ -20,7 +20,29 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: monospace;
+  background: #000;
+  overflow: hidden;
+  position: relative;
+  height: 100vh;
+}
+
+.animationContainer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  line-height: 1.15;
+  color: #00ff40;
+  font-family: monospace;
+  mask-image: radial-gradient(
+    300px circle at var(--x) var(--y),
+    rgba(0, 0, 0, 0.459) 20%,
+    rgba(0, 0, 0, 0.116),
+    transparent
+  );
+  user-select: none;
 }
