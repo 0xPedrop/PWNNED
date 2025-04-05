@@ -6,7 +6,8 @@ import styles from "./Hero.module.css";
 
 const Hero = () => {
   const animationRef = useRef(null);
-  const [randomText, setRandomText] = useState("");
+  const [randomText, setRandomText] = useState(""); // Inicializar com string vazia
+  const [mouseMoved, setMouseMoved] = useState(false); // adicionado para controle.
 
   const generateRandomText = () => {
     const chars =
@@ -26,18 +27,23 @@ const Hero = () => {
       if (animationRef.current) {
         animationRef.current.style.setProperty("--x", `${e.clientX}px`);
         animationRef.current.style.setProperty("--y", `${e.clientY}px`);
-        generateRandomText(); // Gerar novo texto ao mover o mouse
+        if (!mouseMoved) {
+          setMouseMoved(true);
+          generateRandomText();
+        } else {
+          generateRandomText();
+        }
       }
     };
 
     document.addEventListener("mousemove", handleMouseMove);
     return () => document.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [mouseMoved]); // Dependencia no mouseMoved para executar generateRandomText apenas quando o mouse é movido.
 
   return (
     <>
       <div className="animationContainer" ref={animationRef}>
-        {randomText}
+        {mouseMoved ? randomText : ""}
       </div>
       <section className={styles.hero}>
         <div className={styles.content}>

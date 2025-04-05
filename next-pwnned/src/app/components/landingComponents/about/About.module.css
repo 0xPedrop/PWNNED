@@ -1,0 +1,46 @@
+.about {
+  padding: 80px 0;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000;
+  color: #00d400;
+  font-family: "Pixelify Sans";
+  text-align: center;
+}
+
+.content h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  line-height: 1.2;
+  color: white;
+}
+
+.cursor {
+  display: inline-block;
+  margin-left: 5px;
+  color: white;
+  animation: blink 1s steps(2, start) infinite;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  49% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  99% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
