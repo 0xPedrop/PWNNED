@@ -3,6 +3,7 @@ import About from "../components/landingComponents/about/About";
 import Header from "../components/landingComponents/header/Header";
 import Hero from "../components/landingComponents/hero/Hero";
 import Team from "../components/landingComponents/team/Team";
+import Footer from "../components/landingComponents/footer/Footer";
 
 const LandingPage = () => {
   return (
@@ -16,6 +17,7 @@ const LandingPage = () => {
       <About />
       <Plans />
       <Team />
+      <Footer />
     </>
   );
 };
