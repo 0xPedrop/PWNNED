@@ -7,25 +7,56 @@ const Footer = () => {
         <div className={styles.container}>
           <article>
             <h4>Subscribe to our Newsletter</h4>
-            <button>
-              <p>Sign up free</p>
-              <span> ⮕ </span>
-            </button>
+            <div className={styles.newsletterForm}>
+              <input
+                type="email"
+                placeholder="Your email address"
+                className={styles.emailInput}
+              />
+              <button className={styles.submitButton}>Sign up free</button>
+            </div>
           </article>
           <section>
             <div className={styles.logo}>PWNNED</div>
             <div className={styles.socials}>
-              <div className={styles.fa_brands}>
-                <a className={styles.fa_instagram}></a>
-                <a className={styles.fa_medium}></a>
-              </div>
-              <ul>
-                <li>
-                  <h3>Resources</h3>
-                  <a>Usage</a>
-                </li>
-              </ul>
+              <a
+                className={styles.fa_instagram}
+                href="https://instagram.com/pwnned"
+              >
+                <Image
+                  src="/instagram-white.svg"
+                  alt="Instagram"
+                  width={30}
+                  height={30}
+                />
+              </a>
+              <a className={styles.fa_medium} href="https://medium.com/pwnned">
+                <Image
+                  src="/medium-white.svg"
+                  alt="Medium"
+                  width={40}
+                  height={40}
+                />
+              </a>
             </div>
+            <ul>
+              <li>
+                <h3>Resources</h3>
+                <a>Usage</a>
+              </li>
+              <li>
+                <h3>Resources</h3>
+                <a>Usage</a>
+              </li>
+              <li>
+                <h3>Resources</h3>
+                <a>Usage</a>
+              </li>
+              <li>
+                <h3>Resources</h3>
+                <a>Usage</a>
+              </li>
+            </ul>
           </section>
         </div>
       </div>
