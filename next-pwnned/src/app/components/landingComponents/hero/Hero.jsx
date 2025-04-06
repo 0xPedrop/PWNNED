@@ -6,8 +6,8 @@ import styles from "./Hero.module.css";
 
 const Hero = () => {
   const animationRef = useRef(null);
-  const [randomText, setRandomText] = useState(""); // Inicializar com string vazia
-  const [mouseMoved, setMouseMoved] = useState(false); // adicionado para controle.
+  const [randomText, setRandomText] = useState("");
+  const [mouseMoved, setMouseMoved] = useState(false);
 
   const generateRandomText = () => {
     const chars =
@@ -17,7 +17,7 @@ const Hero = () => {
     const randomString = (length) =>
       Array.from({ length }).map(randomCharacter).join(" ");
 
-    setRandomText(randomString(9000));
+    setRandomText(randomString(8000));
   };
 
   useEffect(() => {

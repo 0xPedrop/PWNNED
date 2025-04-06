@@ -1,7 +1,8 @@
-// page.jsx
+import Plans from "../components/landingComponents/plans/Plans";
 import About from "../components/landingComponents/about/About";
 import Header from "../components/landingComponents/header/Header";
 import Hero from "../components/landingComponents/hero/Hero";
+import Team from "../components/landingComponents/team/Team";
 
 const LandingPage = () => {
   return (
@@ -13,6 +14,8 @@ const LandingPage = () => {
         <Hero />
       </main>
       <About />
+      <Plans />
+      <Team />
     </>
   );
 };

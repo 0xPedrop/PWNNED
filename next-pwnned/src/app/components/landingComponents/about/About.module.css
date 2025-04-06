@@ -17,30 +17,3 @@
   line-height: 1.2;
   color: white;
 }
-
-.cursor {
-  display: inline-block;
-  margin-left: 5px;
-  color: white;
-  animation: blink 1s steps(2, start) infinite;
-  font-weight: bold;
-  font-size: 1em;
-}
-
-@keyframes blink {
-  0% {
-    opacity: 1;
-  }
-  49% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-  99% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
