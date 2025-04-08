@@ -1,0 +1,129 @@
+.bode {
+  background: #141419;
+  padding: 1.5rem;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  height: 100vh;
+}
+
+.pricing_container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 4rem 2rem;
+}
+
+.pricing_card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  width: 100%;
+  max-width: 25rem;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  background: #222429;
+  color: #b5b8bc;
+  transition: all 0.5s ease-in-out;
+}
+
+.pricing_card:hover {
+  transform: translateY(-1rem);
+}
+
+.pricing_card_primary {
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.pricing_card_price {
+  color: #f7faff;
+  font-weight: 700;
+  flex-wrap: wrap;
+  font-size: 2rem;
+}
+
+.pricing_card_banner {
+  height: 1rem;
+  width: 100%;
+  position: absolute;
+  color: white;
+  top: -2.5rem;
+}
+
+.pricing_card_banner + .pricing_card {
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.pricing_card_original {
+  color: #bcb5b5;
+  font-weight: 500;
+  margin-top: 2rem;
+  font-size: 1.5rem;
+}
+
+.pricing_card > h3 {
+  margin: 0;
+  font-weight: 700;
+  text-align: center;
+  font-size: 2rem;
+  color: #f7faff;
+}
+
+.pricing_card > .enroll {
+  display: block;
+  width: 100%;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  border-radius: 0.5rem;
+  color: #f7faff;
+  margin-top: auto;
+  text-decoration: none;
+  letter-spacing: 0.75px;
+  border: 1px solid #3f8cff;
+  background: #3f8cff;
+  transition: all 0.3s ease-in-out;
+}
+
+.pricing_card_banner {
+  width: 100%;
+  min-height: 2.5rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: #3f8cff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.pricing_card > ul {
+  width: 100%;
+  display: flex;
+  margin-top: 2.5rem;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.pricing_card > ul > li {
+  position: relative;
+  font-weight: 500;
+  list-style-type: none;
+  font-size: 0.85rem;
+}
+
+.pricing_card > ul > li::before {
+  content: "";
+  position: absolute;
+  top: -0.125rem;
+  left: -2.25rem;
+  width: 2rem;
+  height: 2rem;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+}
