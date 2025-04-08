@@ -1,52 +1,52 @@
 .info {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .userInfo {
-    display: flex;
-    flex-direction: column;
-    font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
 }
 
 .userInfo h1 {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .userInfo p {
-    color: rgb(121, 121, 121);
+  color: rgb(121, 121, 121);
 }
 
 .separator {
-    border: 1px solid rgba(165, 165, 165, 0.37);
-    border-radius: 10px;
-    width: 100%;
-    margin: 10px auto 10px;
+  border: 1px solid rgba(165, 165, 165, 0.37);
+  border-radius: 10px;
+  width: 100%;
+  margin: 10px auto 10px;
 }
 
 .options a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .options > div {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    justify-content: space-between;
-    transition: background-color 0.3s ease; 
-    padding: 10px; 
-    border-radius: 7px; 
-    cursor: pointer;
-    user-select: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  justify-content: space-between;
+  transition: background-color 0.3s ease;
+  padding: 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .options > div:hover {
-    background-color: rgba(0, 100, 50, 0.589);
+  background-color: rgba(134, 134, 134, 0.589);
 }
 
 .iconNameContainer {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
