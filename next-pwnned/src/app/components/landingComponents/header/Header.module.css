@@ -1,0 +1,42 @@
+.header {
+  width: 100%;
+  height: 60px;
+  padding: 0 50px;
+  background-color: #000000;
+  color: #00d400;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  font-family: "Pixelify Sans";
+}
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.authLinks {
+  display: flex;
+  gap: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.link {
+  color: #00d400;
+  text-decoration: none;
+}
+
+.signupButton {
+  color: #00d400;
+  text-decoration: none;
+}
