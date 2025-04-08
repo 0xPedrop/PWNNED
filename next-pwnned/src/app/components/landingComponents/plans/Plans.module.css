@@ -115,7 +115,7 @@
   position: relative;
   font-weight: 500;
   list-style-type: none;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
 }
 
 .pricing_card > ul > li::before {
