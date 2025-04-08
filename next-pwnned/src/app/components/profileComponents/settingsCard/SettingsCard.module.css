@@ -1,0 +1,154 @@
+.cards {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.plainSettings {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.title {
+  font-weight: bold;
+  margin-bottom: 13px;
+}
+
+.plain {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  padding: 10px;
+  background: linear-gradient(25deg, #03a8a2, #03a835);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.upgradeButton {
+  color: #013220;
+  cursor: pointer;
+  font-size: 0.7rem;
+  line-height: 2.5rem;
+  max-width: 240px;
+  width: 100%;
+  letter-spacing: 0.3rem;
+  font-weight: 600;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-self: flex-end;
+  transition: all 1s ease-in;
+}
+
+.upgradeButton:hover {
+  color: #0b6e4f;
+}
+
+.upgradeButton svg {
+  height: 40px;
+  left: 0;
+  top: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.upgradeButton rect {
+  fill: none;
+  stroke: #013220;
+  stroke-width: 2;
+  stroke-dasharray: 450, 0;
+  transition: all 0.5s linear;
+}
+
+.upgradeButton:hover rect {
+  stroke-width: 5;
+  stroke-dasharray: 20, 300;
+  stroke-dashoffset: 48;
+  stroke: #0b6e4f;
+  transition: all 2s cubic-bezier(0.22, 1, 0.25, 1);
+}
+
+.downCards {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.iconNameContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.subscriptionButton {
+  color: green;
+  font-weight: bold;
+  margin-left: 9vh;
+  cursor: pointer;
+  transition: all 0.1s linear;
+}
+
+.subscriptionButton:hover {
+  color: rgb(61, 168, 61);
+}
+
+.freeText {
+  color: #dbdbdb;
+}
+
+.languageTitle {
+  margin-bottom: 20px;
+}
+.relativeDropdown {
+  position: relative;
+  display: inline-block;
+  width: 50%;
+}
+.dropdownButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 12rem;
+  height: 3rem;
+  padding: 12px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+.dropdownList {
+  position: absolute;
+  z-index: 10;
+  width: 12rem;
+  margin-top: 8px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.dropdownItem {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.dropdownItem:hover {
+  background-color: #f3f4f6;
+}
+.chevron {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease-in-out;
+}
+.rotate180 {
+  transform: rotate(180deg);
+}
+.subscriptionTitle {
+  margin-bottom: 20px;
+}
