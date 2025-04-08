@@ -1,44 +1,67 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 
-function AnimatedText({ originalText, animar, tag: Tag = 'h1', onMouseEnter, onMouseLeave }) {
-  const [textoAnimado, setTextoAnimado] = useState(originalText);
-  const intervaloRef = useRef(null);
-
-  const gerarTextoAleatorio = () => {
-    let textoAleatorio = '';
-    for (let i = 0; i < originalText.length; i++) {
-      const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      textoAleatorio += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
-    }
-    return textoAleatorio;
-  };
+function AnimatedText({
+  originalText,
+  animate,
+  tag: Tag = "h1",
+  onMouseEnter,
+  onMouseLeave,
+}) {
+  const [animatedText, setAnimatedText] = useState(originalText);
+  const intervalRef = useRef(null);
+  const [isAnimating, setIsAnimating] = useState(animate);
 
   useEffect(() => {
-    if (animar) {
-      intervaloRef.current = setInterval(() => {
-        let textoAleatorioFormatado = gerarTextoAleatorio();
+    const generateRandomText = () => {
+      let randomText = "";
+      for (let i = 0; i < originalText.length; i++) {
+        const characters =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        randomText += characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
+      }
+      return randomText;
+    };
 
-        if (Tag === 'h1') {
-          textoAleatorioFormatado = textoAleatorioFormatado.toUpperCase();
-        } else if (Tag === 'p') {
-          textoAleatorioFormatado = textoAleatorioFormatado.toLowerCase();
+    if (isAnimating) {
+      intervalRef.current = setInterval(() => {
+        let formattedRandomText = generateRandomText();
+
+        if (Tag === "h1") {
+          formattedRandomText = formattedRandomText.toUpperCase();
+        } else if (Tag === "p") {
+          formattedRandomText = formattedRandomText.toLowerCase();
         }
 
-        setTextoAnimado(textoAleatorioFormatado);
+        setAnimatedText(formattedRandomText);
       }, 100);
     } else {
-      clearInterval(intervaloRef.current);
-      setTextoAnimado(originalText);
+      clearInterval(intervalRef.current);
+      setAnimatedText(originalText);
     }
 
-    return () => clearInterval(intervaloRef.current);
-  }, [animar, originalText, Tag]);
+    return () => clearInterval(intervalRef.current);
+  }, [isAnimating, originalText, Tag]);
 
   return (
-    <Tag onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      {textoAnimado}
+    <Tag
+      onMouseEnter={() => {
+        setIsAnimating(true);
+        if (onMouseEnter) {
+          onMouseEnter();
+        }
+      }}
+      onMouseLeave={() => {
+        setIsAnimating(false);
+        if (onMouseLeave) {
+          onMouseLeave();
+        }
+      }}
+    >
+      {animatedText}
     </Tag>
   );
 }
