@@ -1,0 +1,32 @@
+.header {
+  width: 100%;
+  height: 60px;
+  padding: 0 50px;
+  background-color: var(--background-50);
+  color: var(--primary-900);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  font-family: "Pixelify Sans";
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.profile {
+    cursor: pointer;
+}

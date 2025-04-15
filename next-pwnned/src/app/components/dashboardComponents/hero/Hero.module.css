@@ -1,0 +1,125 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  min-height: 400vh;
+  width: 100vw;
+  background-color: var(--background-50);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  overflow-y: auto;
+}
+
+.generalInfo {
+  justify-self: flex-start;
+  align-self: flex-start;
+  padding-top: 5rem;
+  padding-left: 3.5rem;
+}
+
+.pathsInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 4rem;
+  padding-bottom: 1.5rem;
+  text-align: center;
+}
+
+
+.description {
+  color: gray;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: white;
+}
+
+.minorTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(211, 211, 211);
+}
+
+.paths {
+  display: grid;
+  justify-content: flex-start;
+  max-width: 1200px;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem; 
+  box-sizing: border-box;
+
+}
+
+@media (max-width: 960px) {
+  .paths {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+.pathCardEasy, .pathCardMedium, .pathCardHard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start; 
+  position: relative;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.pathCardEasy:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px var(--primary-200);
+}
+
+.pathCardMedium:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px var(--primary-100);
+}
+
+.pathCardHard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px var(--secondary-100);
+}
+
+.paths h1 {
+  margin-left: -0.1rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin-top: -0.2rem;
+  margin-bottom: 0.6rem;
+}
+
+.paths p {
+  color: white;
+  font-size: 0.7rem;
+  margin-bottom: 0.7rem;
+  padding-left: 0.3rem;
+  flex-grow: 1;
+}
+
+.paths hr {
+  border-radius: 5px;
+  position: absolute; 
+  bottom: 2.9rem;
+  left: 1rem;
+  width: calc(100% - 2rem); 
+}
+
+.paths a {
+  color: white;
+  font-weight: 600;
+  position: absolute; 
+  bottom: 0.8rem; 
+  left: 1.5rem;
+}
+
+.arrow {
+  position: absolute; 
+  bottom: 0.8rem; 
+  left: 19rem;
+}
