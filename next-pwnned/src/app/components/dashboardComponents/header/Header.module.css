@@ -8,7 +8,6 @@
   left: 0;
   z-index: 1000;
   display: flex;
-  justify-content: space-between;
   font-family: "Pixelify Sans";
   align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -39,10 +38,10 @@
 }
 
 .navbar {
-  width: 100%;
+  width: 93%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .logo {

@@ -13,8 +13,8 @@ const Header = () => {
               <CustomizedImage
                 src="/images/profile-photo.png"
                 alt="Profile Photo"
-                width={35}
-                height={35}
+                width={30}
+                height={30}
               />
             </Link>
           </div>
