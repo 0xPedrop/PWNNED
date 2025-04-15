@@ -7,7 +7,7 @@ const CustomizedImage = ({ src, alt, width, height, margin }) => {
     height: height,
     borderRadius: "100px",
     overflow: "hidden",
-    border: "2px solid white",
+    border: "1px solid white",
     margin: margin,
   };
 
