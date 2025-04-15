@@ -38,6 +38,7 @@ export default function SettingsCardContent() {
         color="#000000"
         shadow=".4rem .4rem 0 #000000"
         border="3px solid #000000"
+        borderRadius="3px"
         className={styles.plainSettings}
       >
         <h1 className={styles.title}>Plain Settings</h1>

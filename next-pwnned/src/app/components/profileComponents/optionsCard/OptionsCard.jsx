@@ -46,6 +46,7 @@ export default function OptionsCard() {
         color="#000000"
         shadow=".3rem .3rem 0 #000000"
         border="3px solid #000000"
+        borderRadius="3px"
       >
         <div className={styles.info}>
           <CustomizedImage

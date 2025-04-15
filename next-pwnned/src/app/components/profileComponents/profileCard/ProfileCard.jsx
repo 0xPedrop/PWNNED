@@ -32,6 +32,7 @@ export default function ProfileCard() {
       color="#000000"
       shadow=".4rem .4rem 0 #000000"
       border="3px solid #000000"
+      borderRadius="3px"
     >
       <div className={styles.info}>
         <CustomizedImage
