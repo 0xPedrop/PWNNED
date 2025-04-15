@@ -5,8 +5,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #000000;
-  color: #00d400;
+  background-color: var(--background-100);
+  color: var(--text-800);
   font-family: "Pixelify Sans";
   text-align: center;
 }
@@ -15,5 +15,5 @@
   font-size: 3rem;
   font-weight: bold;
   line-height: 1.2;
-  color: white;
+  color: var(--text-800);
 }

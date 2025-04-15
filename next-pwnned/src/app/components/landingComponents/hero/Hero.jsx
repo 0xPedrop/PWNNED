@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import styles from "./Hero.module.css";
 
 const Hero = () => {
@@ -52,14 +51,6 @@ const Hero = () => {
             <br />
             FOR REAL WORLD<span className={styles.cursor}>_</span>
           </h1>
-        </div>
-        <div className={styles.imageContainer}>
-          <Image
-            src="/hero-image.png"
-            alt="Hacker working"
-            width={500}
-            height={500}
-          />
         </div>
       </section>
     </>

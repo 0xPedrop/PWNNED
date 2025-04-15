@@ -6,6 +6,7 @@ const Card = ({
   backgroundColor,
   color,
   shadow,
+  borderRadius,
   border,
   className,
   children,
@@ -16,7 +17,7 @@ const Card = ({
     padding: "24px",
     backgroundColor: backgroundColor,
     color: color,
-    borderRadius: "3px",
+    borderRadius: borderRadius,
     border: border,
     boxShadow: shadow,
   };

@@ -19,7 +19,7 @@
   position: relative;
   display: grid;
   padding-bottom: 20px;
-  background: #121212;
+  background: var(--background-100);
   color: #f9f9f9;
 }
 
@@ -40,7 +40,7 @@
   font-size: 22px;
   font-weight: 400;
   text-align: center;
-  color: rgb(255 255 255 / 90%);
+  color: var(--text-800);
 }
 
 .newsletterForm {
@@ -53,11 +53,11 @@
   border: 1px solid #ccc;
   border-radius: 10px 0 0 10px;
   flex-grow: 1;
-  color: black;
+  color: #0a0e15;
 }
 
 .submitButton {
-  background-color: #6c5ce7;
+  background-color: var(--primary-300);
   color: white;
   font-family: inherit;
   text-align: center;
@@ -71,7 +71,7 @@
 }
 
 .submitButton:hover {
-  background-color: #4834d4;
+  background-color: var(--primary-600);
 }
 
 .footer section {
