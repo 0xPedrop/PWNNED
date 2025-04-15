@@ -1,18 +1,3 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary-blue: #3f8cff;
-  --primary-blue-dark: #4361ee;
-  --text-white: #f7faff;
-  --text-gray: #b5b8bc;
-  --text-color: #303651;
-  --text-color-neutral: #697089;
-  --card-bg: #222429;
-  --bg: #141419;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -152,10 +137,11 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-family: monospace;
-  background: #000;
+  background: var(--background-50);
   position: relative;
   height: 100vh;
-  color: #00ff40;
+  color: #25d615;
+  overflow-x: hidden;
 }
 
 .animationContainer {
@@ -169,19 +155,19 @@ body {
   transition: opacity 0.3s ease-in-out;
   -webkit-mask-image: radial-gradient(
     300px circle at var(--x) var(--y),
-    #000 20%,
-    rgba(0, 0, 0, 0.25),
+    var(--background-950) 20%,
+    rgba(0, 0, 0, 0.171),
     transparent
   );
   mask-image: radial-gradient(
     300px circle at var(--x) var(--y),
-    #000 20%,
-    rgba(0, 0, 0, 0.25),
+    var(--background-950) 20%,
+    rgba(0, 0, 0, 0.171),
     transparent
   );
   user-select: none;
 }
 
 .animationContainer:hover {
-  opacity: 0.5; /* Opacidade quando o mouse está sobre .animationContainer */
+  opacity: 0.5;
 }
