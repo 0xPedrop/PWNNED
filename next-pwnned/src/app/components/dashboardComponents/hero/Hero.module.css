@@ -3,9 +3,32 @@
   flex-direction: column;
   min-height: 400vh;
   width: 100vw;
-  background-color: var(--background-50);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   overflow-y: auto;
+  background: linear-gradient(
+    121deg,
+    var(--primary-50),
+    var(--primary-100),
+    var(--secondary-100),
+    var(--secondary-50),
+    var(--primary-50),
+    var(--primary-100),
+    var(--secondary-100),
+    var(--secondary-50),
+    var(--primary-50)
+  );
+  background-size: 400% 400%;
+  background-repeat: repeat;
+  animation: gradient 60s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
 }
 
 .generalInfo {
@@ -20,11 +43,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 4rem;
+  padding-top: 2rem;
   padding-bottom: 1.5rem;
   text-align: center;
 }
-
 
 .description {
   color: gray;
@@ -50,9 +72,8 @@
   gap: 2rem;
   margin: 0 auto;
   padding-left: 2rem;
-  padding-right: 2rem; 
+  padding-right: 2rem;
   box-sizing: border-box;
-
 }
 
 @media (max-width: 960px) {
@@ -61,11 +82,13 @@
   }
 }
 
-.pathCardEasy, .pathCardMedium, .pathCardHard {
+.pathCardEasy,
+.pathCardMedium,
+.pathCardHard {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start; 
+  align-items: flex-start;
   position: relative;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
@@ -104,22 +127,32 @@
 
 .paths hr {
   border-radius: 5px;
-  position: absolute; 
+  position: absolute;
   bottom: 2.9rem;
   left: 1rem;
-  width: calc(100% - 2rem); 
+  width: calc(100% - 2rem);
 }
 
 .paths a {
   color: white;
   font-weight: 600;
-  position: absolute; 
-  bottom: 0.8rem; 
+  position: absolute;
+  bottom: 0.8rem;
   left: 1.5rem;
+  width: 20rem;
+  z-index: 1;
 }
 
 .arrow {
-  position: absolute; 
-  bottom: 0.8rem; 
+  position: absolute;
+  bottom: 0.8rem;
   left: 19rem;
+}
+
+.separator {
+  opacity: 0.2;
+  border-radius: 5px;
+  align-self: center;
+  width: 50%;
+  margin-top: 3rem;
 }

@@ -2,7 +2,6 @@
   width: 100%;
   height: 60px;
   padding: 0 50px;
-  background-color: var(--background-50);
   color: var(--primary-900);
   position: fixed;
   top: 0;
@@ -13,6 +12,30 @@
   font-family: "Pixelify Sans";
   align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    121deg,
+    var(--primary-50),
+    var(--primary-100),
+    var(--secondary-100),
+    var(--secondary-50),
+    var(--primary-50),
+    var(--primary-100),
+    var(--secondary-100),
+    var(--secondary-50),
+    var(--primary-50)
+  );
+  background-size: 400% 400%;
+  background-repeat: repeat;
+  animation: gradient 60s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
 }
 
 .navbar {
@@ -28,5 +51,5 @@
 }
 
 .profile {
-    cursor: pointer;
+  cursor: pointer;
 }

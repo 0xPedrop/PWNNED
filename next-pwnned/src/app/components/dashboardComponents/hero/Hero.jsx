@@ -221,6 +221,11 @@ export default function Hero() {
         </Card>
       </div>
 
+      <hr
+        className={styles.separator}
+        style={{ border: "1px solid var(--primary-500)" }}
+      />
+
       <div className={styles.pathsInfo}>
         <h1 className={styles.minorTitle}>Medium Paths</h1>
         <p className={styles.description}>
@@ -437,6 +442,11 @@ export default function Hero() {
           </div>
         </Card>
       </div>
+
+      <hr
+        className={styles.separator}
+        style={{ border: "1px solid var(--secondary-500)" }}
+      />
 
       <div className={styles.pathsInfo}>
         <h1 className={styles.minorTitle}>Hard Paths</h1>
