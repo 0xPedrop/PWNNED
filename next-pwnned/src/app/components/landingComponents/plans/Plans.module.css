@@ -1,5 +1,5 @@
 .bode {
-  background: #141419;
+  background: var(--background-50);
   padding: 1.5rem;
   display: grid;
   place-items: center;
@@ -24,8 +24,8 @@
   max-width: 25rem;
   border-radius: 0.5rem;
   padding: 2rem;
-  background: #222429;
-  color: #b5b8bc;
+  background: #ffffff;
+  color: var(--primary-100);
   transition: all 0.5s ease-in-out;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .pricing_card_price {
-  color: #f7faff;
+  color: #424242;
   font-weight: 700;
   flex-wrap: wrap;
   font-size: 2rem;
@@ -48,7 +48,7 @@
   height: 1rem;
   width: 100%;
   position: absolute;
-  color: white;
+  color: #424242;
   top: -2.5rem;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .pricing_card_original {
-  color: #bcb5b5;
+  color: #424242;
   font-weight: 500;
   margin-top: 2rem;
   font-size: 1.5rem;
@@ -68,7 +68,7 @@
   font-weight: 700;
   text-align: center;
   font-size: 2rem;
-  color: #f7faff;
+  color: #424242;
 }
 
 .pricing_card > .enroll {
@@ -81,12 +81,12 @@
   justify-content: center;
   min-height: 3rem;
   border-radius: 0.5rem;
-  color: #f7faff;
+  color: var(--text-950);
   margin-top: auto;
   text-decoration: none;
   letter-spacing: 0.75px;
-  border: 1px solid #3f8cff;
-  background: #3f8cff;
+  border: 1px solid var(--primary-300);
+  background: var(--primary-300);
   transition: all 0.3s ease-in-out;
 }
 
@@ -94,7 +94,7 @@
   width: 100%;
   min-height: 2.5rem;
   border-radius: 0.5rem 0.5rem 0 0;
-  background: #3f8cff;
+  background: var(--primary-300);
   display: flex;
   justify-content: center;
   align-items: center;

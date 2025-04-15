@@ -7,9 +7,9 @@
   align-items: center;
   justify-content: center;
   margin: 0;
-  background: #000000;
+  background: var(--background-50);
   font-family: "Inter", sans-serif;
-  color: #f7faff;
+  color: var(--text-950);
 }
 
 .profile {
@@ -18,9 +18,9 @@
   align-items: center;
   margin-right: 100px;
   justify-content: space-between;
-  max-width: 40rem;
+  max-width: 35rem;
   padding: 3rem 2rem 3rem 1.25rem;
-  background: #141419;
+  background: #080808;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 6px;
   border-radius: 1.5rem;
   transition: all 0.2s ease-in-out;
@@ -115,7 +115,7 @@
 }
 
 .profile_skill_java:hover {
-  background: #61dafb; /* Fundo azul ao passar o mouse */
+  background: #61dafb;
 }
 
 .profile_skill_cibersecurity {
@@ -134,11 +134,11 @@
 }
 
 .profile_skill_cibersecurity:hover {
-  background: #42b883; /* Fundo verde ao passar o mouse */
+  background: #42b883;
 }
 
 .btn {
-  background: #6c5ce7;
+  background: var(--primary-300);
   color: white;
   font-family: inherit;
   text-align: center;
@@ -153,5 +153,5 @@
 }
 
 .btn:hover {
-  background: #4834d4;
+  background: var(--primary-600);
 }
