@@ -40,13 +40,13 @@ export default function OptionsCard() {
   return (
     <>
       <Card
-        width="250px"
-        height="270px"
-        backgroundColor="#F5F5F5"
-        color="#000000"
-        shadow=".3rem .3rem 0 #000000"
-        border="3px solid #000000"
-        borderRadius="3px"
+        width="14rem"
+        height="14rem"
+        backgroundColor="var(--background-75)"
+        shadow="0px 5px 15px var(--background-100)"
+        color="var(--text-900)"
+        borderRadius="5px"
+        className={styles.optionsCard}
       >
         <div className={styles.info}>
           <CustomizedImage
@@ -68,7 +68,7 @@ export default function OptionsCard() {
             onClick={() => handleCardClick("profile")}
             style={{
               backgroundColor: cardState.profile.color
-                ? "rgba(134, 134, 134, 0.589)"
+                ? "var(--background-400)"
                 : "",
             }}
           >
@@ -86,7 +86,7 @@ export default function OptionsCard() {
               <a>My Profile</a>
             </div>
             <Image
-              src="/next.png"
+              src="/next-white.png"
               alt="Profile Icon"
               width={20}
               height={20}
@@ -98,7 +98,7 @@ export default function OptionsCard() {
             onClick={() => handleCardClick("settings")}
             style={{
               backgroundColor: cardState.settings.color
-                ? "rgba(134, 134, 134, 0.589)"
+                ? "var(--background-400)"
                 : "",
             }}
           >
@@ -116,7 +116,7 @@ export default function OptionsCard() {
               <a>Settings</a>
             </div>
             <Image
-              src="/next.png"
+              src="/next-white.png"
               alt="Profile Icon"
               width={20}
               height={20}
@@ -128,7 +128,7 @@ export default function OptionsCard() {
             onClick={handleLogout}
             style={{
               backgroundColor: cardState.logout.color
-                ? "rgba(134, 134, 134, 0.589)"
+                ? "var(--background-400)"
                 : "",
             }}
           >
@@ -146,7 +146,7 @@ export default function OptionsCard() {
               <a>Log Out</a>
             </div>
             <Image
-              src="/next.png"
+              src="/next-white.png"
               alt="Profile Icon"
               width={20}
               height={20}
@@ -171,6 +171,7 @@ export default function OptionsCard() {
         {cardState.profile.open && (
           <motion.div
             key="profile"
+            style={{ marginLeft: "2.5 em" }}
             initial={{ opacity: 0, x: 0 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 0 }}

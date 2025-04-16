@@ -10,6 +10,8 @@
 
 .userInfo h1 {
   font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: -1rem;
 }
 
 .userInfo p {
@@ -17,9 +19,10 @@
 }
 
 .separator {
-  border: 1px solid rgba(165, 165, 165, 0.37);
+  border: 1px solid var(--background-200);
   border-radius: 10px;
   width: 100%;
+  opacity: 0.6;
   margin: 20px auto;
 }
 
@@ -33,6 +36,7 @@
   justify-content: space-between;
   align-items: center;
   margin-left: 15px;
+  font-weight: 600;
 }
 
 .formGroup label {
@@ -59,7 +63,7 @@
   display: flex;
   align-items: center;
   position: relative;
-  width: 50%;
+  width: 53%;
 }
 
 .passwordToggleButton {
