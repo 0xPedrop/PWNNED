@@ -1,3 +1,7 @@
+.optionsCard {
+  min-width: 15rem;
+}
+
 .info {
   display: flex;
   align-items: center;
@@ -6,11 +10,13 @@
 .userInfo {
   display: flex;
   flex-direction: column;
-  font-size: 12px;
+  font-size: 0.7rem;
 }
 
 .userInfo h1 {
   font-weight: bold;
+  margin-bottom: -0.5rem;
+  font-size: 1rem;
 }
 
 .userInfo p {
@@ -18,7 +24,8 @@
 }
 
 .separator {
-  border: 1px solid rgba(165, 165, 165, 0.37);
+  border: 1px solid var(--background-200);
+  opacity: 0.6;
   border-radius: 10px;
   width: 100%;
   margin: 10px auto 10px;
@@ -43,7 +50,7 @@
 }
 
 .options > div:hover {
-  background-color: rgba(134, 134, 134, 0.589);
+  background-color: var(--background-200);
 }
 
 .iconNameContainer {

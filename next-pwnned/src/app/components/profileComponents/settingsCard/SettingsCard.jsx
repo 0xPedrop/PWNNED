@@ -32,13 +32,12 @@ export default function SettingsCardContent() {
   return (
     <div className={styles.cards}>
       <Card
-        width="600px"
-        height="190px"
-        backgroundColor="#F5F5F5"
-        color="#000000"
-        shadow=".4rem .4rem 0 #000000"
-        border="3px solid #000000"
-        borderRadius="3px"
+        width="42rem"
+        height="10rem"
+        backgroundColor="var(--background-75)"
+        shadow="0px 5px 15px var(--background-100)"
+        color="var(--text-900)"
+        borderRadius="5px"
         className={styles.plainSettings}
       >
         <h1 className={styles.title}>Plain Settings</h1>
@@ -59,14 +58,14 @@ export default function SettingsCardContent() {
       </Card>
       <div className={styles.downCards}>
         <Card
-          width="280px"
-          height="180px"
-          backgroundColor="#F5F5F5"
-          color="#000000"
-          shadow=".4rem .4rem 0 #000000"
-          border="3px solid #000000"
+          width="18.8rem"
+          height="8rem"
+          backgroundColor="var(--background-75)"
+          shadow="0px 5px 15px var(--background-100)"
+          color="var(--text-900)"
+          borderRadius="5px"
         >
-          <h1 className={styles.languageTitle}>
+          <h1 className={styles.title}>
             <b>Language Settings</b>
           </h1>
           <div className={styles.relativeDropdown}>
@@ -102,14 +101,14 @@ export default function SettingsCardContent() {
           </div>
         </Card>
         <Card
-          width="305px"
-          height="180px"
-          backgroundColor="#F5F5F5"
-          color="#000000"
-          shadow=".4rem .4rem 0 #000000"
-          border="3px solid #000000"
+          width="18.8rem"
+          height="8rem"
+          backgroundColor="var(--background-75)"
+          shadow="0px 5px 15px var(--background-100)"
+          color="var(--text-900)"
+          borderRadius="5px"
         >
-          <h1 className={styles.subscriptionTitle}>
+          <h1 className={styles.title}>
             <b>Subscriptions Settings</b>
           </h1>
           <div className={styles.iconNameContainer}>
@@ -120,7 +119,7 @@ export default function SettingsCardContent() {
               height={20}
               style={{ objectFit: "contain" }}
             />
-            <h1>
+            <h1 className={styles.description}>
               <b>Newsletter</b>
             </h1>
             <button onClick={openModal} className={styles.subscriptionButton}>

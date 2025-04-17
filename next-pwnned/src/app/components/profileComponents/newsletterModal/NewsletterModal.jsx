@@ -51,9 +51,9 @@ export default function NewsletterModal({ isOpen, onClose }) {
               variant="contained"
               disableElevation
               sx={{
-                backgroundColor: "#013220",
+                backgroundColor: "var(--primary-200)",
                 "&:hover": {
-                  backgroundColor: "#0B6E4F",
+                  backgroundColor: "var(--primary-300)",
                 },
                 marginTop: "15px",
                 alignSelf: "flex-end",
@@ -63,9 +63,10 @@ export default function NewsletterModal({ isOpen, onClose }) {
                 position: "absolute",
                 bottom: "20px",
                 right: "20px",
+                textTransform: "capitalize",
               }}
             >
-              Save Changes
+              Submit
             </Button>
             <button
               onClick={onClose}

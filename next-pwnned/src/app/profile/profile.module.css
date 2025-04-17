@@ -3,7 +3,8 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #013220;
+  background-color: var(--background-50);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .cards {
@@ -12,6 +13,6 @@
   align-items: flex-start;
   gap: 15px;
   width: 90%;
-  max-width: 900px;
-  height: 450px;
+  max-width: 75vw;
+  height: 70vh;
 }
