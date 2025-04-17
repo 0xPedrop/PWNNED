@@ -34,7 +34,7 @@ export default function OptionsCard() {
   const router = useRouter();
 
   const handleLogout = () => {
-    router.push("/");
+    router.push("/landing");
   };
 
   return (
