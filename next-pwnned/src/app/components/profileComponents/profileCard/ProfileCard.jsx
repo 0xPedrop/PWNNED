@@ -26,20 +26,19 @@ export default function ProfileCard() {
 
   return (
     <Card
-      width="600px"
-      height="450px"
-      backgroundColor="#F5F5F5"
-      color="#000000"
-      shadow=".4rem .4rem 0 #000000"
-      border="3px solid #000000"
-      borderRadius="3px"
+      width="40rem"
+      height="25rem"
+      backgroundColor="var(--background-75)"
+      shadow="0px 5px 15px var(--background-100)"
+      color="var(--text-900)"
+      borderRadius="5px"
     >
       <div className={styles.info}>
         <CustomizedImage
           src="/images/profile-photo.png"
           alt="Profile Photo"
-          width={90}
-          height={90}
+          width={80}
+          height={80}
           margin="0 20px 0 0"
         />
         <div className={styles.userInfo}>
@@ -49,6 +48,7 @@ export default function ProfileCard() {
             tag="h1"
             onMouseEnter={iniciarAnimacao}
             onMouseLeave={pararAnimacao}
+            gradientColors={["var(--secondary-400)", "var(--secondary-500)"]}
           />
           <p>eujotave@gmail.com</p>
         </div>
@@ -107,11 +107,11 @@ export default function ProfileCard() {
           variant="contained"
           disableElevation
           sx={{
-            backgroundColor: "#013220",
+            backgroundColor: "var(--primary-200)",
             "&:hover": {
-              backgroundColor: "#0B6E4F",
+              backgroundColor: "var(--primary-300)",
             },
-            marginTop: "15px",
+            marginTop: "2rem",
             alignSelf: "flex-end",
             padding: "8px",
             width: "150px",

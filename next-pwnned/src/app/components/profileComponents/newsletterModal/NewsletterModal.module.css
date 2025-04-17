@@ -7,7 +7,6 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(20px);
   z-index: 10;
 }
@@ -18,12 +17,15 @@
   position: relative;
   z-index: 11;
   padding: 2rem 4rem 5rem 2rem;
-  background: white;
+  background-color: var(--background-75);
+  box-shadow: 0px 5px 15px var(--background-100);
+  color: var(--text-900);
   max-width: 90%;
   width: 500px;
   border-radius: 20px;
   box-shadow: 0 5px 30px 0 rgb(0 0 0 / 10%);
   animation: fadeIn 1s ease both;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .dialog::backdrop {
@@ -53,13 +55,13 @@
 .dialog h2 {
   font-weight: 600;
   font-size: 2rem;
-  padding-bottom: 1rem;
+  margin-bottom: -0.5rem;
 }
 
 .dialog p {
   font-size: 1rem;
   line-height: 1.3rem;
-  color: rgb(88, 88, 88);
+  color: rgb(151, 151, 151);
 }
 
 .dialog p a {
@@ -122,14 +124,18 @@
     display: block;
     transition: 0.2s;
     font-size: 1rem;
-    color: #11998e;
+    color: var(--secondary-400);
     font-weight: 700;
   }
 
   padding-bottom: 2px;
   font-weight: 700;
   border-width: 3px;
-  border-image: linear-gradient(to right, #11998e, #38ef7d);
+  border-image: linear-gradient(
+    to right,
+    var(--secondary-200),
+    var(--secondary-400)
+  );
   border-image-slice: 1;
 }
 

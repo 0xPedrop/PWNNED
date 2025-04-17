@@ -8,6 +8,7 @@ function AnimatedText({
   tag: Tag = "h1",
   onMouseEnter,
   onMouseLeave,
+  gradientColors = ["var(--secondary-400)", "var(--secondary-500)"],
 }) {
   const [animatedText, setAnimatedText] = useState(originalText);
   const intervalRef = useRef(null);
@@ -46,22 +47,33 @@ function AnimatedText({
     return () => clearInterval(intervalRef.current);
   }, [isAnimating, originalText, Tag]);
 
+  const gradientStyle = {
+    background: `linear-gradient(to right, ${gradientColors.join(", ")})`,
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    color: "inherit",
+    transition: "color 0.3s ease",
+  };
+
+  const defaultStyle = {
+    color: "white",
+    transition: "color 0.3s ease",
+  };
+
   return (
     <Tag
-      onMouseEnter={() => {
-        setIsAnimating(true);
-        if (onMouseEnter) {
-          onMouseEnter();
-        }
-      }}
-      onMouseLeave={() => {
-        setIsAnimating(false);
-        if (onMouseLeave) {
-          onMouseLeave();
-        }
-      }}
+      onMouseEnter={() => setIsAnimating(true)}
+      onMouseLeave={() => setIsAnimating(false)}
+      style={!isAnimating ? defaultStyle : {}}
     >
-      {animatedText}
+      {animatedText.split("").map((char, index) => (
+        <span
+          key={index}
+          style={isAnimating ? gradientStyle : { color: "inherit" }}
+        >
+          {char}
+        </span>
+      ))}
     </Tag>
   );
 }
