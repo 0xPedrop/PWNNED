@@ -1,7 +1,6 @@
 package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.SignupDTO;
-import com.pwnned.adapter.input.response.ApiResponse;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.UserServicePort;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +17,14 @@ public class SignupController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse> signup(@RequestBody SignupDTO signupDTO) {
-        User newUser = new User();
-        newUser.setEmail(signupDTO.email());
-        newUser.setUsername(signupDTO.username());
-        newUser.setPassword(signupDTO.password());
+    public ResponseEntity<String> signup(@RequestBody SignupDTO signupDTO) {
+        User user = new User();
+        user.setEmail(signupDTO.email());
+        user.setUsername(signupDTO.username());
+        user.setPassword(signupDTO.password());
 
-        userServicePort.createUser(newUser);
-        return ResponseEntity.ok(new ApiResponse("Usuário cadastrado com sucesso!"));
+        userServicePort.createUser(user);
 
+        return ResponseEntity.ok("Usuário cadastrado com sucesso!");
     }
 }

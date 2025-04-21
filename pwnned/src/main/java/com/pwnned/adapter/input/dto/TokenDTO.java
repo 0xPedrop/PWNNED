@@ -1,5 +1,4 @@
 package com.pwnned.adapter.input.dto;
 
-public class TokenDTO {
-    
+public record TokenDTO(String token) {
 }
