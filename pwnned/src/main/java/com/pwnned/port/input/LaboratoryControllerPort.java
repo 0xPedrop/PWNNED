@@ -1,7 +1,9 @@
 package com.pwnned.port.input;
 
 import com.pwnned.adapter.input.dto.LaboratoryDTO;
+import com.pwnned.adapter.input.dto.UserDTO;
 import com.pwnned.domain.enums.LabType;
+import com.pwnned.domain.enums.UserType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
