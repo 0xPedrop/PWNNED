@@ -1,42 +1,32 @@
-"use client";
-
-import { useParams, useRouter } from "next/navigation";
-import PathsLayout from "@/app/components/pathsComponents/layouts/PathsLayout.js";
-import pathsData from "@/app/data/pathsData"; // Ainda necessário para o conteúdo principal
+// Importações
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import PathsLayout from "@/app/components/pathsComponents/layouts/PathsLayout";
+import pathsData from "@/app/data/pathsData";
+import { topicsData } from "@/app/data/topicsData";
 import stylesLayout from "@/app/components/pathsComponents/layouts/PathsLayout.module.css";
-import { topicsData } from "@/app/data/topicsData"; // Importe o arquivo central de tópicos
-import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 
-console.log(pathsData);
-console.log(topicsData);
+export default async function TopicPage({ params }) {
+  const session = await getServerSession(authOptions);
 
-export default function TopicPage() {
-  const { path, topic } = useParams();
-  const router = useRouter();
-  const [nextTopicUrl, setNextTopicUrl] = useState(null);
+  if (!session) {
+    redirect("/login");
+  }
 
-  console.log("Path:", path);
-  console.log("Topic:", topic);
-  console.log("pathsData[path]:", pathsData[path]);
+  const { path, topic } = params;
   const currentPathData = pathsData[path];
   const currentTopicData = currentPathData?.topics?.[topic];
-  console.log("currentTopicData:", currentTopicData);
-
-  // Obtém os tópicos para o path atual do arquivo central
   const currentPathTopics = topicsData[path] || [];
-  console.log("currentPathTopics:", currentPathTopics);
 
-  useEffect(() => {
-    const currentIndex = currentPathTopics.findIndex(
-      (item) => item.slug === topic
-    );
-    if (currentIndex < currentPathTopics.length - 1) {
-      const nextTopicSlug = currentPathTopics[currentIndex + 1].slug;
-      setNextTopicUrl(`/paths/${path}/${nextTopicSlug}`);
-    } else {
-      setNextTopicUrl(null); // Ou alguma outra URL se for o último tópico
-    }
-  }, [path, topic, currentPathTopics]);
+  let nextTopicUrl = null;
+  const currentIndex = currentPathTopics.findIndex(
+    (item) => item.slug === topic
+  );
+  if (currentIndex < currentPathTopics.length - 1) {
+    const nextTopicSlug = currentPathTopics[currentIndex + 1].slug;
+    nextTopicUrl = `/paths/${path}/${nextTopicSlug}`;
+  }
 
   if (!currentTopicData) {
     return (
