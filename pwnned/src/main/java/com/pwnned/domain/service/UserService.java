@@ -1,6 +1,7 @@
 package com.pwnned.domain.service;
 
 import com.pwnned.domain.enums.UserType;
+import com.pwnned.domain.exception.UserAlreadyExistsException;
 import com.pwnned.domain.exception.UserAlreadyPremiumException;
 import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.User;
@@ -27,6 +28,14 @@ public class UserService implements UserServicePort {
 
     @Override
     public User createUser(User user) {
+        if (userRepositoryPort.existsByEmail(user.getEmail())) {
+            throw new UserAlreadyExistsException("Email já está em uso");
+        } 
+        
+        if (userRepositoryPort.existsByUsername(user.getUsername())) {
+            throw new UserAlreadyExistsException("Username já está em uso");
+        }
+
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         user.setUserType(UserType.BASIC);
@@ -78,5 +87,19 @@ public class UserService implements UserServicePort {
         List<User> users = userRepositoryPort.getUsersByType(userType);
         if (users.isEmpty()) throw new UserNotFoundException("Users Not Found");
         return users;
+    }
+
+    @Override
+    public Optional<User> authenticateUser(String username, String password) {
+        Optional<User> user = userRepositoryPort.findByUsername(username);
+        if (user.isEmpty()) {
+            return Optional.empty(); 
+        }
+        User foundUser = user.get();
+        if (passwordEncoder.matches(password, foundUser.getPassword())) {
+            return Optional.of(foundUser); 
+        } else {
+            return Optional.empty(); 
+        }
     }
 }
