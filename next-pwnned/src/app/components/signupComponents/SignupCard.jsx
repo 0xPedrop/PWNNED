@@ -1,6 +1,10 @@
 "use client";
+import { signup } from "@/app/services/api";
 import styles from "./SignupCard.module.css";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { toast } from "react-toastify";
 
 export default function SignupCard() {
   const [input, setInput] = useState("");
@@ -14,6 +18,29 @@ export default function SignupCard() {
   const [emailError, setEmailError] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (emailError || usernameError || passwordError) return;
+
+    setIsLoading(true);
+
+    try {
+      const result = await signup({ email, username, password });
+      toast.success(result.message || "Cadastro realizado com sucesso!");
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    } catch (error) {
+      console.error("Erro no handleSubmit:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleCommand = (e) => {
     e.preventDefault();
@@ -89,10 +116,7 @@ export default function SignupCard() {
         )}
 
         {showForm && (
-          <form
-            className={styles.signupForm}
-            onSubmit={(e) => e.preventDefault()}
-          >
+          <form className={styles.signupForm} onSubmit={handleSubmit}>
             <div className={styles.floatingGroup}>
               <input
                 type="text"
@@ -157,9 +181,11 @@ export default function SignupCard() {
             <button
               type="submit"
               className={styles.button}
-              disabled={!!(emailError || usernameError || passwordError)}
+              disabled={
+                !!(emailError || usernameError || passwordError) || isLoading
+              }
             >
-              Cadastrar-se
+              {isLoading ? "Cadastrando..." : "Cadastrar-se"}
             </button>
           </form>
         )}

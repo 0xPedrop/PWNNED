@@ -40,7 +40,7 @@ export default function Hero() {
             <hr style={{ color: "var(--primary-200)" }} />
           </div>
           <div style={{ cursor: "pointer" }}>
-            <a href="">Go To Path</a>
+            <a href="/paths/xss/understanding-xss-fundamentals">Go To Path</a>
             <Image
               src="/next-white.png"
               alt="Next Icon"
