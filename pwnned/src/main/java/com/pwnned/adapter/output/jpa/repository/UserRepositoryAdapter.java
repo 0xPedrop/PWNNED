@@ -51,19 +51,4 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     public List<User> getUsersByType(UserType userType) {
         return userRepository.findByUserType(userType).stream().map(UserMapper.INSTANCE::toModel).toList();
     }
-
-    @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username).map(UserMapper.INSTANCE::toModel);
-    }
-
-    @Override
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    @Override
-    public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
-    }
 }
