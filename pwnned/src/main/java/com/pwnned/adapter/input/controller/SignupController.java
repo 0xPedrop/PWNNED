@@ -1,8 +1,13 @@
 package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.SignupDTO;
+import com.pwnned.domain.exception.UserAlreadyExistsException;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.UserServicePort;
+
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +22,8 @@ public class SignupController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupDTO signupDTO) {
+    public ResponseEntity<?> signup(@RequestBody SignupDTO signupDTO) {
+       try {
         User user = new User();
         user.setEmail(signupDTO.email());
         user.setUsername(signupDTO.username());
@@ -26,5 +32,8 @@ public class SignupController {
         userServicePort.createUser(user);
 
         return ResponseEntity.ok("Usuário cadastrado com sucesso!");
+    } catch (UserAlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
     }
+}
 }

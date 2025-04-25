@@ -4,7 +4,6 @@ import com.pwnned.adapter.input.mapper.LaboratoryMapper;
 import com.pwnned.adapter.output.jpa.repository.entity.LaboratoryEntity;
 import com.pwnned.domain.enums.LabType;
 import com.pwnned.domain.model.Laboratory;
-import com.pwnned.domain.model.User;
 import com.pwnned.port.output.LaboratoryRepositoryPort;
 import org.springframework.stereotype.Component;
 

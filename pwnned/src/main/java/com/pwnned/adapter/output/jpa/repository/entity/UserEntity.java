@@ -24,10 +24,13 @@ public class UserEntity {
     @JdbcTypeCode(SqlTypes.UUID)
     private UUID userId;
 
+    @Column(length = 60, nullable = false, unique = true)
     private String email;
 
+    @Column(length = 60, nullable = false)
     private String password;
 
+    @Column(length = 60, nullable = false, unique = true)
     private String username;
 
     @Enumerated(EnumType.STRING)
