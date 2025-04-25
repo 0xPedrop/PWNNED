@@ -2,10 +2,9 @@
 import { signup } from "@/app/services/api";
 import styles from "./SignupCard.module.css";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Certificando-se de usar o useRouter do Next.js
+import { useRouter } from "next/navigation";
 
-// Toast Notification library (assumindo que você está usando alguma)
-import { toast } from "react-toastify"; // Verifique se você tem o react-toastify instalado
+import { toast } from "react-toastify";
 
 export default function SignupCard() {
   const [input, setInput] = useState("");
@@ -21,29 +20,23 @@ export default function SignupCard() {
   const [passwordError, setPasswordError] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter(); // Agora usando o useRouter corretamente
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Se houver erros, não faz o cadastro
     if (emailError || usernameError || passwordError) return;
 
     setIsLoading(true);
 
     try {
       const result = await signup({ email, username, password });
-
-      // Exibir notificação de sucesso
       toast.success(result.message || "Cadastro realizado com sucesso!");
-
-      // Após a notificação, redirecionar para a página de login
       setTimeout(() => {
         router.push("/login");
-      }, 2000); // Atraso para a notificação ser vista antes do redirecionamento
+      }, 2000);
     } catch (error) {
-      // Caso ocorra um erro, exibe a mensagem de erro
-      toast.error("Erro ao cadastrar");
+      console.error("Erro no handleSubmit:", error);
     } finally {
       setIsLoading(false);
     }
