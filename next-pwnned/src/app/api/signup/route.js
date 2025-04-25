@@ -2,7 +2,7 @@ export async function POST(req) {
   try {
     const { email, username, password } = await req.json();
 
-    const springResponse = await fetch("http://localhost:8080/api/signup", {
+    const springResponse = await fetch("http://localhost:8080/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -10,10 +10,9 @@ export async function POST(req) {
       body: JSON.stringify({ email, username, password }),
     });
 
-    const responseData = await springResponse.json();
-
-    return new Response(JSON.stringify(responseData), {
+    return new Response(springResponse.body, {
       status: springResponse.status,
+      headers: springResponse.headers,
     });
   } catch (err) {
     console.error("Erro no proxy da API:", err);
