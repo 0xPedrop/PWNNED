@@ -2,7 +2,6 @@ package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.LaboratoryDTO;
 import com.pwnned.adapter.input.mapper.LaboratoryMapper;
-import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.domain.enums.LabType;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.port.input.LaboratoryControllerPort;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequestMapping("/labs")
