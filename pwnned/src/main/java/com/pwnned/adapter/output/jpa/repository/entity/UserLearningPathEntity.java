@@ -1,6 +1,5 @@
 package com.pwnned.adapter.output.jpa.repository.entity;
 
-import com.pwnned.domain.enums.PathStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +24,4 @@ public class UserLearningPathEntity {
     @ManyToOne
     @JoinColumn(name = "path_id")
     private LearningPathEntity learningPath;
-
-    private PathStatus pathStatus;
 }
