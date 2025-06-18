@@ -1,6 +1,6 @@
 package com.pwnned.domain.enums;
 
-public enum LabType {
+public enum LaboratoryType {
     STANDART,
     SPECIALIZED
 }
