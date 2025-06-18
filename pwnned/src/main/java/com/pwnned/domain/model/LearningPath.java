@@ -6,30 +6,27 @@ import java.util.List;
 import java.util.UUID;
 
 public class LearningPath {
-    private UUID pathId;
+    private UUID learningPathId;
     private String title;
     private String category;
     private Difficulty difficulty;
-    private List<Laboratory> laboratories;
 
-    public LearningPath(UUID pathId, String title, String category, Difficulty difficulty,
-                        List<Laboratory> laboratories) {
-        this.pathId = pathId;
+    public LearningPath(UUID learningPathId, String title, String category, Difficulty difficulty) {
+        this.learningPathId = learningPathId;
         this.title = title;
         this.category = category;
         this.difficulty = difficulty;
-        this.laboratories = laboratories;
     }
 
     public LearningPath() {
     }
 
-    public UUID getPathId() {
-        return pathId;
+    public UUID getLearningPathId() {
+        return learningPathId;
     }
 
-    public void setPathId(UUID pathId) {
-        this.pathId = pathId;
+    public void setLearningPathId(UUID learningPathId) {
+        this.learningPathId = learningPathId;
     }
 
     public String getTitle() {
@@ -54,14 +51,6 @@ public class LearningPath {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
-    }
-
-    public List<Laboratory> getLaboratories() {
-        return laboratories;
-    }
-
-    public void setLaboratories(List<Laboratory> laboratories) {
-        this.laboratories = laboratories;
     }
 }
 
