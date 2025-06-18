@@ -79,3 +79,4 @@ build/
 
 src/main/resources
 /resources/application.properties
+../Oracle_JDK-21/
