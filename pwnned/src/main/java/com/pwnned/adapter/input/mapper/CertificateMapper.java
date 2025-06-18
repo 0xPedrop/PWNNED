@@ -16,8 +16,8 @@ public interface CertificateMapper {
 
     CertificateMapper INSTANCE = Mappers.getMapper(CertificateMapper.class);
 
-    @Mapping(target = "certificateId", ignore = true) // O ID é gerado pelo banco de dados, não pelo DTO de criação
-    @Mapping(target = "issueDate", expression = "java(LocalDate.now())") // Gera a data atual no backend
+    @Mapping(target = "certificateId", ignore = true)
+    @Mapping(target = "issueDate", expression = "java(LocalDate.now())")
     @Mapping(target = "serialNumber", expression = "java(UUID.randomUUID().toString().replace(\"-\", \"\").toUpperCase())")
     Certificate toModel(CreateCertificateDTO certificateResponseDTO);
     Certificate toModel(CertificateEntity certificateEntity);
