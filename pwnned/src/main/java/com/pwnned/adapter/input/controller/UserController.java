@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/users")
+@RequestMapping("api/v1/users")
 @RestController
 public class UserController implements UserControllerPort {
     private final UserServicePort userServicePort;
@@ -28,7 +28,7 @@ public class UserController implements UserControllerPort {
         User user = UserMapper.INSTANCE.toModel(userDTO);
         User createdUser = userServicePort.createUser(user);
         UserDTO createdUserDTO = UserMapper.INSTANCE.toDTO(createdUser);
-        return ResponseEntity.ok(createdUserDTO);
+        return ResponseEntity.status(201).body(createdUserDTO);
     }
 
     @Override
@@ -43,9 +43,8 @@ public class UserController implements UserControllerPort {
     @Override
     @GetMapping("/{userId}")
     public ResponseEntity<UserDTO> getSingleUser(@PathVariable UUID userId) {
-        return userServicePort.getSingleUser(userId)
-                .map(user -> ResponseEntity.ok(UserMapper.INSTANCE.toDTO(user)))
-                .orElse(ResponseEntity.notFound().build());
+        User user = userServicePort.getSingleUser(userId);
+        return ResponseEntity.ok(UserMapper.INSTANCE.toDTO(user));
     }
 
     @Override

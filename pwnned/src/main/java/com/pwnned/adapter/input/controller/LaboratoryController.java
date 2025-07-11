@@ -1,9 +1,12 @@
 package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.LaboratoryDTO;
+import com.pwnned.adapter.input.dto.UserDTO;
 import com.pwnned.adapter.input.mapper.LaboratoryMapper;
+import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.model.Laboratory;
+import com.pwnned.domain.model.User;
 import com.pwnned.port.input.LaboratoryControllerPort;
 import com.pwnned.port.input.LaboratoryServicePort;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("/labs")
+@RequestMapping("api/v1/labs")
 @RestController
 public class LaboratoryController implements LaboratoryControllerPort {
 
@@ -28,25 +31,23 @@ public class LaboratoryController implements LaboratoryControllerPort {
         Laboratory laboratory = LaboratoryMapper.INSTANCE.toModel(laboratoryDTO);
         Laboratory createdLaboratory = laboratoryServicePort.createLaboratory(laboratory);
         LaboratoryDTO createdLaboratoryDTO = LaboratoryMapper.INSTANCE.toDTO(createdLaboratory);
-        return ResponseEntity.ok(createdLaboratoryDTO);
+        return ResponseEntity.status(201).body(createdLaboratoryDTO);
     }
 
     @Override
     @GetMapping
     public ResponseEntity<List<LaboratoryDTO>> getAllLaboratories() {
-        List<LaboratoryDTO> labsDTO = laboratoryServicePort.getAllLaboratories()
-                .stream()
+        List<LaboratoryDTO> laboratoryDTOS = laboratoryServicePort.getAllLaboratories().stream()
                 .map(LaboratoryMapper.INSTANCE::toDTO)
                 .toList();
-        return ResponseEntity.ok(labsDTO);
+        return ResponseEntity.ok(laboratoryDTOS);
     }
 
     @Override
-    @GetMapping("/{labId}")
+    @GetMapping("/{laboratoryId}")
     public ResponseEntity<LaboratoryDTO> getSingleLaboratory(@PathVariable UUID laboratoryId) {
-        return laboratoryServicePort.getSingleLaboratory(laboratoryId)
-                .map(lab -> ResponseEntity.ok(LaboratoryMapper.INSTANCE.toDTO(lab)))
-                .orElse(ResponseEntity.notFound().build());
+        Laboratory laboratory = laboratoryServicePort.getSingleLaboratory(laboratoryId);
+        return ResponseEntity.ok(LaboratoryMapper.INSTANCE.toDTO(laboratory));
     }
 
     @Override

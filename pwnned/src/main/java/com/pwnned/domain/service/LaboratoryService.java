@@ -3,6 +3,7 @@ package com.pwnned.domain.service;
 import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.exception.LaboratoryNotFoundException;
 import com.pwnned.domain.exception.LearningPathNotFoundException;
+import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.port.input.LaboratoryServicePort;
 import com.pwnned.port.output.LaboratoryRepositoryPort;
@@ -31,17 +32,13 @@ public class LaboratoryService implements LaboratoryServicePort {
 
     @Override
     public List<Laboratory> getAllLaboratories() {
-        List<Laboratory> laboratories = laboratoryRepositoryPort.findAll();
-        if (laboratories.isEmpty()) throw new LaboratoryNotFoundException("Laboratories Not Found");
-        return laboratories;
+        return laboratoryRepositoryPort.findAll();
     }
 
     @Override
-    public Optional<Laboratory> getSingleLaboratory(UUID laboratoryId) {
-        Optional<Laboratory> laboratory = laboratoryRepositoryPort.findById(laboratoryId);
-        if (laboratory.isEmpty()) throw new LaboratoryNotFoundException("Laboratory "
-                + laboratoryId + " Not Found");
-        return laboratory;
+    public Laboratory getSingleLaboratory(UUID laboratoryId) {
+        return laboratoryRepositoryPort.findById(laboratoryId)
+                .orElseThrow(() -> new LaboratoryNotFoundException("Laboratory not found with ID: " + laboratoryId));
     }
 
     @Override

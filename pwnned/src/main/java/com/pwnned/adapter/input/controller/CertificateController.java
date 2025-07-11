@@ -2,8 +2,11 @@ package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.CertificateResponseDTO;
 import com.pwnned.adapter.input.dto.CreateCertificateDTO;
+import com.pwnned.adapter.input.dto.UserDTO;
 import com.pwnned.adapter.input.mapper.CertificateMapper;
+import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.domain.model.Certificate;
+import com.pwnned.domain.model.User;
 import com.pwnned.port.input.CertificateControllerPort;
 import com.pwnned.port.input.CertificateServicePort;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestMapping("/certificates")
+@RequestMapping("api/v1/certificates")
 @RestController
 public class CertificateController implements CertificateControllerPort {
 
@@ -29,25 +32,16 @@ public class CertificateController implements CertificateControllerPort {
         Certificate certificate = CertificateMapper.INSTANCE.toModel(certificateDTO);
         Certificate createdCertificate = certificateServicePort.createCertificate(certificate);
         CertificateResponseDTO createdCertificateDTO = CertificateMapper.INSTANCE.toDTO(createdCertificate);
-        return ResponseEntity.ok(createdCertificateDTO);
+        return ResponseEntity.status(201).body(createdCertificateDTO);
     }
 
     @Override
     @GetMapping
     public ResponseEntity<List<CertificateResponseDTO>> getAllCertificates() {
-        List<CertificateResponseDTO> certificateDTOS = certificateServicePort.getAllCertificates()
-                .stream()
+        List<CertificateResponseDTO> certificateResponseDTOS = certificateServicePort.getAllCertificates().stream()
                 .map(CertificateMapper.INSTANCE::toDTO)
                 .toList();
-        return ResponseEntity.ok(certificateDTOS);
-    }
-
-    @Override
-    @GetMapping("/{certificateId}")
-    public ResponseEntity<CertificateResponseDTO> getSingleCertificate(UUID certificateId) {
-        return certificateServicePort.getSingleCertificate(certificateId)
-                .map(certificate -> ResponseEntity.ok(CertificateMapper.INSTANCE.toDTO(certificate)))
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(certificateResponseDTOS);
     }
 
     @Override
@@ -66,10 +60,8 @@ public class CertificateController implements CertificateControllerPort {
 
     @Override
     @GetMapping("/serial/{serialNumber}")
-    public ResponseEntity<Optional<CertificateResponseDTO>> getCertificateBySerialNumber(@PathVariable String serialNumber) {
-        Optional<Certificate> certificate = certificateServicePort.getCertificateBySerialNumber(serialNumber);
-        return certificate.map(CertificateMapper.INSTANCE::toDTO)
-                .map(dto -> ResponseEntity.ok(Optional.of(dto)))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CertificateResponseDTO> getCertificateBySerialNumber(@PathVariable String serialNumber) {
+        Certificate certificate = certificateServicePort.getCertificateBySerialNumber(serialNumber);
+        return ResponseEntity.ok(CertificateMapper.INSTANCE.toDTO(certificate));
     }
 }

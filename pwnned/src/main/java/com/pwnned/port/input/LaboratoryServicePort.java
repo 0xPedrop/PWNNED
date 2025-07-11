@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface LaboratoryServicePort {
     Laboratory createLaboratory(Laboratory laboratory);
     List<Laboratory> getAllLaboratories();
-    Optional<Laboratory> getSingleLaboratory(UUID laboratoryId);
+    Laboratory getSingleLaboratory(UUID laboratoryId);
     void deleteLaboratory(UUID laboratoryId);
     void deleteAllLaboratories();
     List<Laboratory> getLaboratoriesByType(LaboratoryType laboratoryType);

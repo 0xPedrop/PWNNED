@@ -9,8 +9,7 @@ import java.util.UUID;
 public interface CertificateServicePort {
     Certificate createCertificate(Certificate certificate);
     List<Certificate> getAllCertificates();
-    Optional<Certificate> getSingleCertificate(UUID certificateId);
     void deleteCertificate(UUID certificateId);
     void deleteAllCertificates();
-    Optional<Certificate> getCertificateBySerialNumber(String serialNumber);
+    Certificate getCertificateBySerialNumber(String serialNumber);
 }

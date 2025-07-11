@@ -2,6 +2,7 @@ package com.pwnned.domain.service;
 
 import com.pwnned.domain.exception.CertificateNotFoundException;
 import com.pwnned.domain.exception.LaboratoryNotFoundException;
+import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.Certificate;
 import com.pwnned.port.input.CertificateServicePort;
 import com.pwnned.port.output.CertificateRepositoryPort;
@@ -27,16 +28,7 @@ public class CertificateService implements CertificateServicePort {
 
     @Override
     public List<Certificate> getAllCertificates() {
-        List<Certificate> certificates = certificateRepositoryPort.findAll();
-        if (certificates.isEmpty()) throw new CertificateNotFoundException("Certificates Not Found");
-        return certificates;
-    }
-
-    @Override
-    public Optional<Certificate> getSingleCertificate(UUID certificateId) {
-        Optional<Certificate> certificate = certificateRepositoryPort.findById(certificateId);
-        if (certificate.isEmpty()) throw new CertificateNotFoundException("Certificate " + certificateId + " Not Found");
-        return certificate;
+        return certificateRepositoryPort.findAll();
     }
 
     @Override
@@ -52,9 +44,9 @@ public class CertificateService implements CertificateServicePort {
     }
 
     @Override
-    public Optional<Certificate> getCertificateBySerialNumber(String serialNumber) {
-        Optional<Certificate> certificate = certificateRepositoryPort.findBySerialNumber(serialNumber);
-        if (certificate.isEmpty()) throw new CertificateNotFoundException("Certificate Not Found");
-        return certificate;
+    public Certificate getCertificateBySerialNumber(String serialNumber) {
+        return certificateRepositoryPort.findBySerialNumber(serialNumber)
+                .orElseThrow(() -> new UserNotFoundException("Certificate not found with Serial Number: "
+                        + serialNumber));
     }
 }

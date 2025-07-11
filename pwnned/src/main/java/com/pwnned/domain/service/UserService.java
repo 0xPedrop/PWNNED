@@ -44,16 +44,13 @@ public class UserService implements UserServicePort {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> users = userRepositoryPort.findAll();
-        if (users.isEmpty()) throw new UserNotFoundException("Users Not Found");
-        return users;
+        return userRepositoryPort.findAll();
     }
 
     @Override
-    public Optional<User> getSingleUser(UUID userId) {
-        Optional<User> user = userRepositoryPort.findById(userId);
-        if (user.isEmpty()) throw new UserNotFoundException("User " + userId + " Not Found");
-        return user;
+    public User getSingleUser(UUID userId) {
+        return userRepositoryPort.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
     }
 
     @Override
