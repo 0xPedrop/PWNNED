@@ -1,7 +1,7 @@
 package com.pwnned.domain.model;
 
 import com.pwnned.domain.enums.Difficulty;
-import com.pwnned.domain.enums.LabType;
+import com.pwnned.domain.enums.LaboratoryType;
 
 import java.util.UUID;
 
@@ -9,13 +9,15 @@ public class Laboratory {
     private UUID labId;
     private String title;
     private Difficulty difficulty;
-    private LabType labType;
+    private LaboratoryType laboratoryType;
+    private UUID learningPathId;
 
-    public Laboratory(UUID labId, String title, Difficulty difficulty, LabType labType) {
+    public Laboratory(UUID labId, String title, Difficulty difficulty, LaboratoryType laboratoryType, UUID learningPathId) {
         this.labId = labId;
         this.title = title;
         this.difficulty = difficulty;
-        this.labType = labType;
+        this.laboratoryType = laboratoryType;
+        this.learningPathId = learningPathId;
     }
 
     public Laboratory() {
@@ -45,12 +47,20 @@ public class Laboratory {
         this.difficulty = difficulty;
     }
 
-    public LabType getLabType() {
-        return labType;
+    public LaboratoryType getLaboratoryType() {
+        return laboratoryType;
     }
 
-    public void setLabType(LabType labType) {
-        this.labType = labType;
+    public void setLaboratoryType(LaboratoryType laboratoryType) {
+        this.laboratoryType = laboratoryType;
+    }
+
+    public UUID getLearningPathId() {
+        return learningPathId;
+    }
+
+    public void setLearningPathId(UUID learningPathId) {
+        this.learningPathId = learningPathId;
     }
 }
 

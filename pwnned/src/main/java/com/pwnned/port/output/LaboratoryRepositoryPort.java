@@ -1,6 +1,6 @@
 package com.pwnned.port.output;
 
-import com.pwnned.domain.enums.LabType;
+import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.User;
 
@@ -9,10 +9,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface LaboratoryRepositoryPort {
-    Laboratory save(Laboratory lab);
+    Laboratory save(Laboratory laboratory);
     List<Laboratory> findAll();
-    Optional<Laboratory> findById(UUID labId);
-    void deleteById(UUID labId);
+    Optional<Laboratory> findById(UUID laboratoryId);
+    List<Laboratory> getLaboratoriesByType(LaboratoryType laboratoryType);
+    void deleteById(UUID laboratoryId);
     void deleteAll();
-    List<Laboratory> findLabsByType(LabType labType);
+    List<Laboratory> findByLearningPathId(UUID learningPathId);
 }

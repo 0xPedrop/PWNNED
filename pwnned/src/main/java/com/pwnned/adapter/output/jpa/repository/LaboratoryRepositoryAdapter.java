@@ -2,7 +2,7 @@ package com.pwnned.adapter.output.jpa.repository;
 
 import com.pwnned.adapter.input.mapper.LaboratoryMapper;
 import com.pwnned.adapter.output.jpa.repository.entity.LaboratoryEntity;
-import com.pwnned.domain.enums.LabType;
+import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.output.LaboratoryRepositoryPort;
@@ -22,10 +22,10 @@ public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
     }
 
     @Override
-    public Laboratory save(Laboratory lab) {
-        LaboratoryEntity labEntity = LaboratoryMapper.INSTANCE.toEntity(lab);
-        LaboratoryEntity savedLab= laboratoryRepository.save(labEntity);
-        return LaboratoryMapper.INSTANCE.toModel(savedLab);
+    public Laboratory save(Laboratory laboratory) {
+        LaboratoryEntity laboratoryEntity = LaboratoryMapper.INSTANCE.toEntity(laboratory);
+        LaboratoryEntity savedLaboratory = laboratoryRepository.save(laboratoryEntity);
+        return LaboratoryMapper.INSTANCE.toModel(savedLaboratory);
     }
 
     @Override
@@ -34,13 +34,18 @@ public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
     }
 
     @Override
-    public Optional<Laboratory> findById(UUID labId) {
-        return laboratoryRepository.findById(labId).map(LaboratoryMapper.INSTANCE::toModel);
+    public Optional<Laboratory> findById(UUID laboratoryId) {
+        return laboratoryRepository.findById(laboratoryId).map(LaboratoryMapper.INSTANCE::toModel);
     }
 
     @Override
-    public void deleteById(UUID labId) {
-        laboratoryRepository.deleteById(labId);
+    public List<Laboratory> getLaboratoriesByType(LaboratoryType laboratoryType) {
+        return laboratoryRepository.findByLaboratoryType(laboratoryType).stream().map(LaboratoryMapper.INSTANCE::toModel).toList();
+    }
+
+    @Override
+    public void deleteById(UUID laboratoryId) {
+        laboratoryRepository.deleteById(laboratoryId);
     }
 
     @Override
@@ -49,9 +54,8 @@ public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
     }
 
     @Override
-    public List<Laboratory> findLabsByType(LabType labType) {
-        return laboratoryRepository.findByLabType(labType)
-                .stream()
+    public List<Laboratory> findByLearningPathId(UUID learningPathId) {
+        return laboratoryRepository.findByLearningPathId(learningPathId).stream()
                 .map(LaboratoryMapper.INSTANCE::toModel)
                 .toList();
     }

@@ -1,10 +1,12 @@
 package com.pwnned.domain.service;
 
-import com.pwnned.domain.enums.LabType;
+import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.exception.LaboratoryNotFoundException;
+import com.pwnned.domain.exception.LearningPathNotFoundException;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.port.input.LaboratoryServicePort;
 import com.pwnned.port.output.LaboratoryRepositoryPort;
+import com.pwnned.port.output.LearningPathRepositoryPort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,47 +16,58 @@ import java.util.UUID;
 @Service
 public class LaboratoryService implements LaboratoryServicePort {
 
-   private final LaboratoryRepositoryPort laboratoryRepositoryPort;
+    private final LaboratoryRepositoryPort laboratoryRepositoryPort;
+    private final LearningPathRepositoryPort learningPathRepositoryPort;
 
-    public LaboratoryService(LaboratoryRepositoryPort laboratoryRepositoryPort) {
+    public LaboratoryService(LaboratoryRepositoryPort laboratoryRepositoryPort, LearningPathRepositoryPort learningPathRepositoryPort) {
         this.laboratoryRepositoryPort = laboratoryRepositoryPort;
+        this.learningPathRepositoryPort = learningPathRepositoryPort;
     }
 
     @Override
-    public Laboratory createLab(Laboratory lab) {
-        return laboratoryRepositoryPort.save(lab);
+    public Laboratory createLaboratory(Laboratory laboratory) {
+        return laboratoryRepositoryPort.save(laboratory);
     }
 
     @Override
-    public List<Laboratory> getAllLabs() {
-        List<Laboratory> labs = laboratoryRepositoryPort.findAll();
-        if (labs.isEmpty()) throw new LaboratoryNotFoundException("Labs Not Found");
-        return labs;
+    public List<Laboratory> getAllLaboratories() {
+        List<Laboratory> laboratories = laboratoryRepositoryPort.findAll();
+        if (laboratories.isEmpty()) throw new LaboratoryNotFoundException("Laboratories Not Found");
+        return laboratories;
     }
 
     @Override
-    public Optional<Laboratory> getSingleLab(UUID labId) {
-        Optional<Laboratory> lab = laboratoryRepositoryPort.findById(labId);
-        if (lab.isEmpty()) throw new LaboratoryNotFoundException("Lab " + labId + " Not Found");
-        return lab;
+    public Optional<Laboratory> getSingleLaboratory(UUID laboratoryId) {
+        Optional<Laboratory> laboratory = laboratoryRepositoryPort.findById(laboratoryId);
+        if (laboratory.isEmpty()) throw new LaboratoryNotFoundException("Laboratory "
+                + laboratoryId + " Not Found");
+        return laboratory;
     }
 
     @Override
-    public void deleteLab(UUID labId) {
-        Optional<Laboratory> lab = laboratoryRepositoryPort.findById(labId);
-        if (lab.isEmpty()) throw new LaboratoryNotFoundException("Lab " + labId + " Not Found");
-        laboratoryRepositoryPort.deleteById(labId);
+    public void deleteLaboratory(UUID laboratoryId) {
+        Optional<Laboratory> laboratory = laboratoryRepositoryPort.findById(laboratoryId);
+        if (laboratory.isEmpty()) throw new LaboratoryNotFoundException("Laboratory "
+                + laboratoryId + " Not Found");
+        laboratoryRepositoryPort.deleteById(laboratoryId);
     }
 
     @Override
-    public void deleteAllLabs() {
+    public void deleteAllLaboratories() {
         laboratoryRepositoryPort.deleteAll();
     }
 
     @Override
-    public List<Laboratory> getLabsByType(LabType labType) {
-        List<Laboratory> labs = laboratoryRepositoryPort.findLabsByType(labType);
-        if (labs.isEmpty()) throw new LaboratoryNotFoundException("Labs Not Found");
-        return labs;
+    public List<Laboratory> getLaboratoriesByType(LaboratoryType laboratoryType) {
+        List<Laboratory> laboratories = laboratoryRepositoryPort.getLaboratoriesByType(laboratoryType);
+        if (laboratories.isEmpty()) throw new LaboratoryNotFoundException("Laboratories Not Found");
+        return laboratories;
+    }
+
+    public List<Laboratory> getLaboratoriesByLearningPathId(UUID learningPathId) {
+        learningPathRepositoryPort.findById(learningPathId)
+                .orElseThrow(() -> new LearningPathNotFoundException("Learning Path with ID " + learningPathId + " not found."));
+
+        return laboratoryRepositoryPort.findByLearningPathId(learningPathId);
     }
 }
