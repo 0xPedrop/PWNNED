@@ -1,6 +1,7 @@
 package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.SignupDTO;
+import com.pwnned.adapter.input.response.ApiResponse;
 import com.pwnned.domain.exception.UserAlreadyExistsException;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.UserServicePort;
@@ -23,17 +24,18 @@ public class SignupController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupDTO signupDTO) {
-       try {
-        User user = new User();
-        user.setEmail(signupDTO.email());
-        user.setUsername(signupDTO.username());
-        user.setPassword(signupDTO.password());
+        try {
+            User user = new User();
+            user.setEmail(signupDTO.email());
+            user.setUsername(signupDTO.username());
+            user.setPassword(signupDTO.password());
 
-        userServicePort.createUser(user);
+            userServicePort.createUser(user);
 
-        return ResponseEntity.ok("Usuário cadastrado com sucesso!");
-    } catch (UserAlreadyExistsException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
+            ApiResponse response = new ApiResponse("Usuário cadastrado com sucesso");
+            return ResponseEntity.ok(response);
+        } catch (UserAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
+        }
     }
-}
 }
