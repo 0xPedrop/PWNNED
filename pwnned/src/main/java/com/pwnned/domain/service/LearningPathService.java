@@ -8,6 +8,8 @@ import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
 import com.pwnned.port.input.LearningPathServicePort;
 import com.pwnned.port.output.LearningPathRepositoryPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +31,8 @@ public class LearningPathService implements LearningPathServicePort {
     }
 
     @Override
-    public List<LearningPath> getAllLearningPaths() {
-        return learningPathRepositoryPort.findAll();
+    public Page<LearningPath> getAllLearningPaths(Pageable pageable) {
+        return learningPathRepositoryPort.findAll(pageable);
     }
 
     @Override

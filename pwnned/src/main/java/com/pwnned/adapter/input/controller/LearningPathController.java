@@ -2,9 +2,11 @@ package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.LaboratoryDTO;
 import com.pwnned.adapter.input.dto.LearningPathDTO;
+import com.pwnned.adapter.input.dto.PageableDTO;
 import com.pwnned.adapter.input.dto.UserDTO;
 import com.pwnned.adapter.input.mapper.LaboratoryMapper;
 import com.pwnned.adapter.input.mapper.LearningPathMapper;
+import com.pwnned.adapter.input.mapper.PageableMapper;
 import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.model.Laboratory;
@@ -13,6 +15,9 @@ import com.pwnned.domain.model.User;
 import com.pwnned.domain.service.LaboratoryService;
 import com.pwnned.port.input.LearningPathControllerPort;
 import com.pwnned.port.input.LearningPathServicePort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,35 +30,38 @@ public class LearningPathController implements LearningPathControllerPort {
 
     private final LearningPathServicePort learningPathServicePort;
     private final LaboratoryService laboratoryService;
+    private final LearningPathMapper learningPathMapper;
+    private final LaboratoryMapper laboratoryMapper;
 
-    public LearningPathController(LearningPathServicePort learningPathServicePort, LaboratoryService laboratoryService) {
+    public LearningPathController(LearningPathServicePort learningPathServicePort, LaboratoryService laboratoryService, LearningPathMapper learningPathMapper, LaboratoryMapper laboratoryMapper) {
         this.learningPathServicePort = learningPathServicePort;
         this.laboratoryService = laboratoryService;
+        this.learningPathMapper = learningPathMapper;
+        this.laboratoryMapper = laboratoryMapper;
     }
 
     @Override
     @PostMapping
     public ResponseEntity<LearningPathDTO> createLearningPath(@RequestBody LearningPathDTO learningPathDTO) {
-        LearningPath learningPath = LearningPathMapper.INSTANCE.toModel(learningPathDTO);
+        LearningPath learningPath = learningPathMapper.toModel(learningPathDTO);
         LearningPath createdLearningPath = learningPathServicePort.createLearningPath(learningPath);
-        LearningPathDTO createdLearningPathDTO = LearningPathMapper.INSTANCE.toDTO(createdLearningPath);
+        LearningPathDTO createdLearningPathDTO = learningPathMapper.toDTO(createdLearningPath);
         return ResponseEntity.status(201).body(createdLearningPathDTO);
     }
 
     @Override
     @GetMapping
-    public ResponseEntity<List<LearningPathDTO>> getAllLearningPaths() {
-        List<LearningPathDTO> learningPathDTOS = learningPathServicePort.getAllLearningPaths().stream()
-                .map(LearningPathMapper.INSTANCE::toDTO)
-                .toList();
-        return ResponseEntity.ok(learningPathDTOS);
+    public ResponseEntity<PageableDTO> getAllLearningPaths(@PageableDefault(size = 5, sort = "title") Pageable pageable) {
+        Page<LearningPathDTO> learningPathDTOS = learningPathServicePort.getAllLearningPaths(pageable)
+                .map(learningPathMapper::toDTO);
+        return ResponseEntity.ok(PageableMapper.INSTANCE.toDTO(learningPathDTOS));
     }
 
     @Override
     @GetMapping("/{learningPathId}")
     public ResponseEntity<LearningPathDTO> getSingleLearningPath(@PathVariable UUID learningPathId) {
         LearningPath learningPath = learningPathServicePort.getSingleLearningPath(learningPathId);
-        return ResponseEntity.ok(LearningPathMapper.INSTANCE.toDTO(learningPath));
+        return ResponseEntity.ok(learningPathMapper.toDTO(learningPath));
     }
 
     @Override
@@ -75,7 +83,7 @@ public class LearningPathController implements LearningPathControllerPort {
     public ResponseEntity<List<LearningPathDTO>> getLearningPathsByDifficulty(@PathVariable Difficulty difficulty) {
         List<LearningPathDTO> learningPathDTOS = learningPathServicePort.getLearningPathsByDifficulty(difficulty)
                 .stream()
-                .map(LearningPathMapper.INSTANCE::toDTO)
+                .map(learningPathMapper::toDTO)
                 .toList();
         return ResponseEntity.ok(learningPathDTOS);
     }
@@ -85,7 +93,7 @@ public class LearningPathController implements LearningPathControllerPort {
             @PathVariable UUID learningPathId) {
         List<Laboratory> laboratories = laboratoryService.getLaboratoriesByLearningPathId(learningPathId);
         List<LaboratoryDTO> laboratoryDTOs = laboratories.stream()
-                .map(LaboratoryMapper.INSTANCE::toDTO)
+                .map(laboratoryMapper::toDTO)
                 .toList();
         return ResponseEntity.ok(laboratoryDTOs);
     }

@@ -3,6 +3,7 @@ package com.pwnned.domain.model;
 import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.enums.LaboratoryType;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Laboratory {
@@ -10,14 +11,14 @@ public class Laboratory {
     private String title;
     private Difficulty difficulty;
     private LaboratoryType laboratoryType;
-    private UUID learningPathId;
+    private LearningPath learningPath;
 
-    public Laboratory(UUID labId, String title, Difficulty difficulty, LaboratoryType laboratoryType, UUID learningPathId) {
+    public Laboratory(UUID labId, String title, Difficulty difficulty, LaboratoryType laboratoryType, LearningPath learningPath) {
         this.labId = labId;
         this.title = title;
         this.difficulty = difficulty;
         this.laboratoryType = laboratoryType;
-        this.learningPathId = learningPathId;
+        this.learningPath = learningPath;
     }
 
     public Laboratory() {
@@ -55,12 +56,24 @@ public class Laboratory {
         this.laboratoryType = laboratoryType;
     }
 
-    public UUID getLearningPathId() {
-        return learningPathId;
+    public LearningPath getLearningPath() {
+        return learningPath;
     }
 
-    public void setLearningPathId(UUID learningPathId) {
-        this.learningPathId = learningPathId;
+    public void setLearningPath(LearningPath learningPath) {
+        this.learningPath = learningPath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Laboratory that = (Laboratory) o;
+        return Objects.equals(labId, that.labId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(labId);
     }
 }
-

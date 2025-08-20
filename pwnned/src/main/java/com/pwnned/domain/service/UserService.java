@@ -7,6 +7,8 @@ import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.UserServicePort;
 import com.pwnned.port.output.UserRepositoryPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +45,8 @@ public class UserService implements UserServicePort {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepositoryPort.findAll();
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepositoryPort.findAll(pageable);
     }
 
     @Override
@@ -62,8 +64,6 @@ public class UserService implements UserServicePort {
 
     @Override
     public void deleteAllUsers() {
-        List<User> users = userRepositoryPort.findAll();
-        if (users.isEmpty()) throw new UserNotFoundException("No Users to Delete");
         userRepositoryPort.deleteAll();
     }
 

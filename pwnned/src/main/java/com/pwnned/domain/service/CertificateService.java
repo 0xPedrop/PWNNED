@@ -1,11 +1,19 @@
 package com.pwnned.domain.service;
 
+import com.pwnned.adapter.input.dto.CertificateResponseDTO;
+import com.pwnned.adapter.input.dto.CreateCertificateDTO;
 import com.pwnned.domain.exception.CertificateNotFoundException;
 import com.pwnned.domain.exception.LaboratoryNotFoundException;
 import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.Certificate;
+import com.pwnned.domain.model.LearningPath;
+import com.pwnned.domain.model.User;
 import com.pwnned.port.input.CertificateServicePort;
 import com.pwnned.port.output.CertificateRepositoryPort;
+import com.pwnned.port.output.LearningPathRepositoryPort;
+import com.pwnned.port.output.UserRepositoryPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,19 +24,35 @@ import java.util.UUID;
 public class CertificateService implements CertificateServicePort {
 
     private final CertificateRepositoryPort certificateRepositoryPort;
+    private final UserRepositoryPort userRepositoryPort;
+    private final LearningPathRepositoryPort learningPathRepositoryPort;
 
-    public CertificateService(CertificateRepositoryPort certificateRepositoryPort) {
+    public CertificateService(CertificateRepositoryPort certificateRepositoryPort, UserRepositoryPort userRepositoryPort, LearningPathRepositoryPort learningPathRepositoryPort) {
         this.certificateRepositoryPort = certificateRepositoryPort;
+        this.userRepositoryPort = userRepositoryPort;
+        this.learningPathRepositoryPort = learningPathRepositoryPort;
     }
 
     @Override
-    public Certificate createCertificate(Certificate certificate) {
+    public Certificate createCertificate(CreateCertificateDTO certificateDTO) {
+        User user = userRepositoryPort.findById(certificateDTO.userId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + certificateDTO.userId()));
+
+        LearningPath learningPath = learningPathRepositoryPort.findById(certificateDTO.learningPathId())
+                .orElseThrow(() -> new RuntimeException("Learning Path not found with ID: " +
+                        certificateDTO.learningPathId()));
+
+        Certificate certificate = new Certificate(certificateDTO.title());
+        certificate.setUrl(certificateDTO.url());
+        certificate.setUser(user);
+        certificate.setLearningPath(learningPath);
+
         return certificateRepositoryPort.save(certificate);
     }
 
     @Override
-    public List<Certificate> getAllCertificates() {
-        return certificateRepositoryPort.findAll();
+    public Page<CertificateResponseDTO> getAllCertificates(Pageable pageable) {
+        return certificateRepositoryPort.findAll(pageable);
     }
 
     @Override

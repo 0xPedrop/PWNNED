@@ -11,5 +11,5 @@ import java.util.UUID;
 @Repository
 public interface LaboratoryRepository extends JpaRepository<LaboratoryEntity, UUID> {
     List<LaboratoryEntity> findByLaboratoryType(LaboratoryType laboratoryType);
-    List<LaboratoryEntity> findByLearningPathId(UUID learningPathId);
+    List<LaboratoryEntity> findByLearningPath_LearningPathId(UUID learningPathId);
 }
