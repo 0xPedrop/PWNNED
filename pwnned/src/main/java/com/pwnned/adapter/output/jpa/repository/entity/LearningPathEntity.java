@@ -2,13 +2,11 @@ package com.pwnned.adapter.output.jpa.repository.entity;
 
 import com.pwnned.domain.enums.Difficulty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -17,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Builder
+@EqualsAndHashCode(exclude = {"laboratories", "certificates", "usersAcessing"})
 public class LearningPathEntity {
 
     @Id
@@ -31,4 +30,13 @@ public class LearningPathEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Difficulty difficulty;
+
+    @ManyToMany(mappedBy = "learningPathsAcessed")
+    private Set<UserEntity> usersAcessing;
+
+    @OneToMany(mappedBy = "learningPath")
+    private Set<LaboratoryEntity> laboratories;
+
+    @OneToOne(mappedBy = "learningPath")
+    private CertificateEntity certificate;
 }

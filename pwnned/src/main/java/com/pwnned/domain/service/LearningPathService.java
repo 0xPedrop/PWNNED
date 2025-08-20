@@ -3,10 +3,13 @@ package com.pwnned.domain.service;
 import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.exception.LaboratoryNotFoundException;
 import com.pwnned.domain.exception.LearningPathNotFoundException;
+import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
 import com.pwnned.port.input.LearningPathServicePort;
 import com.pwnned.port.output.LearningPathRepositoryPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,18 +31,14 @@ public class LearningPathService implements LearningPathServicePort {
     }
 
     @Override
-    public List<LearningPath> getAllLearningPaths() {
-        List<LearningPath> learningPaths = learningPathRepositoryPort.findAll();
-        if (learningPaths.isEmpty()) throw new LearningPathNotFoundException("Learning Paths Not Found");
-        return learningPaths;
+    public Page<LearningPath> getAllLearningPaths(Pageable pageable) {
+        return learningPathRepositoryPort.findAll(pageable);
     }
 
     @Override
-    public Optional<LearningPath> getSingleLearningPath(UUID learningPathId) {
-        Optional<LearningPath> learningPath = learningPathRepositoryPort.findById(learningPathId);
-        if (learningPath.isEmpty()) throw new LaboratoryNotFoundException("Learning Path "
-                + learningPathId + " Not Found");
-        return learningPath;
+    public LearningPath getSingleLearningPath(UUID learningPathId) {
+        return learningPathRepositoryPort.findById(learningPathId)
+                .orElseThrow(() -> new LearningPathNotFoundException("Learning Path not found with ID: " + learningPathId));
     }
 
     @Override

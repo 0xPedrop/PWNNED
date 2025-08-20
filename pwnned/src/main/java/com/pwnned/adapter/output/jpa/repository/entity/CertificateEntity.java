@@ -1,10 +1,7 @@
 package com.pwnned.adapter.output.jpa.repository.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "certificates")
+@EqualsAndHashCode(exclude = {"user", "learningPath"})
 public class CertificateEntity {
 
     @Id
@@ -30,4 +28,12 @@ public class CertificateEntity {
     @Column(nullable = false, unique = true)
     private String serialNumber;
     private String url;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "learning_path_id")
+    private LearningPathEntity learningPath;
 }

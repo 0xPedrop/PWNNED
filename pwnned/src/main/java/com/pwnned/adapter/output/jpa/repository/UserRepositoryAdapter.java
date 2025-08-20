@@ -5,6 +5,8 @@ import com.pwnned.adapter.output.jpa.repository.entity.UserEntity;
 import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.output.UserRepositoryPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,26 +17,28 @@ import java.util.UUID;
 public class UserRepositoryAdapter implements UserRepositoryPort {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserRepositoryAdapter(UserRepository userRepository) {
+    public UserRepositoryAdapter(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
     public User save(User user) {
-        UserEntity userEntity = UserMapper.INSTANCE.toEntity(user);
+        UserEntity userEntity = userMapper.toEntity(user);
         UserEntity savedUser = userRepository.save(userEntity);
-        return UserMapper.INSTANCE.toModel(savedUser);
+        return userMapper.toModel(savedUser);
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll().stream().map(UserMapper.INSTANCE::toModel).toList();
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable).map(userMapper::toModel);
     }
 
     @Override
     public Optional<User> findById(UUID userId) {
-        return userRepository.findById(userId).map(UserMapper.INSTANCE::toModel);
+        return userRepository.findById(userId).map(userMapper::toModel);
     }
 
     @Override
@@ -49,12 +53,12 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public List<User> getUsersByType(UserType userType) {
-        return userRepository.findByUserType(userType).stream().map(UserMapper.INSTANCE::toModel).toList();
+        return userRepository.findByUserType(userType).stream().map(userMapper::toModel).toList();
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username).map(UserMapper.INSTANCE::toModel);
+        return userRepository.findByUsername(username).map(userMapper::toModel);
     }
 
     @Override

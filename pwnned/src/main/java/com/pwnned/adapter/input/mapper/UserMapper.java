@@ -4,17 +4,22 @@ import com.pwnned.adapter.input.dto.UserDTO;
 import com.pwnned.adapter.output.jpa.repository.entity.UserEntity;
 import com.pwnned.domain.model.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {LearningPathMapper.class, CertificateMapper.class})
 public interface UserMapper {
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
     User toModel(UserDTO userDTO);
+
+    @Mapping(target = "certificates", ignore = true)
+    @Mapping(target = "learningPathsAcessed", ignore = true)
     User toModel(UserEntity userEntity);
 
     UserDTO toDTO(User user);
+
+    @Mapping(target = "certificates", ignore = true)
+    @Mapping(target = "learningPathsAcessed", ignore = true)
     UserEntity toEntity(User user);
 
 }
