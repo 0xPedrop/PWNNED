@@ -13,6 +13,7 @@ import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.LaboratoryControllerPort;
 import com.pwnned.port.input.LaboratoryServicePort;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -36,7 +37,7 @@ public class LaboratoryController implements LaboratoryControllerPort {
 
     @Override
     @PostMapping
-    public ResponseEntity<LaboratoryDTO> createLaboratory(@RequestBody LaboratoryDTO laboratoryDTO) {
+    public ResponseEntity<LaboratoryDTO> createLaboratory(@Valid @RequestBody LaboratoryDTO laboratoryDTO) {
         Laboratory createdLaboratory = laboratoryServicePort.createLaboratory(laboratoryDTO);
 
         LaboratoryDTO createdLaboratoryDTO = laboratoryMapper.toDTO(createdLaboratory);
@@ -73,7 +74,7 @@ public class LaboratoryController implements LaboratoryControllerPort {
     }
 
     @Override
-    @GetMapping("/type/{labType}")
+    @GetMapping("/type/{laboratoryType}")
     public ResponseEntity<List<LaboratoryDTO>> getLaboratoriesByType(@PathVariable LaboratoryType laboratoryType) {
         List<LaboratoryDTO> labsDTO = laboratoryServicePort.getLaboratoriesByType(laboratoryType)
                 .stream()

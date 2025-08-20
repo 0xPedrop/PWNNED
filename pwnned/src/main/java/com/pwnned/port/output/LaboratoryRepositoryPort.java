@@ -17,4 +17,5 @@ public interface LaboratoryRepositoryPort {
     void deleteById(UUID laboratoryId);
     void deleteAll();
     List<Laboratory> findByLearningPathId(UUID learningPathId);
+    void deleteAllByLearningPathId(UUID learningPathId);
 }

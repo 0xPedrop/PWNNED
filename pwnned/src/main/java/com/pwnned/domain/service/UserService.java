@@ -6,6 +6,7 @@ import com.pwnned.domain.exception.UserAlreadyPremiumException;
 import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.UserServicePort;
+import com.pwnned.port.output.CertificateRepositoryPort;
 import com.pwnned.port.output.UserRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,11 +21,13 @@ import java.util.UUID;
 public class UserService implements UserServicePort {
 
     private final UserRepositoryPort userRepositoryPort;
+    private final CertificateRepositoryPort certificateRepositoryPort;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepositoryPort userRepositoryPort, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepositoryPort userRepositoryPort, CertificateRepositoryPort certificateRepositoryPort, BCryptPasswordEncoder passwordEncoder) {
         this.userRepositoryPort = userRepositoryPort;
+        this.certificateRepositoryPort = certificateRepositoryPort;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -63,7 +66,10 @@ public class UserService implements UserServicePort {
     }
 
     @Override
-    public void deleteAllUsers() {
+    public void deleteAllUsers(Pageable pageable) {
+        Page<User> users = userRepositoryPort.findAll(pageable);
+        users.forEach(user -> certificateRepositoryPort.deleteAllByUserId(user.getUserId()));
+
         userRepositoryPort.deleteAll();
     }
 

@@ -57,4 +57,9 @@ public class CertificateRepositoryAdapter implements CertificateRepositoryPort {
     public void deleteAll() {
         certificateRepository.deleteAll();
     }
+
+    @Override
+    public void deleteAllByUserId(UUID userId) {
+        certificateRepository.deleteAllByUserId(userId);
+    }
 }

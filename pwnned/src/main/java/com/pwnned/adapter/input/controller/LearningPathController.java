@@ -15,6 +15,7 @@ import com.pwnned.domain.model.User;
 import com.pwnned.domain.service.LaboratoryService;
 import com.pwnned.port.input.LearningPathControllerPort;
 import com.pwnned.port.input.LearningPathServicePort;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -42,7 +43,7 @@ public class LearningPathController implements LearningPathControllerPort {
 
     @Override
     @PostMapping
-    public ResponseEntity<LearningPathDTO> createLearningPath(@RequestBody LearningPathDTO learningPathDTO) {
+    public ResponseEntity<LearningPathDTO> createLearningPath(@Valid @RequestBody LearningPathDTO learningPathDTO) {
         LearningPath learningPath = learningPathMapper.toModel(learningPathDTO);
         LearningPath createdLearningPath = learningPathServicePort.createLearningPath(learningPath);
         LearningPathDTO createdLearningPathDTO = learningPathMapper.toDTO(createdLearningPath);
@@ -73,8 +74,8 @@ public class LearningPathController implements LearningPathControllerPort {
 
     @Override
     @DeleteMapping
-    public ResponseEntity<String> deleteAllLearningPaths() {
-        learningPathServicePort.deleteAllLearningPaths();
+    public ResponseEntity<String> deleteAllLearningPaths(Pageable pageable) {
+        learningPathServicePort.deleteAllLearningPaths(pageable);
         return ResponseEntity.ok("All Learning Paths Deleted");
     }
 

@@ -7,6 +7,7 @@ import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
 import com.pwnned.port.input.LearningPathServicePort;
+import com.pwnned.port.output.LaboratoryRepositoryPort;
 import com.pwnned.port.output.LearningPathRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +21,11 @@ import java.util.UUID;
 public class LearningPathService implements LearningPathServicePort {
 
     private final LearningPathRepositoryPort learningPathRepositoryPort;
+    private final LaboratoryRepositoryPort laboratoryRepositoryPort;
 
-    public LearningPathService(LearningPathRepositoryPort learningPathRepositoryPort) {
+    public LearningPathService(LearningPathRepositoryPort learningPathRepositoryPort, LaboratoryRepositoryPort laboratoryRepositoryPort) {
         this.learningPathRepositoryPort = learningPathRepositoryPort;
+        this.laboratoryRepositoryPort = laboratoryRepositoryPort;
     }
 
     @Override
@@ -50,7 +53,10 @@ public class LearningPathService implements LearningPathServicePort {
     }
 
     @Override
-    public void deleteAllLearningPaths() {
+    public void deleteAllLearningPaths(Pageable pageable) {
+        Page<LearningPath> learningPaths = learningPathRepositoryPort.findAll(pageable);
+        learningPaths.forEach(lp -> laboratoryRepositoryPort.deleteAllByLearningPathId(lp.getLearningPathId()));
+
         learningPathRepositoryPort.deleteAll();
     }
 

@@ -8,6 +8,7 @@ import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.UserControllerPort;
 import com.pwnned.port.input.UserServicePort;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -31,7 +32,7 @@ public class UserController implements UserControllerPort {
 
     @Override
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
         User user = userMapper.toModel(userDTO);
         User createdUser = userServicePort.createUser(user);
         UserDTO createdUserDTO = userMapper.toDTO(createdUser);
@@ -62,8 +63,8 @@ public class UserController implements UserControllerPort {
 
     @Override
     @DeleteMapping
-    public ResponseEntity<String> deleteAllUsers() {
-        userServicePort.deleteAllUsers();
+    public ResponseEntity<String> deleteAllUsers(Pageable pageable) {
+        userServicePort.deleteAllUsers(pageable);
         return ResponseEntity.ok("All Users Deleted");
     }
 

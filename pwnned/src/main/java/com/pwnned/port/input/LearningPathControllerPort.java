@@ -18,7 +18,7 @@ public interface LearningPathControllerPort {
     ResponseEntity<PageableDTO> getAllLearningPaths(Pageable pageable);
     ResponseEntity<LearningPathDTO> getSingleLearningPath(@PathVariable UUID learningPathId);
     ResponseEntity<String> deleteLearningPath(@PathVariable UUID learningPathId);
-    ResponseEntity<String> deleteAllLearningPaths();
+    ResponseEntity<String> deleteAllLearningPaths(Pageable pageable);
     ResponseEntity<List<LearningPathDTO>> getLearningPathsByDifficulty(@PathVariable Difficulty difficulty);
     ResponseEntity<List<LaboratoryDTO>> getLaboratoriesForLearningPath(
             @PathVariable UUID learningPathId);

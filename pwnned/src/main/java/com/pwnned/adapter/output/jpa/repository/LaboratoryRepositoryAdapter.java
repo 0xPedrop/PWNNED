@@ -64,4 +64,9 @@ public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
                 .map(laboratoryMapper::toModel)
                 .toList();
     }
+
+    @Override
+    public void deleteAllByLearningPathId(UUID learningPathId) {
+        laboratoryRepository.deleteAllByLearningPathId(learningPathId);
+    }
 }

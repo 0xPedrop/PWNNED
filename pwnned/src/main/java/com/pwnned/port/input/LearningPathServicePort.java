@@ -14,6 +14,6 @@ public interface LearningPathServicePort {
     Page<LearningPath> getAllLearningPaths(Pageable pageable);
     LearningPath getSingleLearningPath(UUID learningPathId);
     void deleteLearningPath(UUID learningPathId);
-    void deleteAllLearningPaths();
+    void deleteAllLearningPaths(Pageable pageable);
     List<LearningPath> getLearningPathsByDifficulty(Difficulty difficulty);
 }

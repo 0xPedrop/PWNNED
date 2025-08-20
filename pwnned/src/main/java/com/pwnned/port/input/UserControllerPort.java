@@ -17,7 +17,7 @@ public interface UserControllerPort {
     ResponseEntity<PageableDTO> getAllUsers(Pageable pageable);
     ResponseEntity<UserDTO> getSingleUser(@PathVariable UUID userId);
     ResponseEntity<String> deleteUser(@PathVariable UUID userId);
-    ResponseEntity<String> deleteAllUsers();
+    ResponseEntity<String> deleteAllUsers(Pageable pageable);
     ResponseEntity<String> promoteUser(UUID userId);
     ResponseEntity<List<UserDTO>> getUsersByType(@PathVariable UserType userType);
 }

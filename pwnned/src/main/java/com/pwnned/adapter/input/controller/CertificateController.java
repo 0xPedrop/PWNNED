@@ -9,6 +9,7 @@ import com.pwnned.domain.model.Certificate;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.CertificateControllerPort;
 import com.pwnned.port.input.CertificateServicePort;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -33,7 +34,7 @@ public class CertificateController implements CertificateControllerPort {
 
     @Override
     @PostMapping
-    public ResponseEntity<CertificateResponseDTO> createCertificate(@RequestBody CreateCertificateDTO certificateDTO) {
+    public ResponseEntity<CertificateResponseDTO> createCertificate(@Valid @RequestBody CreateCertificateDTO certificateDTO) {
         Certificate createdCertificate = certificateServicePort.createCertificate(certificateDTO);
         CertificateResponseDTO createdCertificateDTO = certificateMapper.toDTO(createdCertificate);
         return ResponseEntity.status(201).body(createdCertificateDTO);

@@ -15,7 +15,7 @@ public interface UserServicePort {
     Optional<User> authenticateUser(String username, String password);
     User getSingleUser(UUID userId);
     void deleteUser(UUID userId);
-    void deleteAllUsers();
+    void deleteAllUsers(Pageable pageable);
     void promoteUser(UUID userId);
     List<User> getUsersByType(UserType userType);
 }

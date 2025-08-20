@@ -2,6 +2,7 @@ package com.pwnned.adapter.input.dto;
 
 import com.pwnned.domain.enums.Difficulty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
@@ -16,6 +17,6 @@ public record LearningPathDTO(
         @NotBlank(message = "Category must not be blank")
         String category,
 
-        @NotBlank(message = "Difficulty must not be blank")
+        @NotNull(message = "Difficulty must not be null")
         Difficulty difficulty) {
 }

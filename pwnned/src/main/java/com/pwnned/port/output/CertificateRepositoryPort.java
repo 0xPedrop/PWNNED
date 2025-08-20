@@ -16,4 +16,5 @@ public interface CertificateRepositoryPort {
     Optional<Certificate> findBySerialNumber(String serialNumber);
     void deleteById(UUID certificateId);
     void deleteAll();
+    void deleteAllByUserId(UUID userId);
 }
