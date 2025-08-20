@@ -32,7 +32,7 @@ public class LaboratoryEntity {
     @Column(nullable = false)
     private LaboratoryType laboratoryType;
 
-    @Column(name = "learning_path_id", nullable = false)
-    @JdbcTypeCode(SqlTypes.UUID)
-    private UUID learningPathId;
+    @ManyToOne
+    @JoinColumn(name = "learning_path_id", nullable = false)
+    private LearningPathEntity learningPath;
 }

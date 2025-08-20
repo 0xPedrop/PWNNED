@@ -1,12 +1,17 @@
 package com.pwnned.domain.service;
 
+import com.pwnned.adapter.input.dto.LaboratoryDTO;
 import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.exception.LaboratoryNotFoundException;
 import com.pwnned.domain.exception.LearningPathNotFoundException;
+import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.Laboratory;
+import com.pwnned.domain.model.LearningPath;
 import com.pwnned.port.input.LaboratoryServicePort;
 import com.pwnned.port.output.LaboratoryRepositoryPort;
 import com.pwnned.port.output.LearningPathRepositoryPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,23 +30,29 @@ public class LaboratoryService implements LaboratoryServicePort {
     }
 
     @Override
-    public Laboratory createLaboratory(Laboratory laboratory) {
-        return laboratoryRepositoryPort.save(laboratory);
+    public Laboratory createLaboratory(LaboratoryDTO laboratoryDTO) {
+        LearningPath learningPath = learningPathRepositoryPort.findById(laboratoryDTO.learningPathId())
+                .orElseThrow(() -> new LearningPathNotFoundException("Learning Path com o ID " + laboratoryDTO.learningPathId() + " não foi encontrado."));
+
+        Laboratory newLaboratory = new Laboratory();
+        newLaboratory.setTitle(laboratoryDTO.title());
+        newLaboratory.setDifficulty(laboratoryDTO.difficulty());
+        newLaboratory.setLaboratoryType(laboratoryDTO.laboratoryType());
+
+        newLaboratory.setLearningPath(learningPath);
+
+        return laboratoryRepositoryPort.save(newLaboratory);
     }
 
     @Override
-    public List<Laboratory> getAllLaboratories() {
-        List<Laboratory> laboratories = laboratoryRepositoryPort.findAll();
-        if (laboratories.isEmpty()) throw new LaboratoryNotFoundException("Laboratories Not Found");
-        return laboratories;
+    public Page<Laboratory> getAllLaboratories(Pageable pageable) {
+        return laboratoryRepositoryPort.findAll(pageable);
     }
 
     @Override
-    public Optional<Laboratory> getSingleLaboratory(UUID laboratoryId) {
-        Optional<Laboratory> laboratory = laboratoryRepositoryPort.findById(laboratoryId);
-        if (laboratory.isEmpty()) throw new LaboratoryNotFoundException("Laboratory "
-                + laboratoryId + " Not Found");
-        return laboratory;
+    public Laboratory getSingleLaboratory(UUID laboratoryId) {
+        return laboratoryRepositoryPort.findById(laboratoryId)
+                .orElseThrow(() -> new LaboratoryNotFoundException("Laboratory not found with ID: " + laboratoryId));
     }
 
     @Override

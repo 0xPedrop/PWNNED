@@ -7,16 +7,26 @@ import com.pwnned.adapter.output.jpa.repository.entity.LearningPathEntity;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring", uses = {LaboratoryMapper.class, CertificateMapper.class, UserMapper.class}) // Adicionado `uses` aqui
 public interface LearningPathMapper {
 
-    LearningPathMapper INSTANCE = Mappers.getMapper(LearningPathMapper.class);
-
+    @Mapping(target = "laboratories", ignore = true)
+    @Mapping(target = "usersAcessing", ignore = true)
+    @Mapping(target = "certificate", ignore = true)
     LearningPath toModel(LearningPathDTO learningPathDTO);
+
+    @Mapping(target = "laboratories", ignore = true)
+    @Mapping(target = "usersAcessing", ignore = true)
+    @Mapping(target = "certificate", ignore = true)
     LearningPath toModel(LearningPathEntity learningPathEntity);
 
     LearningPathDTO toDTO(LearningPath learningPath);
+
+    @Mapping(target = "laboratories", ignore = true)
+    @Mapping(target = "usersAcessing", ignore = true)
+    @Mapping(target = "certificate", ignore = true)
     LearningPathEntity toEntity(LearningPath learningPath);
 }

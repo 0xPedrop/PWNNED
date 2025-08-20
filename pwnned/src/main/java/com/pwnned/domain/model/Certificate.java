@@ -10,24 +10,27 @@ public class Certificate {
     private LocalDate issueDate;
     private String serialNumber;
     private String url;
+    private User user;
+    private LearningPath learningPath;
 
-    public Certificate(String title, String url) {
+    public Certificate(String title) {
         this.title = title;
         this.issueDate = LocalDate.now();
         this.serialNumber = generateUniqueSerialNumber();
-        this.url = url;
     }
 
     public Certificate() {
     }
 
-    public Certificate(UUID certificateId, String title, LocalDate issueDate, String serialNumber,
-                       String url) {
+    public Certificate(UUID certificateId, String title, LocalDate issueDate, String serialNumber, String url,
+                       User user, LearningPath learningPath) {
         this.certificateId = certificateId;
         this.title = title;
         this.issueDate = issueDate;
         this.serialNumber = serialNumber;
         this.url = url;
+        this.user = user;
+        this.learningPath = learningPath;
     }
 
     public UUID getCertificateId() {
@@ -66,6 +69,22 @@ public class Certificate {
         this.url = url;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LearningPath getLearningPath() {
+        return learningPath;
+    }
+
+    public void setLearningPath(LearningPath learningPath) {
+        this.learningPath = learningPath;
+    }
+
     @Override
     public String toString() {
         return "Certificate{" +
@@ -73,7 +92,8 @@ public class Certificate {
                 ", title='" + title + '\'' +
                 ", issueDate=" + issueDate +
                 ", serialNumber='" + serialNumber + '\'' +
-                ", url='" + url + '\'' +
+                ", user=" + (user != null ? user.getUserId() : null) +
+                ", learningPath=" + (learningPath != null ? learningPath.getLearningPathId() : null) +
                 '}';
     }
 

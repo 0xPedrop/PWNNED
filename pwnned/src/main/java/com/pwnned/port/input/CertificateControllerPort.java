@@ -2,6 +2,8 @@ package com.pwnned.port.input;
 
 import com.pwnned.adapter.input.dto.CertificateResponseDTO;
 import com.pwnned.adapter.input.dto.CreateCertificateDTO;
+import com.pwnned.adapter.input.dto.PageableDTO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,9 +14,8 @@ import java.util.UUID;
 
 public interface CertificateControllerPort {
     ResponseEntity<CertificateResponseDTO> createCertificate(@RequestBody CreateCertificateDTO certificateDTO);
-    ResponseEntity<List<CertificateResponseDTO>> getAllCertificates();
-    ResponseEntity<CertificateResponseDTO> getSingleCertificate(@PathVariable UUID certificateId);
+    ResponseEntity<PageableDTO> getAllCertificates(Pageable pageable);
     ResponseEntity<String> deleteCertificate(@PathVariable UUID certificateId);
     ResponseEntity<String> deleteAllCertificate();
-    ResponseEntity<Optional<CertificateResponseDTO>> getCertificateBySerialNumber(@PathVariable String serialNumber);
+    ResponseEntity<CertificateResponseDTO> getCertificateBySerialNumber(@PathVariable String serialNumber);
 }
