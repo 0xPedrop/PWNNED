@@ -10,7 +10,11 @@ export const topicsData = {
     },
     {
       label: "Persistent XSS (Stored - Type 2)",
-      slug: "persistent-xss",
+      slug: "stored-xss",
+    },
+    {
+      label: "Dom-Based XSS (Type 3)",
+      slug: "dom-based-xss",
     },
   ],
   "sql-injection": [
