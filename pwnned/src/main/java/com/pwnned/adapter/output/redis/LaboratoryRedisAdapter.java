@@ -31,7 +31,7 @@ public class LaboratoryRedisAdapter {
     }
 
     public void cacheLaboratoryByType(String laboratoryType, List<Laboratory> laboratories) {
-        String key = "laboratories:type" + laboratoryType.toUpperCase();
+        String key = "laboratories:type:" + laboratoryType.toUpperCase();
         redisTemplate.opsForValue().set(key, laboratories, 1, TimeUnit.HOURS);
     }
 
@@ -46,7 +46,7 @@ public class LaboratoryRedisAdapter {
     }
 
     public void cacheLaboratoriesByLearningPathId(UUID learningPathId, List<Laboratory> laboratories) {
-        String key = "laboratory:learningpath" + learningPathId;
+        String key = "laboratory:learningpath:" + learningPathId;
         redisTemplate.opsForValue().set(key, laboratories, 1, TimeUnit.HOURS);
     }
 
