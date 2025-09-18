@@ -4,7 +4,6 @@ import com.pwnned.adapter.input.dto.CertificateResponseDTO;
 import com.pwnned.adapter.input.dto.CreateCertificateDTO;
 import com.pwnned.adapter.output.redis.CertificateRedisAdapter;
 import com.pwnned.domain.exception.CertificateNotFoundException;
-import com.pwnned.domain.exception.LaboratoryNotFoundException;
 import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.Certificate;
 import com.pwnned.domain.model.LearningPath;

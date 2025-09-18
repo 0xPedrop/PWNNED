@@ -2,10 +2,7 @@ package com.pwnned.domain.service;
 
 import com.pwnned.adapter.output.redis.LearningPathRedisAdapter;
 import com.pwnned.domain.enums.Difficulty;
-import com.pwnned.domain.exception.LaboratoryNotFoundException;
 import com.pwnned.domain.exception.LearningPathNotFoundException;
-import com.pwnned.domain.exception.UserNotFoundException;
-import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
 import com.pwnned.port.input.LearningPathServicePort;
 import com.pwnned.port.output.LaboratoryRepositoryPort;
