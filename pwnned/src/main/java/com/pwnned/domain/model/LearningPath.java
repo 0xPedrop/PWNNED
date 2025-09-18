@@ -1,5 +1,6 @@
 package com.pwnned.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pwnned.domain.enums.Difficulty;
 
 import java.util.Set;
@@ -11,7 +12,10 @@ public class LearningPath {
     private String title;
     private String category;
     private Difficulty difficulty;
+
+    @JsonManagedReference
     private Set<Laboratory> laboratories;
+
     private Set<User> usersAcessing;
     private Certificate certificate;
 

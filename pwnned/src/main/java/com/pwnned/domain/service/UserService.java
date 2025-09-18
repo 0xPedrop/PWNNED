@@ -1,5 +1,6 @@
 package com.pwnned.domain.service;
 
+import com.pwnned.adapter.output.redis.UserRedisAdapter;
 import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.exception.UserAlreadyExistsException;
 import com.pwnned.domain.exception.UserAlreadyPremiumException;
@@ -21,12 +22,16 @@ import java.util.UUID;
 public class UserService implements UserServicePort {
 
     private final UserRepositoryPort userRepositoryPort;
+    private final UserRedisAdapter userRedisAdapter;
     private final CertificateRepositoryPort certificateRepositoryPort;
+
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepositoryPort userRepositoryPort, CertificateRepositoryPort certificateRepositoryPort, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepositoryPort userRepositoryPort, UserRedisAdapter userRedisAdapter,
+                       CertificateRepositoryPort certificateRepositoryPort, BCryptPasswordEncoder passwordEncoder) {
         this.userRepositoryPort = userRepositoryPort;
+        this.userRedisAdapter = userRedisAdapter;
         this.certificateRepositoryPort = certificateRepositoryPort;
         this.passwordEncoder = passwordEncoder;
     }
@@ -54,8 +59,16 @@ public class UserService implements UserServicePort {
 
     @Override
     public User getSingleUser(UUID userId) {
-        return userRepositoryPort.findById(userId)
+        Optional<User> cachedUser = userRedisAdapter.getCachedUser(userId);
+        if(cachedUser.isPresent()) {
+            return cachedUser.get();
+        }
+
+        User user = userRepositoryPort.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+
+        userRedisAdapter.cacheUser(user);
+        return user;
     }
 
     @Override
@@ -63,6 +76,9 @@ public class UserService implements UserServicePort {
         Optional<User> user = userRepositoryPort.findById(userId);
         if (user.isEmpty()) throw new UserNotFoundException("User " + userId + " Not Found");
         userRepositoryPort.deleteById(userId);
+
+        userRedisAdapter.invalidateCacheForUser(userId);
+        userRedisAdapter.invalidateCacheForUsersByType(user.get().getUserType().name());
     }
 
     @Override
@@ -71,6 +87,8 @@ public class UserService implements UserServicePort {
         users.forEach(user -> certificateRepositoryPort.deleteAllByUserId(user.getUserId()));
 
         userRepositoryPort.deleteAll();
+        userRedisAdapter.invalidateCacheForUsersByType(UserType.BASIC.name());
+        userRedisAdapter.invalidateCacheForUsersByType(UserType.PREMIUM.name());
     }
 
     @Override
@@ -81,14 +99,28 @@ public class UserService implements UserServicePort {
         if (user.getUserType().equals(UserType.PREMIUM)) {
             throw new UserAlreadyPremiumException("User is Already Premium");
         }
+
+        userRedisAdapter.invalidateCacheForUsersByType(user.getUserType().name());
+
         user.setUserType(UserType.PREMIUM);
         userRepositoryPort.save(user);
+
+        userRedisAdapter.invalidateCacheForUsersByType(user.getUserType().name());
+        userRedisAdapter.invalidateCacheForUser(userId);
     }
 
     @Override
     public List<User> getUsersByType(UserType userType) {
+        Optional<List<User>> cachedUsersByType = userRedisAdapter.getCachedUsersByType(userType.name());
+
+        if (cachedUsersByType.isPresent()) {
+            return cachedUsersByType.get();
+        }
+
         List<User> users = userRepositoryPort.getUsersByType(userType);
         if (users.isEmpty()) throw new UserNotFoundException("Users Not Found");
+
+        userRedisAdapter.cacheUsersByType(userType.name(), users);
         return users;
     }
 

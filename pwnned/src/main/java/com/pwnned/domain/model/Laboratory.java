@@ -1,5 +1,6 @@
 package com.pwnned.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.enums.LaboratoryType;
 
@@ -11,6 +12,8 @@ public class Laboratory {
     private String title;
     private Difficulty difficulty;
     private LaboratoryType laboratoryType;
+
+    @JsonBackReference
     private LearningPath learningPath;
 
     public Laboratory(UUID labId, String title, Difficulty difficulty, LaboratoryType laboratoryType, LearningPath learningPath) {
