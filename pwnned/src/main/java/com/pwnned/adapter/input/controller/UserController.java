@@ -8,12 +8,14 @@ import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.model.User;
 import com.pwnned.port.input.UserControllerPort;
 import com.pwnned.port.input.UserServicePort;
+import com.pwnned.port.output.StorageRepositoryPort;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,10 +26,13 @@ import java.util.UUID;
 public class UserController implements UserControllerPort {
     private final UserServicePort userServicePort;
     private final UserMapper userMapper;
+    private final StorageRepositoryPort storageRepositoryPort;
 
-    public UserController(UserServicePort userServicePort, UserMapper userMapper) {
+    public UserController(UserServicePort userServicePort, UserMapper userMapper,
+                          StorageRepositoryPort storageRepositoryPort) {
         this.userServicePort = userServicePort;
         this.userMapper = userMapper;
+        this.storageRepositoryPort = storageRepositoryPort;
     }
 
     @Override
@@ -83,5 +88,13 @@ public class UserController implements UserControllerPort {
                 .map(userMapper::toDTO)
                 .toList();
         return ResponseEntity.ok(usersDTO);
+    }
+
+    @Override
+    @PostMapping("/{userId}/upload-photo")
+    public ResponseEntity<String> uploadPhoto(@PathVariable String userId, @RequestParam("file") MultipartFile file) throws Exception {
+        String fileName = userId + "_" + file.getOriginalFilename();
+        String result = storageRepositoryPort.uploadFile(fileName, file.getInputStream(), file.getContentType());
+        return ResponseEntity.ok("Arquivo enviado com sucesso: " + result);
     }
 }

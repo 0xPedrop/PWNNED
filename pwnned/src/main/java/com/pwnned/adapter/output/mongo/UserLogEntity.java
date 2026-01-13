@@ -1,4 +1,4 @@
-package com.pwnned.adapter.output.jpa.repository.mongo;
+package com.pwnned.adapter.output.mongo;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

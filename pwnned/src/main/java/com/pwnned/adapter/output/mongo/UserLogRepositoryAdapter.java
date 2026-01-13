@@ -1,4 +1,4 @@
-package com.pwnned.adapter.output.jpa.repository.mongo;
+package com.pwnned.adapter.output.mongo;
 
 import com.pwnned.domain.model.UserLog;
 import com.pwnned.port.output.UserLogRepositoryPort;
