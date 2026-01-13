@@ -12,6 +12,7 @@ services:
     depends_on:
       - mongodb
       - minio
+      - redis
 
   mongodb:
     image: mongo:latest
@@ -37,3 +38,9 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+  redis:
+    image: redis:alpine
+    container_name: pwnned-redis
+    ports:
+      - "6379:6379"
+    restart: always
