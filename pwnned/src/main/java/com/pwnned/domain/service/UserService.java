@@ -6,6 +6,7 @@ import com.pwnned.domain.exception.UserAlreadyExistsException;
 import com.pwnned.domain.exception.UserAlreadyPremiumException;
 import com.pwnned.domain.exception.UserNotFoundException;
 import com.pwnned.domain.model.User;
+import com.pwnned.port.input.UserLogServicePort;
 import com.pwnned.port.input.UserServicePort;
 import com.pwnned.port.output.CertificateRepositoryPort;
 import com.pwnned.port.output.UserRepositoryPort;
@@ -24,15 +25,18 @@ public class UserService implements UserServicePort {
     private final UserRepositoryPort userRepositoryPort;
     private final UserRedisAdapter userRedisAdapter;
     private final CertificateRepositoryPort certificateRepositoryPort;
+    private final UserLogServicePort userLogServicePort;
 
 
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepositoryPort userRepositoryPort, UserRedisAdapter userRedisAdapter,
-                       CertificateRepositoryPort certificateRepositoryPort, BCryptPasswordEncoder passwordEncoder) {
+                       CertificateRepositoryPort certificateRepositoryPort, UserLogServicePort userLogServicePort,
+                       BCryptPasswordEncoder passwordEncoder) {
         this.userRepositoryPort = userRepositoryPort;
         this.userRedisAdapter = userRedisAdapter;
         this.certificateRepositoryPort = certificateRepositoryPort;
+        this.userLogServicePort = userLogServicePort;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -49,7 +53,9 @@ public class UserService implements UserServicePort {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         user.setUserType(UserType.BASIC);
-        return userRepositoryPort.save(user);
+        User createdUser = userRepositoryPort.save(user);
+        userLogServicePort.logAction(createdUser.getUserId().toString(), "USUÁRIO CRIADO");
+        return createdUser;
     }
 
     @Override
