@@ -14,9 +14,10 @@ public class User {
     private UserType userType;
     private Set<Certificate> certificates;
     private Set<LearningPath> learningPathsAcessed;
+    private Integer experiencePoints;
 
     public User(UUID userId, String email, String password, String username, UserType userType,
-                Set<Certificate> certificates, Set<LearningPath> learningPathsAcessed) {
+                Set<Certificate> certificates, Set<LearningPath> learningPathsAcessed, Integer experiencePoints) {
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -24,6 +25,7 @@ public class User {
         this.userType = userType;
         this.certificates = certificates;
         this.learningPathsAcessed = learningPathsAcessed;
+        this.experiencePoints = experiencePoints;
     }
 
     public User() {
@@ -83,6 +85,14 @@ public class User {
 
     public void setLearningPathsAcessed(Set<LearningPath> learningPathsAcessed) {
         this.learningPathsAcessed = learningPathsAcessed;
+    }
+
+    public Integer getExperiencePoints() {
+        return experiencePoints;
+    }
+
+    public void setExperiencePoints(Integer experiencePoints) {
+        this.experiencePoints = experiencePoints;
     }
 
     @Override

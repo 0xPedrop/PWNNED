@@ -70,4 +70,9 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
+
+    @Override
+    public Integer getUserExperiencePoints(UUID userId) {
+        return userRepository.getUserExperiencePoints(userId);
+    }
 }

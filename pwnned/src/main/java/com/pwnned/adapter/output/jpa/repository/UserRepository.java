@@ -1,8 +1,10 @@
 package com.pwnned.adapter.output.jpa.repository;
 
 import com.pwnned.domain.enums.UserType;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.pwnned.adapter.output.jpa.repository.entity.UserEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +17,7 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByUsername(String username);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+
+    @Query(value = "SELECT calculate_user_xp(:userId)", nativeQuery = true)
+    Integer getUserExperiencePoints(@Param("userId") UUID userId);
 }

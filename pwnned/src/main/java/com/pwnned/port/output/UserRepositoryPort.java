@@ -19,4 +19,5 @@ public interface UserRepositoryPort {
     List<User> getUsersByType(UserType userType);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+    Integer getUserExperiencePoints(UUID userId);
 }

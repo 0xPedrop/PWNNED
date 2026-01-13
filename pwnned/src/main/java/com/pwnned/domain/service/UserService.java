@@ -1,5 +1,8 @@
 package com.pwnned.domain.service;
 
+import com.pwnned.adapter.input.dto.UserDTO;
+import com.pwnned.adapter.input.mapper.UserMapper;
+import com.pwnned.adapter.output.jpa.repository.entity.UserEntity;
 import com.pwnned.adapter.output.redis.UserRedisAdapter;
 import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.exception.UserAlreadyExistsException;
@@ -26,17 +29,18 @@ public class UserService implements UserServicePort {
     private final UserRedisAdapter userRedisAdapter;
     private final CertificateRepositoryPort certificateRepositoryPort;
     private final UserLogServicePort userLogServicePort;
-
+    private final UserMapper userMapper;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepositoryPort userRepositoryPort, UserRedisAdapter userRedisAdapter,
-                       CertificateRepositoryPort certificateRepositoryPort, UserLogServicePort userLogServicePort,
+                       CertificateRepositoryPort certificateRepositoryPort, UserLogServicePort userLogServicePort, UserMapper userMapper,
                        BCryptPasswordEncoder passwordEncoder) {
         this.userRepositoryPort = userRepositoryPort;
         this.userRedisAdapter = userRedisAdapter;
         this.certificateRepositoryPort = certificateRepositoryPort;
         this.userLogServicePort = userLogServicePort;
+        this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -73,7 +77,11 @@ public class UserService implements UserServicePort {
         User user = userRepositoryPort.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
 
+        Integer xp = userRepositoryPort.getUserExperiencePoints(userId);
+        user.setExperiencePoints(xp);
+
         userRedisAdapter.cacheUser(user);
+
         return user;
     }
 
@@ -142,5 +150,24 @@ public class UserService implements UserServicePort {
         } else {
             return Optional.empty(); 
         }
+    }
+
+    public UserDTO findUserById(UUID userId) {
+        User user = userRepositoryPort.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+
+        Integer currentXp = userRepositoryPort.getUserExperiencePoints(userId);
+
+        // Usa o Mapper que você já tem para converter Model -> DTO
+        UserDTO userDTO = userMapper.toDTO(user);
+
+        return UserDTO.builder()
+                .userId(userDTO.userId())
+                .username(userDTO.username())
+                .email(userDTO.email())
+                .password(userDTO.password())
+                .experiencePoints(currentXp)
+                .userType(userDTO.userType())
+                .build();
     }
 }

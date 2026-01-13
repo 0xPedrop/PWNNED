@@ -16,6 +16,7 @@ public interface UserMapper {
     @Mapping(target = "learningPathsAcessed", ignore = true)
     User toModel(UserEntity userEntity);
 
+    @Mapping(source = "experiencePoints", target = "experiencePoints")
     UserDTO toDTO(User user);
 
     @Mapping(target = "certificates", ignore = true)
