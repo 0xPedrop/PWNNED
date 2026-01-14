@@ -1,6 +1,7 @@
 package com.pwnned.adapter.output.jpa.repository;
 
 import com.pwnned.adapter.input.mapper.UserMapper;
+import com.pwnned.adapter.input.mapper.util.CycleAvoidingMappingContext;
 import com.pwnned.adapter.output.jpa.repository.entity.UserEntity;
 import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.model.User;
@@ -26,19 +27,21 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public User save(User user) {
-        UserEntity userEntity = userMapper.toEntity(user);
+        UserEntity userEntity = userMapper.toEntity(user, new CycleAvoidingMappingContext());
         UserEntity savedUser = userRepository.save(userEntity);
-        return userMapper.toModel(savedUser);
+        return userMapper.toModel(savedUser, new CycleAvoidingMappingContext());
     }
 
     @Override
     public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable).map(userMapper::toModel);
+        return userRepository.findAll(pageable)
+                .map(entity -> userMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
 
     @Override
     public Optional<User> findById(UUID userId) {
-        return userRepository.findById(userId).map(userMapper::toModel);
+        return userRepository.findById(userId)
+                .map(entity -> userMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
 
     @Override
@@ -53,12 +56,15 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public List<User> getUsersByType(UserType userType) {
-        return userRepository.findByUserType(userType).stream().map(userMapper::toModel).toList();
+        return userRepository.findByUserType(userType).stream()
+                .map(entity -> userMapper.toModel(entity, new CycleAvoidingMappingContext()))
+                .toList();
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username).map(userMapper::toModel);
+        return userRepository.findByUsername(username)
+                .map(entity -> userMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
 
     @Override

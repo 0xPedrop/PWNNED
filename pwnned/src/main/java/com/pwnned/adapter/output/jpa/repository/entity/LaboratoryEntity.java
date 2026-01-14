@@ -26,6 +26,8 @@ public class LaboratoryEntity {
     private UUID labId;
 
     private String title;
+
+    @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
     @Enumerated(EnumType.STRING)

@@ -1,9 +1,7 @@
 package com.pwnned.adapter.output.jpa.repository;
 
-import com.pwnned.adapter.input.mapper.LaboratoryMapper;
 import com.pwnned.adapter.input.mapper.LearningPathMapper;
-import com.pwnned.adapter.input.mapper.UserMapper;
-import com.pwnned.adapter.output.jpa.repository.entity.LaboratoryEntity;
+import com.pwnned.adapter.input.mapper.util.CycleAvoidingMappingContext;
 import com.pwnned.adapter.output.jpa.repository.entity.LearningPathEntity;
 import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.model.LearningPath;
@@ -29,25 +27,28 @@ public class LearningPathRepositoryAdapter implements LearningPathRepositoryPort
 
     @Override
     public LearningPath save(LearningPath learningPath) {
-        LearningPathEntity learningPathEntity = learningPathMapper.toEntity(learningPath);
-        LearningPathEntity savedLearningPath = learningPathRepository.save(learningPathEntity);
-        return learningPathMapper.toModel(savedLearningPath);
+        LearningPathEntity entity = learningPathMapper.toEntity(learningPath, new CycleAvoidingMappingContext());
+        LearningPathEntity saved = learningPathRepository.save(entity);
+        return learningPathMapper.toModel(saved, new CycleAvoidingMappingContext());
     }
 
     @Override
     public Page<LearningPath> findAll(Pageable pageable) {
-        return learningPathRepository.findAll(pageable).map(learningPathMapper::toModel);
+        return learningPathRepository.findAll(pageable)
+                .map(entity -> learningPathMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
 
     @Override
     public Optional<LearningPath> findById(UUID learningPathId) {
-        return learningPathRepository.findById(learningPathId).map(learningPathMapper::toModel);
+        return learningPathRepository.findById(learningPathId)
+                .map(entity -> learningPathMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
 
     @Override
     public List<LearningPath> getLearningPathsByDifficulty(Difficulty difficulty) {
-        return learningPathRepository.findLearningPathsByDifficulty(difficulty)
-                .stream().map(learningPathMapper::toModel).toList();
+        return learningPathRepository.findLearningPathsByDifficulty(difficulty).stream()
+                .map(entity -> learningPathMapper.toModel(entity, new CycleAvoidingMappingContext()))
+                .toList();
     }
 
     @Override

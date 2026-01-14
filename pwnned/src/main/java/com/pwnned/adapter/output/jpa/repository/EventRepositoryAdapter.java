@@ -1,6 +1,7 @@
 package com.pwnned.adapter.output.jpa.repository;
 
 import com.pwnned.adapter.input.mapper.EventMapper;
+import com.pwnned.adapter.input.mapper.util.CycleAvoidingMappingContext;
 import com.pwnned.adapter.output.jpa.repository.entity.EventEntity;
 import com.pwnned.domain.model.Event;
 import com.pwnned.port.output.EventRepositoryPort;
@@ -23,20 +24,21 @@ public class EventRepositoryAdapter implements EventRepositoryPort {
 
     @Override
     public Event save(Event event) {
-        EventEntity entity = eventMapper.toEntity(event);
+        EventEntity entity = eventMapper.toEntity(event, new CycleAvoidingMappingContext());
         EventEntity savedEntity = eventRepository.save(entity);
-        return eventMapper.toModel(savedEntity);
+        return eventMapper.toModel(savedEntity, new CycleAvoidingMappingContext());
     }
 
     @Override
     public Optional<Event> findById(UUID id) {
-        return eventRepository.findById(id).map(eventMapper::toModel);
+        return eventRepository.findById(id)
+                .map(entity -> eventMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
 
     @Override
     public List<Event> findAll() {
         return eventRepository.findAll().stream()
-                .map(eventMapper::toModel)
+                .map(entity -> eventMapper.toModel(entity, new CycleAvoidingMappingContext()))
                 .toList();
     }
 
@@ -67,7 +69,6 @@ public class EventRepositoryAdapter implements EventRepositoryPort {
                 double km = proj.getDistance() / 1000.0;
                 model.setDistanceToUser(Math.round(km * 100.0) / 100.0);
             }
-
             return model;
         }).toList();
     }

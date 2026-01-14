@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -73,5 +74,22 @@ public class LaboratoryRedisAdapter {
     public void invalidateCacheForLaboratoriesByLearningPathId(UUID learningPathId) {
         String key = "laboratories:learningpath:" + learningPathId;
         redisTemplate.delete(key);
+    }
+
+    public void invalidateLaboratoriesByType(String laboratoryType) {
+        String key = "laboratories:type:" + laboratoryType.toUpperCase();
+        redisTemplate.delete(key);
+    }
+
+    public void invalidateAllLaboratoriesCache() {
+        Set<String> keys = redisTemplate.keys("laboratories:*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
+
+        Set<String> individualKeys = redisTemplate.keys("laboratory:*");
+        if (individualKeys != null && !individualKeys.isEmpty()) {
+            redisTemplate.delete(individualKeys);
+        }
     }
 }

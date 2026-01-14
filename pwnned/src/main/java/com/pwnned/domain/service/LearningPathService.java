@@ -69,13 +69,11 @@ public class LearningPathService implements LearningPathServicePort {
     @Override
     public void deleteAllLearningPaths(Pageable pageable) {
         Page<LearningPath> learningPaths = learningPathRepositoryPort.findAll(pageable);
-        learningPaths.forEach(lp -> laboratoryRepositoryPort
-                                                    .deleteAllByLearningPathId(lp.getLearningPathId()));
-
+        learningPaths.forEach(lp ->
+                laboratoryRepositoryPort.deleteAllByLearningPathId(lp.getLearningPathId())
+        );
         learningPathRepositoryPort.deleteAll();
-        learningPathRedisAdapter.invalidateCacheForLearningPathsByDifficulty(Difficulty.EASY.name());
-        learningPathRedisAdapter.invalidateCacheForLearningPathsByDifficulty(Difficulty.MEDIUM.name());
-        learningPathRedisAdapter.invalidateCacheForLearningPathsByDifficulty(Difficulty.HARD.name());
+        learningPathRedisAdapter.invalidateAllLearningPathsCache();
     }
 
     @Override

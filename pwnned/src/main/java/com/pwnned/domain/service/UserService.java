@@ -2,7 +2,6 @@ package com.pwnned.domain.service;
 
 import com.pwnned.adapter.input.dto.UserDTO;
 import com.pwnned.adapter.input.mapper.UserMapper;
-import com.pwnned.adapter.output.jpa.repository.entity.UserEntity;
 import com.pwnned.adapter.output.redis.UserRedisAdapter;
 import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.exception.UserAlreadyExistsException;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,12 +30,11 @@ public class UserService implements UserServicePort {
     private final CertificateRepositoryPort certificateRepositoryPort;
     private final UserLogServicePort userLogServicePort;
     private final UserMapper userMapper;
-
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepositoryPort userRepositoryPort, UserRedisAdapter userRedisAdapter,
-                       CertificateRepositoryPort certificateRepositoryPort, UserLogServicePort userLogServicePort, UserMapper userMapper,
-                       BCryptPasswordEncoder passwordEncoder) {
+                       CertificateRepositoryPort certificateRepositoryPort, UserLogServicePort userLogServicePort,
+                       UserMapper userMapper, BCryptPasswordEncoder passwordEncoder) {
         this.userRepositoryPort = userRepositoryPort;
         this.userRedisAdapter = userRedisAdapter;
         this.certificateRepositoryPort = certificateRepositoryPort;
@@ -45,11 +44,12 @@ public class UserService implements UserServicePort {
     }
 
     @Override
+    @Transactional
     public User createUser(User user) {
         if (userRepositoryPort.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("Email já está em uso");
-        } 
-        
+        }
+
         if (userRepositoryPort.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistsException("Username já está em uso");
         }
@@ -57,7 +57,10 @@ public class UserService implements UserServicePort {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         user.setUserType(UserType.BASIC);
+
         User createdUser = userRepositoryPort.save(user);
+        userRedisAdapter.invalidateCacheForUsersByType(UserType.BASIC.name());
+
         userLogServicePort.logAction(createdUser.getUserId().toString(), "USUÁRIO CRIADO");
         return createdUser;
     }
@@ -69,47 +72,47 @@ public class UserService implements UserServicePort {
 
     @Override
     public User getSingleUser(UUID userId) {
-        Optional<User> cachedUser = userRedisAdapter.getCachedUser(userId);
-        if(cachedUser.isPresent()) {
-            return cachedUser.get();
-        }
+        return userRedisAdapter.getCachedUser(userId)
+                .orElseGet(() -> {
+                    User user = userRepositoryPort.findById(userId)
+                            .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
 
-        User user = userRepositoryPort.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+                    Integer xp = userRepositoryPort.getUserExperiencePoints(userId);
+                    user.setExperiencePoints(xp != null ? xp : 0);
 
-        Integer xp = userRepositoryPort.getUserExperiencePoints(userId);
-        user.setExperiencePoints(xp);
-
-        userRedisAdapter.cacheUser(user);
-
-        return user;
+                    userRedisAdapter.cacheUser(user);
+                    return user;
+                });
     }
 
     @Override
+    @Transactional
     public void deleteUser(UUID userId) {
-        Optional<User> user = userRepositoryPort.findById(userId);
-        if (user.isEmpty()) throw new UserNotFoundException("User " + userId + " Not Found");
-        userRepositoryPort.deleteById(userId);
+        User user = userRepositoryPort.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User " + userId + " Not Found"));
 
+        String typeName = user.getUserType().name();
+
+        userRepositoryPort.deleteById(userId);
         userRedisAdapter.invalidateCacheForUser(userId);
-        userRedisAdapter.invalidateCacheForUsersByType(user.get().getUserType().name());
+        userRedisAdapter.invalidateCacheForUsersByType(typeName);
     }
 
     @Override
+    @Transactional
     public void deleteAllUsers(Pageable pageable) {
         Page<User> users = userRepositoryPort.findAll(pageable);
         users.forEach(user -> certificateRepositoryPort.deleteAllByUserId(user.getUserId()));
-
         userRepositoryPort.deleteAll();
-        userRedisAdapter.invalidateCacheForUsersByType(UserType.BASIC.name());
-        userRedisAdapter.invalidateCacheForUsersByType(UserType.PREMIUM.name());
+        userRedisAdapter.invalidateAllUsersCache();
     }
 
     @Override
+    @Transactional
     public void promoteUser(UUID userId) {
-        Optional<User> searchedUser = userRepositoryPort.findById(userId);
-        if (searchedUser.isEmpty()) throw new UserNotFoundException("User " + userId + " Not Found");
-        User user = searchedUser.get();
+        User user = userRepositoryPort.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User " + userId + " Not Found"));
+
         if (user.getUserType().equals(UserType.PREMIUM)) {
             throw new UserAlreadyPremiumException("User is Already Premium");
         }
@@ -119,55 +122,30 @@ public class UserService implements UserServicePort {
         user.setUserType(UserType.PREMIUM);
         userRepositoryPort.save(user);
 
-        userRedisAdapter.invalidateCacheForUsersByType(user.getUserType().name());
+        userRedisAdapter.invalidateCacheForUsersByType(UserType.PREMIUM.name());
         userRedisAdapter.invalidateCacheForUser(userId);
     }
 
     @Override
     public List<User> getUsersByType(UserType userType) {
-        Optional<List<User>> cachedUsersByType = userRedisAdapter.getCachedUsersByType(userType.name());
-
-        if (cachedUsersByType.isPresent()) {
-            return cachedUsersByType.get();
-        }
-
-        List<User> users = userRepositoryPort.getUsersByType(userType);
-        if (users.isEmpty()) throw new UserNotFoundException("Users Not Found");
-
-        userRedisAdapter.cacheUsersByType(userType.name(), users);
-        return users;
+        return userRedisAdapter.getCachedUsersByType(userType.name())
+                .orElseGet(() -> {
+                    List<User> users = userRepositoryPort.getUsersByType(userType);
+                    if (!users.isEmpty()) {
+                        userRedisAdapter.cacheUsersByType(userType.name(), users);
+                    }
+                    return users;
+                });
     }
 
     @Override
     public Optional<User> authenticateUser(String username, String password) {
-        Optional<User> user = userRepositoryPort.findByUsername(username);
-        if (user.isEmpty()) {
-            return Optional.empty(); 
-        }
-        User foundUser = user.get();
-        if (passwordEncoder.matches(password, foundUser.getPassword())) {
-            return Optional.of(foundUser); 
-        } else {
-            return Optional.empty(); 
-        }
+        return userRepositoryPort.findByUsername(username)
+                .filter(user -> passwordEncoder.matches(password, user.getPassword()));
     }
 
     public UserDTO findUserById(UUID userId) {
-        User user = userRepositoryPort.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
-
-        Integer currentXp = userRepositoryPort.getUserExperiencePoints(userId);
-
-        // Usa o Mapper que você já tem para converter Model -> DTO
-        UserDTO userDTO = userMapper.toDTO(user);
-
-        return UserDTO.builder()
-                .userId(userDTO.userId())
-                .username(userDTO.username())
-                .email(userDTO.email())
-                .password(userDTO.password())
-                .experiencePoints(currentXp)
-                .userType(userDTO.userType())
-                .build();
+        User user = getSingleUser(userId);
+        return userMapper.toDTO(user);
     }
 }

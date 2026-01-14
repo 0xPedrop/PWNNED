@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -53,5 +54,17 @@ public class UserRedisAdapter {
     public void invalidateCacheForUsersByType(String userType) {
         String key = "users:type:" + userType.toUpperCase();
         redisTemplate.delete(key);
+    }
+
+    public void invalidateAllUsersCache() {
+        Set<String> typeKeys = redisTemplate.keys("users:type:*");
+        if (typeKeys != null && !typeKeys.isEmpty()) {
+            redisTemplate.delete(typeKeys);
+        }
+
+        Set<String> userKeys = redisTemplate.keys("user:*");
+        if (userKeys != null && !userKeys.isEmpty()) {
+            redisTemplate.delete(userKeys);
+        }
     }
 }

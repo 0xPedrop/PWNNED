@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -53,5 +54,17 @@ public class LearningPathRedisAdapter {
     public void invalidateCacheForLearningPathsByDifficulty(String difficulty) {
         String key = "learningpaths:difficulty:" + difficulty.toUpperCase();
         redisTemplate.delete(key);
+    }
+
+    public void invalidateAllLearningPathsCache() {
+        Set<String> difficultyKeys = redisTemplate.keys("learningpaths:difficulty:*");
+        if (difficultyKeys != null && !difficultyKeys.isEmpty()) {
+            redisTemplate.delete(difficultyKeys);
+        }
+
+        Set<String> pathKeys = redisTemplate.keys("learningpath:*");
+        if (pathKeys != null && !pathKeys.isEmpty()) {
+            redisTemplate.delete(pathKeys);
+        }
     }
 }
