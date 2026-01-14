@@ -26,10 +26,12 @@ public class CertificateController implements CertificateControllerPort {
 
     private final CertificateServicePort certificateServicePort;
     private final CertificateMapper certificateMapper;
+    private final PageableMapper pageableMapper;
 
-    public CertificateController(CertificateServicePort certificateServicePort, CertificateMapper certificateMapper) {
+    public CertificateController(CertificateServicePort certificateServicePort, CertificateMapper certificateMapper, PageableMapper pageableMapper) {
         this.certificateServicePort = certificateServicePort;
         this.certificateMapper = certificateMapper;
+        this.pageableMapper = pageableMapper;
     }
 
     @Override
@@ -44,16 +46,15 @@ public class CertificateController implements CertificateControllerPort {
     @GetMapping
     public ResponseEntity<PageableDTO> getAllCertificates(@PageableDefault(size = 5, sort = "title") Pageable pageable) {
         Page<CertificateResponseDTO> certificateDTO = certificateServicePort.getAllCertificates(pageable);
-        return ResponseEntity.ok(PageableMapper.INSTANCE.toDTO(certificateDTO));
+        return ResponseEntity.ok(pageableMapper.toDTO(certificateDTO));
     }
 
     @Override
     @DeleteMapping("/{certificateId}")
-    public ResponseEntity<String> deleteCertificate(UUID certificateId) {
+    public ResponseEntity<String> deleteCertificate(@PathVariable UUID certificateId) {
         certificateServicePort.deleteCertificate(certificateId);
         return ResponseEntity.ok("Certificate " + certificateId + " deleted");
     }
-
     @Override
     @DeleteMapping
     public ResponseEntity<String> deleteAllCertificate() {

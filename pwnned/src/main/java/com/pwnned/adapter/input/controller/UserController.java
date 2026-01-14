@@ -27,12 +27,14 @@ public class UserController implements UserControllerPort {
     private final UserServicePort userServicePort;
     private final UserMapper userMapper;
     private final StorageRepositoryPort storageRepositoryPort;
+    private final PageableMapper pageableMapper;
 
     public UserController(UserServicePort userServicePort, UserMapper userMapper,
-                          StorageRepositoryPort storageRepositoryPort) {
+                          StorageRepositoryPort storageRepositoryPort, PageableMapper pageableMapper) {
         this.userServicePort = userServicePort;
         this.userMapper = userMapper;
         this.storageRepositoryPort = storageRepositoryPort;
+        this.pageableMapper = pageableMapper;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class UserController implements UserControllerPort {
     public ResponseEntity<PageableDTO> getAllUsers(@PageableDefault(size = 5, sort = "username") Pageable pageable) {
         Page<UserDTO> usersDTO = userServicePort.getAllUsers(pageable)
                 .map(userMapper::toDTO);
-        return ResponseEntity.ok(PageableMapper.INSTANCE.toDTO(usersDTO));
+        return ResponseEntity.ok(pageableMapper.toDTO(usersDTO));
     }
 
     @Override

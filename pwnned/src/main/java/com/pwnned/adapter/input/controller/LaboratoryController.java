@@ -29,10 +29,12 @@ public class LaboratoryController implements LaboratoryControllerPort {
 
     private final LaboratoryServicePort laboratoryServicePort;
     private final LaboratoryMapper laboratoryMapper;
+    private final PageableMapper pageableMapper;
 
-    public LaboratoryController(LaboratoryServicePort laboratoryServicePort, LaboratoryMapper laboratoryMapper) {
+    public LaboratoryController(LaboratoryServicePort laboratoryServicePort, LaboratoryMapper laboratoryMapper, PageableMapper pageableMapper) {
         this.laboratoryServicePort = laboratoryServicePort;
         this.laboratoryMapper = laboratoryMapper;
+        this.pageableMapper = pageableMapper;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class LaboratoryController implements LaboratoryControllerPort {
     public ResponseEntity<PageableDTO> getAllLaboratories(@PageableDefault(size = 5, sort = "title") Pageable pageable) {
         Page<LaboratoryDTO> laboratoryDTOS = laboratoryServicePort.getAllLaboratories(pageable)
                 .map(laboratoryMapper::toDTO);
-        return ResponseEntity.ok(PageableMapper.INSTANCE.toDTO(laboratoryDTOS));
+        return ResponseEntity.ok(pageableMapper.toDTO(laboratoryDTOS));
     }
 
     @Override
@@ -60,7 +62,7 @@ public class LaboratoryController implements LaboratoryControllerPort {
     }
 
     @Override
-    @DeleteMapping("/{labId}")
+    @DeleteMapping("/{laboratoryId}")
     public ResponseEntity<String> deleteLaboratory(@PathVariable UUID laboratoryId) {
         laboratoryServicePort.deleteLaboratory(laboratoryId);
         return ResponseEntity.ok("Lab " + laboratoryId + " deleted");

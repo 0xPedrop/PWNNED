@@ -13,6 +13,7 @@ import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
 import com.pwnned.domain.model.User;
 import com.pwnned.domain.service.LaboratoryService;
+import com.pwnned.port.input.LaboratoryServicePort;
 import com.pwnned.port.input.LearningPathControllerPort;
 import com.pwnned.port.input.LearningPathServicePort;
 import jakarta.validation.Valid;
@@ -30,15 +31,18 @@ import java.util.UUID;
 public class LearningPathController implements LearningPathControllerPort {
 
     private final LearningPathServicePort learningPathServicePort;
-    private final LaboratoryService laboratoryService;
+    private final LaboratoryServicePort laboratoryServicePort;
     private final LearningPathMapper learningPathMapper;
     private final LaboratoryMapper laboratoryMapper;
+    private final PageableMapper pageableMapper;
 
-    public LearningPathController(LearningPathServicePort learningPathServicePort, LaboratoryService laboratoryService, LearningPathMapper learningPathMapper, LaboratoryMapper laboratoryMapper) {
+    public LearningPathController(LearningPathServicePort learningPathServicePort,
+                                  LaboratoryServicePort laboratoryServicePort, LearningPathMapper learningPathMapper, LaboratoryMapper laboratoryMapper, PageableMapper pageableMapper) {
         this.learningPathServicePort = learningPathServicePort;
-        this.laboratoryService = laboratoryService;
+        this.laboratoryServicePort = laboratoryServicePort;
         this.learningPathMapper = learningPathMapper;
         this.laboratoryMapper = laboratoryMapper;
+        this.pageableMapper = pageableMapper;
     }
 
     @Override
@@ -55,7 +59,7 @@ public class LearningPathController implements LearningPathControllerPort {
     public ResponseEntity<PageableDTO> getAllLearningPaths(@PageableDefault(size = 5, sort = "title") Pageable pageable) {
         Page<LearningPathDTO> learningPathDTOS = learningPathServicePort.getAllLearningPaths(pageable)
                 .map(learningPathMapper::toDTO);
-        return ResponseEntity.ok(PageableMapper.INSTANCE.toDTO(learningPathDTOS));
+        return ResponseEntity.ok(pageableMapper.toDTO(learningPathDTOS));
     }
 
     @Override
@@ -92,7 +96,7 @@ public class LearningPathController implements LearningPathControllerPort {
     @GetMapping("/{learningPathId}/labs")
     public ResponseEntity<List<LaboratoryDTO>> getLaboratoriesForLearningPath(
             @PathVariable UUID learningPathId) {
-        List<Laboratory> laboratories = laboratoryService.getLaboratoriesByLearningPathId(learningPathId);
+        List<Laboratory> laboratories = laboratoryServicePort.getLaboratoriesByLearningPathId(learningPathId);
         List<LaboratoryDTO> laboratoryDTOs = laboratories.stream()
                 .map(laboratoryMapper::toDTO)
                 .toList();
