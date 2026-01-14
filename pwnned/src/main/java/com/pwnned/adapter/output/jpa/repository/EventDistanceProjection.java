@@ -8,6 +8,6 @@ public interface EventDistanceProjection {
     String getDescription();
     String getType();
     java.time.LocalDateTime getEventDate();
-    Object getGeometria();
+    Object getGeometry();
     Double getDistance();
 }

@@ -11,20 +11,20 @@ public class Event {
     private String description;
     private String type;
     private LocalDateTime eventDate;
-    private Point geometria;
+    private Point geometry;
     private Double distanceToUser;
 
     public Event() {
     }
 
-    public Event(UUID eventId, String name, String description, String type, LocalDateTime eventDate, Point geometria,
+    public Event(UUID eventId, String name, String description, String type, LocalDateTime eventDate, Point geometry,
                  Double distanceToUser) {
         this.eventId = eventId;
         this.name = name;
         this.description = description;
         this.type = type;
         this.eventDate = eventDate;
-        this.geometria = geometria;
+        this.geometry = geometry;
         this.distanceToUser = distanceToUser;
     }
 
@@ -68,12 +68,12 @@ public class Event {
         this.eventDate = eventDate;
     }
 
-    public Point getGeometria() {
-        return geometria;
+    public Point getGeometry() {
+        return geometry;
     }
 
-    public void setGeometria(Point geometria) {
-        this.geometria = geometria;
+    public void setGeometry(Point geometry) {
+        this.geometry = geometry;
     }
 
     public Double getDistanceToUser() {

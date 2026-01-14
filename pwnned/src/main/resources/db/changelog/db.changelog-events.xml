@@ -27,7 +27,17 @@
     </changeSet>
 
     <changeSet id="20260114-03" author="pwnned">
-        <sql>CREATE INDEX idx_events_geometria ON events USING GIST (geometria);</sql>
+        <sql>CREATE INDEX idx_events_geometry ON events USING GIST (geometria);</sql>
+    </changeSet>
+
+    <changeSet id="20260114-04-rename-geometry" author="pwnned">
+        <renameColumn tableName="events"
+                      oldColumnName="geometria"
+                      newColumnName="geometry"
+                      columnDataType="geometry(Point, 4326)"/>
+    </changeSet>
+    <changeSet id="20260114-05-sync-fix" author="pwnned">
+        <sql>-- Comando apenas para garantir sincronização manual</sql>
     </changeSet>
 
 </databaseChangeLog>

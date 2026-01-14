@@ -33,5 +33,5 @@ public class EventEntity {
     private LocalDateTime eventDate;
 
     @Column(columnDefinition = "geometry(Point, 4326)")
-    private Point geometria;
+    private Point geometry;
 }

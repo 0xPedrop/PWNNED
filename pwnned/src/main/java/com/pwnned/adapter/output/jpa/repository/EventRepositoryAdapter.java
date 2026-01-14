@@ -54,15 +54,15 @@ public class EventRepositoryAdapter implements EventRepositoryPort {
             model.setType(proj.getType());
             model.setEventDate(proj.getEventDate());
 
-            Object geo = proj.getGeometria();
+            Object geo = proj.getGeometry();
             if (geo instanceof org.locationtech.jts.geom.Point point) {
-                model.setGeometria(point);
+                model.setGeometry(point);
             } else if (geo instanceof org.geolatte.geom.Point geolattePoint) {
                 org.locationtech.jts.geom.Coordinate coord = new org.locationtech.jts.geom.Coordinate(
                         geolattePoint.getPosition().getCoordinate(0),
                         geolattePoint.getPosition().getCoordinate(1)
                 );
-                model.setGeometria(new org.locationtech.jts.geom.GeometryFactory().createPoint(coord));
+                model.setGeometry(new org.locationtech.jts.geom.GeometryFactory().createPoint(coord));
             }
 
             if (proj.getDistance() != null) {

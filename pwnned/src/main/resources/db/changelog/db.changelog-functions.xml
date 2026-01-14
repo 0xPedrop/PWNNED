@@ -9,10 +9,10 @@
             CREATE OR REPLACE FUNCTION calculate_user_xp(u_id UUID)
             RETURNS INTEGER AS $$
             BEGIN
-                -- Lógica: Cada certificado vale 100 pontos de XP
-            RETURN (SELECT COALESCE(COUNT(*), 0) * 100
-                    FROM certificates
-                    WHERE user_id = u_id);
+            RETURN (
+                (SELECT COALESCE(COUNT(*), 0) * 100 FROM user_learning_path WHERE user_id = u_id) +
+                (SELECT COALESCE(COUNT(*), 0) * 500 FROM certificates WHERE user_id = u_id)
+                );
             END;
             $$ LANGUAGE plpgsql;
         </sql>

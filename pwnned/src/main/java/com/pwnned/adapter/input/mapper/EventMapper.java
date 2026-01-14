@@ -18,13 +18,13 @@ public interface EventMapper {
 
     GeometryFactory factory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    @Mapping(target = "geometria", source = ".", qualifiedByName = "coordsToPoint")
+    @Mapping(target = "geometry", source = ".", qualifiedByName = "coordsToPoint")
     Event toModel(EventDTO eventDTO);
 
     Event toModel(EventEntity eventEntity, @Context CycleAvoidingMappingContext context);
 
-    @Mapping(target = "latitude", source = "geometria.y")
-    @Mapping(target = "longitude", source = "geometria.x")
+    @Mapping(target = "latitude", source = "geometry.y")
+    @Mapping(target = "longitude", source = "geometry.x")
     @Mapping(target = "distanceToUser", source = "distanceToUser")
     EventDTO toDTO(Event event);
 

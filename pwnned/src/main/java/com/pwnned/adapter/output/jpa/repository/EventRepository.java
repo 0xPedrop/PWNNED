@@ -13,10 +13,10 @@ import java.util.UUID;
 public interface EventRepository extends JpaRepository<EventEntity, UUID> {
 
     @Query(value = "SELECT e.event_id as eventId, e.name as name, e.description as description, " +
-            "e.type as type, e.event_date as eventDate, e.geometria as geometria, " +
-            "ST_Distance(e.geometria::geography, ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography) as distance " +
+            "e.type as type, e.event_date as eventDate, e.geometry as geometry, " +
+            "ST_Distance(e.geometry::geography, ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography) as distance " +
             "FROM events e WHERE " +
-            "ST_DWithin(e.geometria::geography, ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography, :distanceInMeters) " +
+            "ST_DWithin(e.geometry::geography, ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography, :distanceInMeters) " +
             "ORDER BY distance ASC",
             nativeQuery = true)
     List<EventDistanceProjection> findNearbyEventsWithDistance(@Param("lat") double lat,
