@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="20260114-01" author="pwnned">
+        <sql>CREATE EXTENSION IF NOT EXISTS postgis;</sql>
+    </changeSet>
+
+    <changeSet id="20260114-02" author="pwnned">
+        <createTable tableName="events">
+            <column name="event_id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="type" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_date" type="TIMESTAMP"/>
+            <column name="geometria" type="geometry(Point, 4326)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20260114-03" author="pwnned">
+        <sql>CREATE INDEX idx_events_geometria ON events USING GIST (geometria);</sql>
+    </changeSet>
+
+</databaseChangeLog>
