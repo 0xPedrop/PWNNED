@@ -8,7 +8,5 @@ import org.springframework.data.domain.Page;
 @Mapper(componentModel = "spring")
 public interface PageableMapper {
 
-    PageableMapper INSTANCE = Mappers.getMapper(PageableMapper.class);
-
     PageableDTO toDTO(Page page);
 }
