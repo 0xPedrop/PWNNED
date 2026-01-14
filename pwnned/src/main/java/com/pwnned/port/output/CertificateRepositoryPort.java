@@ -12,9 +12,9 @@ import java.util.UUID;
 public interface CertificateRepositoryPort {
     Certificate save(Certificate certificate);
     Page<CertificateResponseDTO> findAll(Pageable pageable);
-    Optional<Certificate> findById(UUID certificateId);
+    Optional<Certificate> findById(Long certificateId);
     Optional<Certificate> findBySerialNumber(String serialNumber);
-    void deleteById(UUID certificateId);
+    void deleteById(Long certificateId);
     void deleteAll();
-    void deleteAllByUserId(UUID userId);
+    void deleteAllByUserId(Long userId);
 }

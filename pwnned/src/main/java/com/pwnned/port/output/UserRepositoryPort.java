@@ -12,12 +12,12 @@ import java.util.UUID;
 public interface UserRepositoryPort {
     User save(User user);
     Page<User> findAll(Pageable pageable);
-    Optional<User> findById(UUID userId);
+    Optional<User> findById(Long userId);
     Optional<User> findByUsername(String username);
-    void deleteById(UUID userId);
+    void deleteById(Long userId);
     void deleteAll();
     List<User> getUsersByType(UserType userType);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
-    Integer getUserExperiencePoints(UUID userId);
+    Integer getUserExperiencePoints(Long userId);
 }

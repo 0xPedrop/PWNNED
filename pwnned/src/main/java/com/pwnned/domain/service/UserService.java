@@ -17,10 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService implements UserServicePort {
@@ -46,40 +44,26 @@ public class UserService implements UserServicePort {
     @Override
     @Transactional
     public User createUser(User user) {
-        if (userRepositoryPort.existsByEmail(user.getEmail())) {
-            throw new UserAlreadyExistsException("Email já está em uso");
-        }
+        if (userRepositoryPort.existsByEmail(user.getEmail())) throw new UserAlreadyExistsException("Email já está em uso");
+        if (userRepositoryPort.existsByUsername(user.getUsername())) throw new UserAlreadyExistsException("Username já está em uso");
 
-        if (userRepositoryPort.existsByUsername(user.getUsername())) {
-            throw new UserAlreadyExistsException("Username já está em uso");
-        }
-
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserType(UserType.BASIC);
 
         User createdUser = userRepositoryPort.save(user);
         userRedisAdapter.invalidateCacheForUsersByType(UserType.BASIC.name());
 
-        userLogServicePort.logAction(createdUser.getUserId().toString(), "USUÁRIO CRIADO");
+        userLogServicePort.logAction(String.valueOf(createdUser.getUserId()), "USUÁRIO CRIADO");
         return createdUser;
     }
 
     @Override
-    public Page<User> getAllUsers(Pageable pageable) {
-        return userRepositoryPort.findAll(pageable);
-    }
-
-    @Override
-    public User getSingleUser(UUID userId) {
+    public User getSingleUser(Long userId) {
         return userRedisAdapter.getCachedUser(userId)
                 .orElseGet(() -> {
                     User user = userRepositoryPort.findById(userId)
-                            .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
-
-                    Integer xp = userRepositoryPort.getUserExperiencePoints(userId);
-                    user.setExperiencePoints(xp != null ? xp : 0);
-
+                            .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+                    user.setExperiencePoints(userRepositoryPort.getUserExperiencePoints(userId));
                     userRedisAdapter.cacheUser(user);
                     return user;
                 });
@@ -87,43 +71,29 @@ public class UserService implements UserServicePort {
 
     @Override
     @Transactional
-    public void deleteUser(UUID userId) {
-        User user = userRepositoryPort.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User " + userId + " Not Found"));
-
-        String typeName = user.getUserType().name();
-
+    public void deleteUser(Long userId) {
+        User user = userRepositoryPort.findById(userId).orElseThrow(() -> new UserNotFoundException("User Not Found"));
         userRepositoryPort.deleteById(userId);
         userRedisAdapter.invalidateCacheForUser(userId);
-        userRedisAdapter.invalidateCacheForUsersByType(typeName);
+        userRedisAdapter.invalidateCacheForUsersByType(user.getUserType().name());
+    }
+
+    @Override public Page<User> getAllUsers(Pageable pageable) { return userRepositoryPort.findAll(pageable); }
+    @Override public Optional<User> authenticateUser(String username, String password) {
+        return userRepositoryPort.findByUsername(username).filter(u -> passwordEncoder.matches(password, u.getPassword()));
     }
 
     @Override
     @Transactional
-    public void deleteAllUsers(Pageable pageable) {
-        Page<User> users = userRepositoryPort.findAll(pageable);
-        users.forEach(user -> certificateRepositoryPort.deleteAllByUserId(user.getUserId()));
-        userRepositoryPort.deleteAll();
-        userRedisAdapter.invalidateAllUsersCache();
-    }
-
-    @Override
-    @Transactional
-    public void promoteUser(UUID userId) {
-        User user = userRepositoryPort.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User " + userId + " Not Found"));
-
-        if (user.getUserType().equals(UserType.PREMIUM)) {
-            throw new UserAlreadyPremiumException("User is Already Premium");
-        }
+    public void promoteUser(Long userId) {
+        User user = userRepositoryPort.findById(userId).orElseThrow(() -> new UserNotFoundException("User Not Found"));
+        if (user.getUserType() == UserType.PREMIUM) throw new UserAlreadyPremiumException("Already Premium");
 
         userRedisAdapter.invalidateCacheForUsersByType(user.getUserType().name());
-
         user.setUserType(UserType.PREMIUM);
         userRepositoryPort.save(user);
-
-        userRedisAdapter.invalidateCacheForUsersByType(UserType.PREMIUM.name());
         userRedisAdapter.invalidateCacheForUser(userId);
+        userRedisAdapter.invalidateCacheForUsersByType(UserType.PREMIUM.name());
     }
 
     @Override
@@ -131,21 +101,16 @@ public class UserService implements UserServicePort {
         return userRedisAdapter.getCachedUsersByType(userType.name())
                 .orElseGet(() -> {
                     List<User> users = userRepositoryPort.getUsersByType(userType);
-                    if (!users.isEmpty()) {
-                        userRedisAdapter.cacheUsersByType(userType.name(), users);
-                    }
+                    userRedisAdapter.cacheUsersByType(userType.name(), users);
                     return users;
                 });
     }
 
     @Override
-    public Optional<User> authenticateUser(String username, String password) {
-        return userRepositoryPort.findByUsername(username)
-                .filter(user -> passwordEncoder.matches(password, user.getPassword()));
-    }
-
-    public UserDTO findUserById(UUID userId) {
-        User user = getSingleUser(userId);
-        return userMapper.toDTO(user);
+    @Transactional
+    public void deleteAllUsers(Pageable pageable) {
+        userRepositoryPort.findAll(pageable).forEach(u -> certificateRepositoryPort.deleteAllByUserId(u.getUserId()));
+        userRepositoryPort.deleteAll();
+        userRedisAdapter.invalidateAllUsersCache();
     }
 }

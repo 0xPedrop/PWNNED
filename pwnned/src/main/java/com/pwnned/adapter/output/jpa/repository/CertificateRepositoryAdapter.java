@@ -41,7 +41,7 @@ public class CertificateRepositoryAdapter implements CertificateRepositoryPort {
     }
 
     @Override
-    public Optional<Certificate> findById(UUID certificateId) {
+    public Optional<Certificate> findById(Long certificateId) {
         return certificateRepository.findById(certificateId)
                 .map(entity -> certificateMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
@@ -53,7 +53,7 @@ public class CertificateRepositoryAdapter implements CertificateRepositoryPort {
     }
 
     @Override
-    public void deleteById(UUID certificateId) {
+    public void deleteById(Long certificateId) {
         certificateRepository.deleteById(certificateId);
     }
 
@@ -63,7 +63,7 @@ public class CertificateRepositoryAdapter implements CertificateRepositoryPort {
     }
 
     @Override
-    public void deleteAllByUserId(UUID userId) {
+    public void deleteAllByUserId(Long userId) {
         certificateRepository.deleteAllByUserId(userId);
     }
 }

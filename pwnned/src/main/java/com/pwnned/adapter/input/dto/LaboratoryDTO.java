@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
 
-public record LaboratoryDTO(UUID labId,
+public record LaboratoryDTO(Long labId,
                             @NotBlank(message = "Title must not be blank")
                             @Size(min = 5, max = 40, message = "Title must be between 5 and 40 characters")
                             String title,
@@ -20,7 +20,7 @@ public record LaboratoryDTO(UUID labId,
                             LaboratoryType laboratoryType,
 
                             @NotNull(message = "Learning Path Id must not be blank")
-                            UUID learningPathId) {
+                            Long learningPathId) {
     public LaboratoryDTO() {
         this(null, null, null, null, null);
     }

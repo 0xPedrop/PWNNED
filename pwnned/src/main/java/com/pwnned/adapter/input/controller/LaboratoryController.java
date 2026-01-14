@@ -56,14 +56,14 @@ public class LaboratoryController implements LaboratoryControllerPort {
 
     @Override
     @GetMapping("/{laboratoryId}")
-    public ResponseEntity<LaboratoryDTO> getSingleLaboratory(@PathVariable UUID laboratoryId) {
+    public ResponseEntity<LaboratoryDTO> getSingleLaboratory(@PathVariable Long laboratoryId) {
         Laboratory laboratory = laboratoryServicePort.getSingleLaboratory(laboratoryId);
         return ResponseEntity.ok(laboratoryMapper.toDTO(laboratory));
     }
 
     @Override
     @DeleteMapping("/{laboratoryId}")
-    public ResponseEntity<String> deleteLaboratory(@PathVariable UUID laboratoryId) {
+    public ResponseEntity<String> deleteLaboratory(@PathVariable Long laboratoryId) {
         laboratoryServicePort.deleteLaboratory(laboratoryId);
         return ResponseEntity.ok("Lab " + laboratoryId + " deleted");
     }

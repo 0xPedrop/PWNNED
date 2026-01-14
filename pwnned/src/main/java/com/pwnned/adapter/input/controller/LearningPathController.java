@@ -64,14 +64,14 @@ public class LearningPathController implements LearningPathControllerPort {
 
     @Override
     @GetMapping("/{learningPathId}")
-    public ResponseEntity<LearningPathDTO> getSingleLearningPath(@PathVariable UUID learningPathId) {
+    public ResponseEntity<LearningPathDTO> getSingleLearningPath(@PathVariable Long learningPathId) {
         LearningPath learningPath = learningPathServicePort.getSingleLearningPath(learningPathId);
         return ResponseEntity.ok(learningPathMapper.toDTO(learningPath));
     }
 
     @Override
     @DeleteMapping("/{learningPathId}")
-    public ResponseEntity<String> deleteLearningPath(@PathVariable UUID learningPathId) {
+    public ResponseEntity<String> deleteLearningPath(@PathVariable Long learningPathId) {
         learningPathServicePort.deleteLearningPath(learningPathId);
         return ResponseEntity.ok("Learning Path " + learningPathId + " deleted");
     }
@@ -95,7 +95,7 @@ public class LearningPathController implements LearningPathControllerPort {
 
     @GetMapping("/{learningPathId}/labs")
     public ResponseEntity<List<LaboratoryDTO>> getLaboratoriesForLearningPath(
-            @PathVariable UUID learningPathId) {
+            @PathVariable Long learningPathId) {
         List<Laboratory> laboratories = laboratoryServicePort.getLaboratoriesByLearningPathId(learningPathId);
         List<LaboratoryDTO> laboratoryDTOs = laboratories.stream()
                 .map(laboratoryMapper::toDTO)

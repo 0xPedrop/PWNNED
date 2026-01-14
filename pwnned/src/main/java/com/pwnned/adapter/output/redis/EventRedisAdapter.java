@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -24,7 +23,7 @@ public class EventRedisAdapter {
         invalidateAllEventsCache();
     }
 
-    public Optional<EventDTO> getCachedEvent(UUID eventId) {
+    public Optional<EventDTO> getCachedEvent(Long eventId) {
         String key = CACHE_KEY_PREFIX + eventId;
         Object cachedObject = redisTemplate.opsForValue().get(key);
         if (cachedObject instanceof EventDTO) {
@@ -45,7 +44,7 @@ public class EventRedisAdapter {
         return Optional.empty();
     }
 
-    public void invalidateEvent(UUID eventId) {
+    public void invalidateEvent(Long eventId) {
         String key = CACHE_KEY_PREFIX + eventId;
         redisTemplate.delete(key);
         invalidateAllEventsCache();

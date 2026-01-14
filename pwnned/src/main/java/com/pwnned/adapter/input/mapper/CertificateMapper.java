@@ -15,6 +15,8 @@ public interface CertificateMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "learningPath", ignore = true)
     @Mapping(target = "certificateId", ignore = true)
+    @Mapping(target = "issueDate", ignore = true)
+    @Mapping(target = "serialNumber", ignore = true)
     Certificate toModel(CreateCertificateDTO certificateDTO);
 
     Certificate toModel(CertificateEntity certificateEntity, @Context CycleAvoidingMappingContext context);

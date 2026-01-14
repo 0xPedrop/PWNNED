@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
@@ -39,7 +38,7 @@ public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
     }
 
     @Override
-    public Optional<Laboratory> findById(UUID laboratoryId) {
+    public Optional<Laboratory> findById(Long laboratoryId) {
         return laboratoryRepository.findById(laboratoryId)
                 .map(entity -> laboratoryMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
@@ -52,7 +51,7 @@ public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
     }
 
     @Override
-    public void deleteById(UUID laboratoryId) {
+    public void deleteById(Long laboratoryId) {
         laboratoryRepository.deleteById(laboratoryId);
     }
 
@@ -62,14 +61,14 @@ public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
     }
 
     @Override
-    public List<Laboratory> findByLearningPathId(UUID learningPathId) {
+    public List<Laboratory> findByLearningPathId(Long learningPathId) {
         return laboratoryRepository.findByLearningPath_LearningPathId(learningPathId).stream()
                 .map(entity -> laboratoryMapper.toModel(entity, new CycleAvoidingMappingContext()))
                 .toList();
     }
 
     @Override
-    public void deleteAllByLearningPathId(UUID learningPathId) {
+    public void deleteAllByLearningPathId(Long learningPathId) {
         laboratoryRepository.deleteAllByLearningPathId(learningPathId);
     }
 }

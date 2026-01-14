@@ -15,10 +15,10 @@ public record CreateCertificateDTO(
         String url,
 
         @NotNull(message = "UserId must not be null")
-        UUID userId,
+        Long userId,
 
         @NotNull(message = "LearningPathId must not be null")
-        UUID learningPathId
+        Long learningPathId
 
 ) {
 }

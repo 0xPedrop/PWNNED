@@ -51,7 +51,7 @@ public class CertificateController implements CertificateControllerPort {
 
     @Override
     @DeleteMapping("/{certificateId}")
-    public ResponseEntity<String> deleteCertificate(@PathVariable UUID certificateId) {
+    public ResponseEntity<String> deleteCertificate(@PathVariable Long certificateId) {
         certificateServicePort.deleteCertificate(certificateId);
         return ResponseEntity.ok("Certificate " + certificateId + " deleted");
     }

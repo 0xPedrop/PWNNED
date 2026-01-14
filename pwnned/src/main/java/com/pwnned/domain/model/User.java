@@ -1,13 +1,11 @@
 package com.pwnned.domain.model;
 
 import com.pwnned.domain.enums.UserType;
-
 import java.util.Set;
-import java.util.UUID;
 import java.util.Objects;
 
 public class User {
-    private UUID userId;
+    private Long userId;
     private String email;
     private String password;
     private String username;
@@ -16,7 +14,9 @@ public class User {
     private Set<LearningPath> learningPathsAcessed;
     private Integer experiencePoints;
 
-    public User(UUID userId, String email, String password, String username, UserType userType,
+    public User() {}
+
+    public User(Long userId, String email, String password, String username, UserType userType,
                 Set<Certificate> certificates, Set<LearningPath> learningPathsAcessed, Integer experiencePoints) {
         this.userId = userId;
         this.email = email;
@@ -28,72 +28,22 @@ public class User {
         this.experiencePoints = experiencePoints;
     }
 
-    public User() {
-    }
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    public Set<Certificate> getCertificates() {
-        return certificates;
-    }
-
-    public void setCertificates(Set<Certificate> certificates) {
-        this.certificates = certificates;
-    }
-
-    public Set<LearningPath> getLearningPathsAcessed() {
-        return learningPathsAcessed;
-    }
-
-    public void setLearningPathsAcessed(Set<LearningPath> learningPathsAcessed) {
-        this.learningPathsAcessed = learningPathsAcessed;
-    }
-
-    public Integer getExperiencePoints() {
-        return experiencePoints;
-    }
-
-    public void setExperiencePoints(Integer experiencePoints) {
-        this.experiencePoints = experiencePoints;
-    }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    public UserType getUserType() { return userType; }
+    public void setUserType(UserType userType) { this.userType = userType; }
+    public Set<Certificate> getCertificates() { return certificates; }
+    public void setCertificates(Set<Certificate> certificates) { this.certificates = certificates; }
+    public Set<LearningPath> getLearningPathsAcessed() { return learningPathsAcessed; }
+    public void setLearningPathsAcessed(Set<LearningPath> learningPathsAcessed) { this.learningPathsAcessed = learningPathsAcessed; }
+    public Integer getExperiencePoints() { return experiencePoints; }
+    public void setExperiencePoints(Integer experiencePoints) { this.experiencePoints = experiencePoints; }
 
     @Override
     public boolean equals(Object o) {
@@ -104,7 +54,5 @@ public class User {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(userId);
-    }
+    public int hashCode() { return Objects.hash(userId); }
 }

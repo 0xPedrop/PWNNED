@@ -5,10 +5,9 @@ import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.enums.LaboratoryType;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class Laboratory {
-    private UUID labId;
+    private Long labId;
     private String title;
     private Difficulty difficulty;
     private LaboratoryType laboratoryType;
@@ -16,7 +15,7 @@ public class Laboratory {
     @JsonBackReference
     private LearningPath learningPath;
 
-    public Laboratory(UUID labId, String title, Difficulty difficulty, LaboratoryType laboratoryType, LearningPath learningPath) {
+    public Laboratory(Long labId, String title, Difficulty difficulty, LaboratoryType laboratoryType, LearningPath learningPath) {
         this.labId = labId;
         this.title = title;
         this.difficulty = difficulty;
@@ -27,11 +26,11 @@ public class Laboratory {
     public Laboratory() {
     }
 
-    public UUID getLabId() {
+    public Long getLabId() {
         return labId;
     }
 
-    public void setLabId(UUID labId) {
+    public void setLabId(Long labId) {
         this.labId = labId;
     }
 

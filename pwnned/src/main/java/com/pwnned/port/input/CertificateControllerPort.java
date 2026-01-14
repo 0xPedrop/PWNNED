@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface CertificateControllerPort {
     ResponseEntity<CertificateResponseDTO> createCertificate(@RequestBody CreateCertificateDTO certificateDTO);
     ResponseEntity<PageableDTO> getAllCertificates(Pageable pageable);
-    ResponseEntity<String> deleteCertificate(@PathVariable UUID certificateId);
+    ResponseEntity<String> deleteCertificate(@PathVariable Long certificateId);
     ResponseEntity<String> deleteAllCertificate();
     ResponseEntity<CertificateResponseDTO> getCertificateBySerialNumber(@PathVariable String serialNumber);
 }

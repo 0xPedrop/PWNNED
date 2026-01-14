@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -22,7 +21,7 @@ public class LearningPathRedisAdapter {
         redisTemplate.opsForValue().set(key, learningPath, 1, TimeUnit.HOURS);
     }
 
-    public Optional<LearningPath> getCachedLearningPath(UUID learningPathId) {
+    public Optional<LearningPath> getCachedLearningPath(Long learningPathId) {
         String key = "learningpath:" + learningPathId;
         Object cachedObject = redisTemplate.opsForValue().get(key);
         if (cachedObject instanceof LearningPath) {
@@ -46,7 +45,7 @@ public class LearningPathRedisAdapter {
         return Optional.empty();
     }
 
-    public void invalidateCacheForLearningPath(UUID learningPathId) {
+    public void invalidateCacheForLearningPath(Long learningPathId) {
         String key = "learningpath:" + learningPathId;
         redisTemplate.delete(key);
     }

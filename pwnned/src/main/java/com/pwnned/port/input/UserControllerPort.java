@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface UserControllerPort {
     ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO);
     ResponseEntity<PageableDTO> getAllUsers(Pageable pageable);
-    ResponseEntity<UserDTO> getSingleUser(@PathVariable UUID userId);
-    ResponseEntity<String> deleteUser(@PathVariable UUID userId);
+    ResponseEntity<UserDTO> getSingleUser(@PathVariable Long userId);
+    ResponseEntity<String> deleteUser(@PathVariable Long userId);
     ResponseEntity<String> deleteAllUsers(Pageable pageable);
-    ResponseEntity<String> promoteUser(UUID userId);
+    ResponseEntity<String> promoteUser(Long userId);
     ResponseEntity<List<UserDTO>> getUsersByType(@PathVariable UserType userType);
     ResponseEntity<String> uploadPhoto(String userId, MultipartFile file) throws Exception;
 }

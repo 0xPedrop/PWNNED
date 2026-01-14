@@ -4,9 +4,9 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="create-function-calculate-xp" author="pwnned">
+    <changeSet id="create-function-calculate-xp-v2" author="pwnned">
         <sql splitStatements="false">
-            CREATE OR REPLACE FUNCTION calculate_user_xp(u_id UUID)
+            CREATE OR REPLACE FUNCTION calculate_user_xp(u_id BIGINT)
             RETURNS INTEGER AS $$
             BEGIN
             RETURN (
@@ -17,7 +17,7 @@
             $$ LANGUAGE plpgsql;
         </sql>
         <rollback>
-            DROP FUNCTION IF EXISTS calculate_user_xp(UUID);
+            DROP FUNCTION IF EXISTS calculate_user_xp(BIGINT);
         </rollback>
     </changeSet>
 </databaseChangeLog>

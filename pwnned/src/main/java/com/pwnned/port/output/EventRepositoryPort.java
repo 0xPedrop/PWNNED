@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface EventRepositoryPort {
     Event save(Event event);
-    Optional<Event> findById(UUID id);
+    Optional<Event> findById(Long eventId);
     List<Event> findAll();
     List<Event> findNearbyEvents(double lat, double lon, double distanceInMeters);
 }

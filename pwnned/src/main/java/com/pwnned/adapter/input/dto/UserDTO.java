@@ -1,5 +1,7 @@
 package com.pwnned.adapter.input.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.pwnned.domain.enums.UserType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +12,8 @@ import java.util.UUID;
 
 @Builder
 public record UserDTO(
-        UUID userId,
+        @JsonSerialize(using = ToStringSerializer.class)
+        Long userId,
 
         @NotBlank(message = "Email must not be blank")
         @Email(message = "Invalid Format for Email")

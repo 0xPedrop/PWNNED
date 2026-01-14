@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
+
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -22,7 +22,7 @@ public class UserRedisAdapter {
         redisTemplate.opsForValue().set(key, user, 1,  TimeUnit.HOURS);
     }
 
-    public Optional<User> getCachedUser(UUID userId) {
+    public Optional<User> getCachedUser(Long userId) {
         String key = "user:" + userId;
         Object cachedObject = redisTemplate.opsForValue().get(key);
         if (cachedObject instanceof User) {
@@ -46,7 +46,7 @@ public class UserRedisAdapter {
         return Optional.empty();
     }
 
-    public void invalidateCacheForUser(UUID userId) {
+    public void invalidateCacheForUser(Long userId) {
         String key = "user:" + userId;
         redisTemplate.delete(key);
     }

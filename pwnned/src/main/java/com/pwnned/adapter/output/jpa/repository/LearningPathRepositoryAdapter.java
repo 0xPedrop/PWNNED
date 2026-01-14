@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class LearningPathRepositoryAdapter implements LearningPathRepositoryPort {
@@ -39,7 +38,7 @@ public class LearningPathRepositoryAdapter implements LearningPathRepositoryPort
     }
 
     @Override
-    public Optional<LearningPath> findById(UUID learningPathId) {
+    public Optional<LearningPath> findById(Long learningPathId) {
         return learningPathRepository.findById(learningPathId)
                 .map(entity -> learningPathMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
@@ -52,7 +51,7 @@ public class LearningPathRepositoryAdapter implements LearningPathRepositoryPort
     }
 
     @Override
-    public void deleteById(UUID learningPathId) {
+    public void deleteById(Long learningPathId) {
         learningPathRepository.deleteById(learningPathId);
     }
 

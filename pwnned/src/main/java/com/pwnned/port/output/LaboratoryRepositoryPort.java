@@ -7,15 +7,14 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface LaboratoryRepositoryPort {
     Laboratory save(Laboratory laboratory);
     Page<Laboratory> findAll(Pageable pageable);
-    Optional<Laboratory> findById(UUID laboratoryId);
+    Optional<Laboratory> findById(Long laboratoryId);
     List<Laboratory> getLaboratoriesByType(LaboratoryType laboratoryType);
-    void deleteById(UUID laboratoryId);
+    void deleteById(Long laboratoryId);
     void deleteAll();
-    List<Laboratory> findByLearningPathId(UUID learningPathId);
-    void deleteAllByLearningPathId(UUID learningPathId);
+    List<Laboratory> findByLearningPathId(Long learningPathId);
+    void deleteAllByLearningPathId(Long learningPathId);
 }

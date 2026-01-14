@@ -9,5 +9,5 @@ public interface EventControllerPort {
     ResponseEntity<EventDTO> create(EventDTO dto);
     ResponseEntity<List<EventDTO>> listAll();
     ResponseEntity<List<EventDTO>> getNearby(double lat, double lon, double radius);
-    ResponseEntity<EventDTO> getById(UUID id);
+    ResponseEntity<EventDTO> getById(Long eventId);
 }

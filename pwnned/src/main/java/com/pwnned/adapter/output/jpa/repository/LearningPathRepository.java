@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface LearningPathRepository extends JpaRepository<LearningPathEntity, UUID> {
+public interface LearningPathRepository extends JpaRepository<LearningPathEntity, Long> {
     List<LearningPathEntity> findLearningPathsByDifficulty(Difficulty difficulty);
 }

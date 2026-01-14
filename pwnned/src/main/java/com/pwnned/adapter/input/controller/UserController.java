@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/v1/users")
@@ -56,14 +55,14 @@ public class UserController implements UserControllerPort {
 
     @Override
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getSingleUser(@PathVariable UUID userId) {
+    public ResponseEntity<UserDTO> getSingleUser(@PathVariable Long userId) {
         User user = userServicePort.getSingleUser(userId);
         return ResponseEntity.ok(userMapper.toDTO(user));
     }
 
     @Override
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable UUID userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         userServicePort.deleteUser(userId);
         return ResponseEntity.ok("User " + userId + " Deleted");
     }
@@ -77,7 +76,7 @@ public class UserController implements UserControllerPort {
 
     @Override
     @PutMapping("/{userId}")
-    public ResponseEntity<String> promoteUser(@PathVariable UUID userId) {
+    public ResponseEntity<String> promoteUser(@PathVariable Long userId) {
         userServicePort.promoteUser(userId);
         return ResponseEntity.ok("User " + userId + " is a Premium User Now");
     }

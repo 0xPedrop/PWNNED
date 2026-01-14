@@ -7,6 +7,6 @@ import java.util.UUID;
 public interface EventServicePort {
     EventDTO createEvent(EventDTO eventDTO);
     List<EventDTO> getNearbyEvents(double lat, double lon, double radiusInKm);
-    EventDTO getEventById(UUID id);
+    EventDTO getEventById(Long eventId);
     List<EventDTO> getAllEvents();
 }

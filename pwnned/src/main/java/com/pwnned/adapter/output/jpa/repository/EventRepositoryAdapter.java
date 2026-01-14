@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class EventRepositoryAdapter implements EventRepositoryPort {
@@ -30,8 +29,8 @@ public class EventRepositoryAdapter implements EventRepositoryPort {
     }
 
     @Override
-    public Optional<Event> findById(UUID id) {
-        return eventRepository.findById(id)
+    public Optional<Event> findById(Long eventId) {
+        return eventRepository.findById(eventId)
                 .map(entity -> eventMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
 

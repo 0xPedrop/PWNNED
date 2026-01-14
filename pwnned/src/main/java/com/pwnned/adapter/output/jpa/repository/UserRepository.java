@@ -12,12 +12,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, UUID> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findByUserType(UserType userType);
     Optional<UserEntity> findByUsername(String username);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
 
     @Query(value = "SELECT calculate_user_xp(:userId)", nativeQuery = true)
-    Integer getUserExperiencePoints(@Param("userId") UUID userId);
+    Integer getUserExperiencePoints(@Param("userId") Long userId);
 }

@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/events")
@@ -46,7 +45,7 @@ public class EventController implements EventControllerPort {
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<EventDTO> getById(@PathVariable UUID id) {
+    public ResponseEntity<EventDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(eventServicePort.getEventById(id));
     }
 }

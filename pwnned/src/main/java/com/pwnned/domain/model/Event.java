@@ -3,10 +3,10 @@ package com.pwnned.domain.model;
 import org.locationtech.jts.geom.Point;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
+
 
 public class Event {
-    private UUID eventId;
+    private Long eventId;
     private String name;
     private String description;
     private String type;
@@ -17,7 +17,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(UUID eventId, String name, String description, String type, LocalDateTime eventDate, Point geometry,
+    public Event(Long eventId, String name, String description, String type, LocalDateTime eventDate, Point geometry,
                  Double distanceToUser) {
         this.eventId = eventId;
         this.name = name;
@@ -28,11 +28,11 @@ public class Event {
         this.distanceToUser = distanceToUser;
     }
 
-    public UUID getEventId() {
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(UUID eventId) {
+    public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
 

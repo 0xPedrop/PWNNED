@@ -6,10 +6,10 @@
 
     <include file="db/changelog/db.changelog-users.xml"/>
     <include file="db/changelog/db.changelog-learningpaths.xml"/>
+    <include file="db/changelog/db.changelog-events.xml"/>
 
     <include file="db/changelog/db.changelog-laboratories.xml"/>
     <include file="db/changelog/db.changelog-certificates.xml"/>
-    <include file="db/changelog/db.changelog-events.xml"/>
 
     <include file="db/changelog/db.changelog-functions.xml"/>
 

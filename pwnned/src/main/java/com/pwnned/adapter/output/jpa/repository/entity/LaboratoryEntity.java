@@ -21,9 +21,7 @@ import java.util.UUID;
 public class LaboratoryEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcTypeCode(SqlTypes.UUID)
-    private UUID labId;
+    private Long labId;
 
     private String title;
 

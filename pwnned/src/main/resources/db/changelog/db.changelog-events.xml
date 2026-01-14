@@ -5,13 +5,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="20260114-01" author="pwnned">
+    <changeSet id="events-01-postgis-extension" author="pwnned">
         <sql>CREATE EXTENSION IF NOT EXISTS postgis;</sql>
     </changeSet>
 
-    <changeSet id="20260114-02" author="pwnned">
+    <changeSet id="events-02-create-table-snowflake" author="pwnned">
         <createTable tableName="events">
-            <column name="event_id" type="UUID">
+            <column name="event_id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
@@ -22,22 +22,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="event_date" type="TIMESTAMP"/>
-            <column name="geometria" type="geometry(Point, 4326)"/>
+            <column name="geometry" type="geometry(Point, 4326)"/>
         </createTable>
     </changeSet>
 
-    <changeSet id="20260114-03" author="pwnned">
-        <sql>CREATE INDEX idx_events_geometry ON events USING GIST (geometria);</sql>
-    </changeSet>
-
-    <changeSet id="20260114-04-rename-geometry" author="pwnned">
-        <renameColumn tableName="events"
-                      oldColumnName="geometria"
-                      newColumnName="geometry"
-                      columnDataType="geometry(Point, 4326)"/>
-    </changeSet>
-    <changeSet id="20260114-05-sync-fix" author="pwnned">
-        <sql>-- Comando apenas para garantir sincronização manual</sql>
+    <changeSet id="events-03-spatial-index" author="pwnned">
+        <sql>CREATE INDEX idx_events_geometry ON events USING GIST (geometry);</sql>
     </changeSet>
 
 </databaseChangeLog>
