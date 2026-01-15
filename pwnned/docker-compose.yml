@@ -1,0 +1,63 @@
+services:
+  pwnned-app:
+    build: .
+    container_name: pwnned-app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      redis:
+        condition: service_started
+      minio:
+        condition: service_healthy
+
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: pwnned-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: pwnned
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d pwnned"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: mongo:latest
+    container_name: pwnned-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  minio:
+    image: minio/minio:latest
+    container_name: pwnned-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password123
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  redis:
+    image: redis:alpine
+    container_name: pwnned-redis
+    ports:
+      - "6379:6379"

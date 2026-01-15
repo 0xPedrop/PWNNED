@@ -1,21 +1,23 @@
 package com.pwnned.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pwnned.domain.enums.Difficulty;
-
 import java.util.Set;
-import java.util.UUID;
 import java.util.Objects;
 
 public class LearningPath {
-    private UUID learningPathId;
+    private Long learningPathId;
     private String title;
     private String category;
     private Difficulty difficulty;
+
+    @JsonManagedReference
     private Set<Laboratory> laboratories;
+
     private Set<User> usersAcessing;
     private Certificate certificate;
 
-    public LearningPath(UUID learningPathId, String title, String category, Difficulty difficulty,
+    public LearningPath(Long learningPathId, String title, String category, Difficulty difficulty,
                         Set<Laboratory> laboratories, Set<User> usersAcessing, Certificate certificate) {
         this.learningPathId = learningPathId;
         this.title = title;
@@ -29,11 +31,11 @@ public class LearningPath {
     public LearningPath() {
     }
 
-    public UUID getLearningPathId() {
+    public Long getLearningPathId() {
         return learningPathId;
     }
 
-    public void setLearningPathId(UUID learningPathId) {
+    public void setLearningPathId(Long learningPathId) {
         this.learningPathId = learningPathId;
     }
 

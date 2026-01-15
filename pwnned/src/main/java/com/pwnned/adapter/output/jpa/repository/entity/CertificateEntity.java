@@ -2,11 +2,7 @@ package com.pwnned.adapter.output.jpa.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import java.time.LocalDate;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,9 +14,7 @@ import java.util.UUID;
 public class CertificateEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcTypeCode(SqlTypes.UUID)
-    private UUID certificateId;
+    private Long certificateId;
 
     private String title;
     private LocalDate issueDate;
@@ -30,7 +24,7 @@ public class CertificateEntity {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @OneToOne(fetch = FetchType.LAZY)

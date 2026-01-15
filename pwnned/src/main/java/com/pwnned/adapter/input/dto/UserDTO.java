@@ -1,14 +1,17 @@
 package com.pwnned.adapter.input.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.pwnned.domain.enums.UserType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
-import java.util.UUID;
-
+@Builder
 public record UserDTO(
-        UUID userId,
+        @JsonSerialize(using = ToStringSerializer.class)
+        Long userId,
 
         @NotBlank(message = "Email must not be blank")
         @Email(message = "Invalid Format for Email")
@@ -22,8 +25,10 @@ public record UserDTO(
         @Size(min = 4, max = 10, message = "Username must be between 4 and 10 characters")
         String username,
 
+        Integer experiencePoints,
+
         UserType userType) {
     public UserDTO() {
-        this(null, null, null, null, null);
+        this(null, null, null, null, null, null);
     }
 }

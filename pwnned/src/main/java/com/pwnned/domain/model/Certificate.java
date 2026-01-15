@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Certificate {
-    private UUID certificateId;
+    private Long certificateId;
     private String title;
     private LocalDate issueDate;
     private String serialNumber;
@@ -22,7 +22,7 @@ public class Certificate {
     public Certificate() {
     }
 
-    public Certificate(UUID certificateId, String title, LocalDate issueDate, String serialNumber, String url,
+    public Certificate(Long certificateId, String title, LocalDate issueDate, String serialNumber, String url,
                        User user, LearningPath learningPath) {
         this.certificateId = certificateId;
         this.title = title;
@@ -33,8 +33,12 @@ public class Certificate {
         this.learningPath = learningPath;
     }
 
-    public UUID getCertificateId() {
+    public Long getCertificateId() {
         return certificateId;
+    }
+
+    public void setCertificateId(Long certificateId) {
+        this.certificateId = certificateId;
     }
 
     public String getTitle() {

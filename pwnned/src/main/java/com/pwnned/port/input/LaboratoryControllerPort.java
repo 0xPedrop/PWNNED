@@ -7,15 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
-import java.util.UUID;
 
 public interface LaboratoryControllerPort {
     ResponseEntity<LaboratoryDTO> createLaboratory(@RequestBody LaboratoryDTO laboratoryDTO);
     ResponseEntity<PageableDTO> getAllLaboratories(Pageable pageable);
-    ResponseEntity<LaboratoryDTO> getSingleLaboratory(@PathVariable UUID laboratoryId);
-    ResponseEntity<String> deleteLaboratory(@PathVariable UUID laboratoryId);
+    ResponseEntity<LaboratoryDTO> getSingleLaboratory(@PathVariable Long laboratoryId);
+    ResponseEntity<String> deleteLaboratory(@PathVariable Long laboratoryId);
     ResponseEntity<String> deleteAllLaboratories();
     ResponseEntity<List<LaboratoryDTO>> getLaboratoriesByType(@PathVariable LaboratoryType laboratoryType);
 }

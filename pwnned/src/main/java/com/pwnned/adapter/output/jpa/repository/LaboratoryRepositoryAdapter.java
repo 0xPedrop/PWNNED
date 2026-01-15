@@ -1,7 +1,7 @@
 package com.pwnned.adapter.output.jpa.repository;
 
 import com.pwnned.adapter.input.mapper.LaboratoryMapper;
-import com.pwnned.adapter.input.mapper.LearningPathMapper;
+import com.pwnned.adapter.input.mapper.util.CycleAvoidingMappingContext;
 import com.pwnned.adapter.output.jpa.repository.entity.LaboratoryEntity;
 import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.model.Laboratory;
@@ -10,13 +10,10 @@ import com.pwnned.port.output.LaboratoryRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
-
 public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
 
     private final LaboratoryRepository laboratoryRepository;
@@ -29,28 +26,32 @@ public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
 
     @Override
     public Laboratory save(Laboratory laboratory) {
-        LaboratoryEntity laboratoryEntity = laboratoryMapper.toEntity(laboratory);
-        LaboratoryEntity savedLaboratory = laboratoryRepository.save(laboratoryEntity);
-        return laboratoryMapper.toModel(savedLaboratory);
+        LaboratoryEntity entity = laboratoryMapper.toEntity(laboratory, new CycleAvoidingMappingContext());
+        LaboratoryEntity saved = laboratoryRepository.save(entity);
+        return laboratoryMapper.toModel(saved, new CycleAvoidingMappingContext());
     }
 
     @Override
     public Page<Laboratory> findAll(Pageable pageable) {
-        return laboratoryRepository.findAll(pageable).map(laboratoryMapper::toModel);
+        return laboratoryRepository.findAll(pageable)
+                .map(entity -> laboratoryMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
 
     @Override
-    public Optional<Laboratory> findById(UUID laboratoryId) {
-        return laboratoryRepository.findById(laboratoryId).map(laboratoryMapper::toModel);
+    public Optional<Laboratory> findById(Long laboratoryId) {
+        return laboratoryRepository.findById(laboratoryId)
+                .map(entity -> laboratoryMapper.toModel(entity, new CycleAvoidingMappingContext()));
     }
 
     @Override
     public List<Laboratory> getLaboratoriesByType(LaboratoryType laboratoryType) {
-        return laboratoryRepository.findByLaboratoryType(laboratoryType).stream().map(laboratoryMapper::toModel).toList();
+        return laboratoryRepository.findByLaboratoryType(laboratoryType).stream()
+                .map(entity -> laboratoryMapper.toModel(entity, new CycleAvoidingMappingContext()))
+                .toList();
     }
 
     @Override
-    public void deleteById(UUID laboratoryId) {
+    public void deleteById(Long laboratoryId) {
         laboratoryRepository.deleteById(laboratoryId);
     }
 
@@ -60,14 +61,14 @@ public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {
     }
 
     @Override
-    public List<Laboratory> findByLearningPathId(UUID learningPathId) {
+    public List<Laboratory> findByLearningPathId(Long learningPathId) {
         return laboratoryRepository.findByLearningPath_LearningPathId(learningPathId).stream()
-                .map(laboratoryMapper::toModel)
+                .map(entity -> laboratoryMapper.toModel(entity, new CycleAvoidingMappingContext()))
                 .toList();
     }
 
     @Override
-    public void deleteAllByLearningPathId(UUID learningPathId) {
+    public void deleteAllByLearningPathId(Long learningPathId) {
         laboratoryRepository.deleteAllByLearningPathId(learningPathId);
     }
 }
