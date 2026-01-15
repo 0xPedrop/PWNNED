@@ -8,7 +8,6 @@ import com.pwnned.domain.model.Event;
 import com.pwnned.port.input.EventServicePort;
 import com.pwnned.port.output.EventRepositoryPort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

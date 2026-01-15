@@ -42,12 +42,14 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
         return userRepository.findAll(pageable).map(e -> userMapper.toModel(e, new CycleAvoidingMappingContext()));
     }
     @Override public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username).map(e -> userMapper.toModel(e, new CycleAvoidingMappingContext()));
+        return userRepository.findByUsername(username).map(e -> userMapper.toModel(e,
+                new CycleAvoidingMappingContext()));
     }
     @Override public void deleteById(Long userId) { userRepository.deleteById(userId); }
     @Override public void deleteAll() { userRepository.deleteAll(); }
     @Override public List<User> getUsersByType(UserType userType) {
-        return userRepository.findByUserType(userType).stream().map(e -> userMapper.toModel(e, new CycleAvoidingMappingContext())).toList();
+        return userRepository.findByUserType(userType).stream().map(e -> userMapper.toModel(e,
+                new CycleAvoidingMappingContext())).toList();
     }
     @Override public boolean existsByEmail(String email) { return userRepository.existsByEmail(email); }
     @Override public boolean existsByUsername(String username) { return userRepository.existsByUsername(username); }

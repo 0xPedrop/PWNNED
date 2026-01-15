@@ -15,10 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 public class LaboratoryService implements LaboratoryServicePort {
@@ -30,7 +28,8 @@ public class LaboratoryService implements LaboratoryServicePort {
 
     public LaboratoryService(LaboratoryRepositoryPort laboratoryRepositoryPort,
                              LaboratoryRedisAdapter laboratoryRedisAdapter,
-                             LearningPathRepositoryPort learningPathRepositoryPort, SnowflakeIdGenerator snowflakeIdGenerator) {
+                             LearningPathRepositoryPort learningPathRepositoryPort,
+                             SnowflakeIdGenerator snowflakeIdGenerator) {
         this.laboratoryRepositoryPort = laboratoryRepositoryPort;
         this.laboratoryRedisAdapter = laboratoryRedisAdapter;
         this.learningPathRepositoryPort = learningPathRepositoryPort;
@@ -42,7 +41,7 @@ public class LaboratoryService implements LaboratoryServicePort {
     public Laboratory createLaboratory(LaboratoryDTO laboratoryDTO) {
         LearningPath learningPath = learningPathRepositoryPort.findById(laboratoryDTO.learningPathId())
                 .orElseThrow(() -> new LearningPathNotFoundException("Learning Path ID "
-                        + laboratoryDTO.learningPathId() + " não encontrado."));
+                        + laboratoryDTO.learningPathId() + " not found"));
 
         Laboratory newLaboratory = new Laboratory();
         newLaboratory.setLabId(snowflakeIdGenerator.nextId());
@@ -116,7 +115,8 @@ public class LaboratoryService implements LaboratoryServicePort {
         return laboratoryRedisAdapter.getCachedLaboratoriesByLearningPathId(learningPathId)
                 .orElseGet(() -> {
                     learningPathRepositoryPort.findById(learningPathId)
-                            .orElseThrow(() -> new LearningPathNotFoundException("Learning Path with ID " + learningPathId + " not found."));
+                            .orElseThrow(() -> new LearningPathNotFoundException("Learning Path with ID "
+                                    + learningPathId + " not found."));
 
                     List<Laboratory> laboratories = laboratoryRepositoryPort.findByLearningPathId(learningPathId);
                     if (!laboratories.isEmpty()) {

@@ -2,7 +2,6 @@ package com.pwnned.port.input;
 
 import com.pwnned.adapter.input.dto.EventDTO;
 import java.util.List;
-import java.util.UUID;
 
 public interface EventServicePort {
     EventDTO createEvent(EventDTO eventDTO);

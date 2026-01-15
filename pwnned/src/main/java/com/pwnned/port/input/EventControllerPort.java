@@ -3,7 +3,6 @@ package com.pwnned.port.input;
 import com.pwnned.adapter.input.dto.EventDTO;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
-import java.util.UUID;
 
 public interface EventControllerPort {
     ResponseEntity<EventDTO> create(EventDTO dto);

@@ -6,7 +6,6 @@ import com.pwnned.adapter.output.jpa.repository.entity.EventEntity;
 import com.pwnned.domain.model.Event;
 import com.pwnned.port.output.EventRepositoryPort;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
 

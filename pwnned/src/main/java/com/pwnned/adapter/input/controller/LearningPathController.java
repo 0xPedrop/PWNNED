@@ -3,16 +3,12 @@ package com.pwnned.adapter.input.controller;
 import com.pwnned.adapter.input.dto.LaboratoryDTO;
 import com.pwnned.adapter.input.dto.LearningPathDTO;
 import com.pwnned.adapter.input.dto.PageableDTO;
-import com.pwnned.adapter.input.dto.UserDTO;
 import com.pwnned.adapter.input.mapper.LaboratoryMapper;
 import com.pwnned.adapter.input.mapper.LearningPathMapper;
 import com.pwnned.adapter.input.mapper.PageableMapper;
-import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
-import com.pwnned.domain.model.User;
-import com.pwnned.domain.service.LaboratoryService;
 import com.pwnned.port.input.LaboratoryServicePort;
 import com.pwnned.port.input.LearningPathControllerPort;
 import com.pwnned.port.input.LearningPathServicePort;
@@ -22,9 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.UUID;
 
 @RequestMapping("api/v1/learningpaths")
 @RestController
@@ -37,7 +31,10 @@ public class LearningPathController implements LearningPathControllerPort {
     private final PageableMapper pageableMapper;
 
     public LearningPathController(LearningPathServicePort learningPathServicePort,
-                                  LaboratoryServicePort laboratoryServicePort, LearningPathMapper learningPathMapper, LaboratoryMapper laboratoryMapper, PageableMapper pageableMapper) {
+                                  LaboratoryServicePort laboratoryServicePort,
+                                  LearningPathMapper learningPathMapper,
+                                  LaboratoryMapper laboratoryMapper,
+                                  PageableMapper pageableMapper) {
         this.learningPathServicePort = learningPathServicePort;
         this.laboratoryServicePort = laboratoryServicePort;
         this.learningPathMapper = learningPathMapper;

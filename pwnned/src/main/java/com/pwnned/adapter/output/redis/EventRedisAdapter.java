@@ -4,7 +4,6 @@ import com.pwnned.adapter.input.dto.EventDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;

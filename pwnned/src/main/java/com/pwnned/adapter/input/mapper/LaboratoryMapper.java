@@ -8,7 +8,6 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
 @Mapper(componentModel = "spring", uses = {LearningPathMapper.class})
 public interface LaboratoryMapper {
 

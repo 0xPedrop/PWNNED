@@ -4,11 +4,9 @@ import com.pwnned.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -36,7 +34,6 @@ public class UserRedisAdapter {
         redisTemplate.opsForValue().set(key, users, 1, TimeUnit.HOURS);
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<List<User>> getCachedUsersByType(String userType) {
         String key = "users:type:" + userType.toUpperCase();
         Object cachedObject = redisTemplate.opsForValue().get(key);

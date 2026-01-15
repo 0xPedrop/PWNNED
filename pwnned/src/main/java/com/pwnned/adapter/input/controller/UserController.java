@@ -16,7 +16,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -93,7 +92,8 @@ public class UserController implements UserControllerPort {
 
     @Override
     @PostMapping("/{userId}/upload-photo")
-    public ResponseEntity<String> uploadPhoto(@PathVariable String userId, @RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<String> uploadPhoto(@PathVariable String userId, @RequestParam("file") MultipartFile file)
+            throws Exception {
         String fileName = userId + "_" + file.getOriginalFilename();
         String result = storageRepositoryPort.uploadFile(fileName, file.getInputStream(), file.getContentType());
         return ResponseEntity.ok("Arquivo enviado com sucesso: " + result);

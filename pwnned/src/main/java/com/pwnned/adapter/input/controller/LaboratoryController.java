@@ -1,16 +1,11 @@
 package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.LaboratoryDTO;
-import com.pwnned.adapter.input.dto.LearningPathDTO;
 import com.pwnned.adapter.input.dto.PageableDTO;
-import com.pwnned.adapter.input.dto.UserDTO;
 import com.pwnned.adapter.input.mapper.LaboratoryMapper;
-import com.pwnned.adapter.input.mapper.LearningPathMapper;
 import com.pwnned.adapter.input.mapper.PageableMapper;
-import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.model.Laboratory;
-import com.pwnned.domain.model.User;
 import com.pwnned.port.input.LaboratoryControllerPort;
 import com.pwnned.port.input.LaboratoryServicePort;
 import jakarta.validation.Valid;
@@ -19,9 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.UUID;
 
 @RequestMapping("api/v1/labs")
 @RestController
@@ -31,7 +24,8 @@ public class LaboratoryController implements LaboratoryControllerPort {
     private final LaboratoryMapper laboratoryMapper;
     private final PageableMapper pageableMapper;
 
-    public LaboratoryController(LaboratoryServicePort laboratoryServicePort, LaboratoryMapper laboratoryMapper, PageableMapper pageableMapper) {
+    public LaboratoryController(LaboratoryServicePort laboratoryServicePort, LaboratoryMapper laboratoryMapper,
+                                PageableMapper pageableMapper) {
         this.laboratoryServicePort = laboratoryServicePort;
         this.laboratoryMapper = laboratoryMapper;
         this.pageableMapper = pageableMapper;

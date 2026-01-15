@@ -4,7 +4,6 @@ import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.model.LearningPath;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 
 public interface LearningPathServicePort {

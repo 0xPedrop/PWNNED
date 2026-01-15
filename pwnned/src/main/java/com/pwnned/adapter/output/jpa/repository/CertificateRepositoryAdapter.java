@@ -9,9 +9,7 @@ import com.pwnned.port.output.CertificateRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class CertificateRepositoryAdapter implements CertificateRepositoryPort {

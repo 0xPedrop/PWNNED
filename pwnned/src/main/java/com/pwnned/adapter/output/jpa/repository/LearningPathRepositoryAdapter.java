@@ -9,7 +9,6 @@ import com.pwnned.port.output.LearningPathRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +18,8 @@ public class LearningPathRepositoryAdapter implements LearningPathRepositoryPort
     private final LearningPathRepository learningPathRepository;
     private final LearningPathMapper learningPathMapper;
 
-    public LearningPathRepositoryAdapter(LearningPathRepository learningPathRepository, LearningPathMapper learningPathMapper) {
+    public LearningPathRepositoryAdapter(LearningPathRepository learningPathRepository,
+                                         LearningPathMapper learningPathMapper) {
         this.learningPathRepository = learningPathRepository;
         this.learningPathMapper = learningPathMapper;
     }

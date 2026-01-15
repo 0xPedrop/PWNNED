@@ -84,10 +84,6 @@ public class Event {
         this.distanceToUser = distanceToUser;
     }
 
-    public boolean isPastEvent() {
-        return eventDate.isBefore(LocalDateTime.now());
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

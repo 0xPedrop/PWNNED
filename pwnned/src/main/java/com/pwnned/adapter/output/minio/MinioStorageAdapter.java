@@ -32,7 +32,7 @@ public class MinioStorageAdapter implements StorageRepositoryPort {
                     .build());
             return fileName;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao subir arquivo para o MinIO", e);
+            throw new RuntimeException("Error uploading file to MinIO.", e);
         }
     }
 }

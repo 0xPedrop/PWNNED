@@ -4,7 +4,6 @@ import com.pwnned.domain.model.Laboratory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -50,7 +49,6 @@ public class LaboratoryRedisAdapter {
         redisTemplate.opsForValue().set(key, laboratories, 1, TimeUnit.HOURS);
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<List<Laboratory>> getCachedLaboratoriesByLearningPathId(Long learningPathId) {
         String key = "laboratories:learningpath:" + learningPathId;
         Object cachedObject = redisTemplate.opsForValue().get(key);

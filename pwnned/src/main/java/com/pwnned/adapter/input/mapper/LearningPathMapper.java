@@ -1,18 +1,14 @@
 package com.pwnned.adapter.input.mapper;
 
-import com.pwnned.adapter.input.dto.LaboratoryDTO;
 import com.pwnned.adapter.input.dto.LearningPathDTO;
 import com.pwnned.adapter.input.mapper.util.CycleAvoidingMappingContext;
-import com.pwnned.adapter.output.jpa.repository.entity.LaboratoryEntity;
 import com.pwnned.adapter.output.jpa.repository.entity.LearningPathEntity;
-import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", uses = {LaboratoryMapper.class, CertificateMapper.class, UserMapper.class}) // Adicionado `uses` aqui
+@Mapper(componentModel = "spring", uses = {LaboratoryMapper.class, CertificateMapper.class, UserMapper.class})
 public interface LearningPathMapper {
 
     @Mapping(target = "laboratories", ignore = true)

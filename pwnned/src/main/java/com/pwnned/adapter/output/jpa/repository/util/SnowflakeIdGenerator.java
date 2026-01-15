@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SnowflakeIdGenerator {
-    private final long epoch = 1705190400000L; // Custom Epoch (ex: 14/01/2024)
+    private final long epoch = 1705190400000L;
     private final long workerIdBits = 5L;
     private final long datacenterIdBits = 5L;
     private final long maxWorkerId = -1L ^ (-1L << workerIdBits);

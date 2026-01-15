@@ -3,9 +3,6 @@ package com.pwnned.adapter.output.jpa.repository.entity;
 import com.pwnned.domain.enums.Difficulty;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import java.util.Set;
 
 @Data

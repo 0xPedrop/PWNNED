@@ -16,9 +16,7 @@ import com.pwnned.port.output.UserRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class CertificateService implements CertificateServicePort {
@@ -29,7 +27,10 @@ public class CertificateService implements CertificateServicePort {
     private final LearningPathRepositoryPort learningPathRepositoryPort;
     private final SnowflakeIdGenerator snowflakeIdGenerator;
 
-    public CertificateService(CertificateRepositoryPort certificateRepositoryPort, CertificateRedisAdapter certificateRedisAdapter, UserRepositoryPort userRepositoryPort, LearningPathRepositoryPort learningPathRepositoryPort, SnowflakeIdGenerator snowflakeIdGenerator) {
+    public CertificateService(CertificateRepositoryPort certificateRepositoryPort,
+                              CertificateRedisAdapter certificateRedisAdapter, UserRepositoryPort userRepositoryPort,
+                              LearningPathRepositoryPort learningPathRepositoryPort,
+                              SnowflakeIdGenerator snowflakeIdGenerator) {
         this.certificateRepositoryPort = certificateRepositoryPort;
         this.certificateRedisAdapter = certificateRedisAdapter;
         this.userRepositoryPort = userRepositoryPort;

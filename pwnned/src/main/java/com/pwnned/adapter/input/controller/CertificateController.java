@@ -2,11 +2,8 @@ package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.*;
 import com.pwnned.adapter.input.mapper.CertificateMapper;
-import com.pwnned.adapter.input.mapper.LaboratoryMapper;
 import com.pwnned.adapter.input.mapper.PageableMapper;
-import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.domain.model.Certificate;
-import com.pwnned.domain.model.User;
 import com.pwnned.port.input.CertificateControllerPort;
 import com.pwnned.port.input.CertificateServicePort;
 import jakarta.validation.Valid;
@@ -16,10 +13,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 @RequestMapping("api/v1/certificates")
 @RestController
 public class CertificateController implements CertificateControllerPort {
@@ -28,7 +21,8 @@ public class CertificateController implements CertificateControllerPort {
     private final CertificateMapper certificateMapper;
     private final PageableMapper pageableMapper;
 
-    public CertificateController(CertificateServicePort certificateServicePort, CertificateMapper certificateMapper, PageableMapper pageableMapper) {
+    public CertificateController(CertificateServicePort certificateServicePort, CertificateMapper certificateMapper,
+                                 PageableMapper pageableMapper) {
         this.certificateServicePort = certificateServicePort;
         this.certificateMapper = certificateMapper;
         this.pageableMapper = pageableMapper;
@@ -36,7 +30,8 @@ public class CertificateController implements CertificateControllerPort {
 
     @Override
     @PostMapping
-    public ResponseEntity<CertificateResponseDTO> createCertificate(@Valid @RequestBody CreateCertificateDTO certificateDTO) {
+    public ResponseEntity<CertificateResponseDTO> createCertificate(@Valid @RequestBody
+                                                                        CreateCertificateDTO certificateDTO) {
         Certificate createdCertificate = certificateServicePort.createCertificate(certificateDTO);
         CertificateResponseDTO createdCertificateDTO = certificateMapper.toDTO(createdCertificate);
         return ResponseEntity.status(201).body(createdCertificateDTO);

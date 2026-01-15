@@ -1,7 +1,5 @@
 package com.pwnned.adapter.output.jpa.repository;
 
-import java.util.UUID;
-
 public interface EventDistanceProjection {
     Long getEventId();
     String getName();

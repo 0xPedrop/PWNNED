@@ -28,22 +28,70 @@ public class User {
         this.experiencePoints = experiencePoints;
     }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public UserType getUserType() { return userType; }
-    public void setUserType(UserType userType) { this.userType = userType; }
-    public Set<Certificate> getCertificates() { return certificates; }
-    public void setCertificates(Set<Certificate> certificates) { this.certificates = certificates; }
-    public Set<LearningPath> getLearningPathsAcessed() { return learningPathsAcessed; }
-    public void setLearningPathsAcessed(Set<LearningPath> learningPathsAcessed) { this.learningPathsAcessed = learningPathsAcessed; }
-    public Integer getExperiencePoints() { return experiencePoints; }
-    public void setExperiencePoints(Integer experiencePoints) { this.experiencePoints = experiencePoints; }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    public Set<Certificate> getCertificates() {
+        return certificates;
+    }
+
+    public void setCertificates(Set<Certificate> certificates) {
+        this.certificates = certificates;
+    }
+
+    public Set<LearningPath> getLearningPathsAcessed() {
+        return learningPathsAcessed;
+    }
+
+    public void setLearningPathsAcessed(Set<LearningPath> learningPathsAcessed) {
+        this.learningPathsAcessed = learningPathsAcessed;
+    }
+
+    public Integer getExperiencePoints() {
+        return experiencePoints;
+    }
+
+    public void setExperiencePoints(Integer experiencePoints) {
+        this.experiencePoints = experiencePoints;
+    }
 
     @Override
     public boolean equals(Object o) {

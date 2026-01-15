@@ -1,7 +1,5 @@
 package com.pwnned.domain.service;
 
-import com.pwnned.adapter.input.dto.UserDTO;
-import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.adapter.output.redis.UserRedisAdapter;
 import com.pwnned.domain.enums.UserType;
 import com.pwnned.domain.exception.UserAlreadyExistsException;
@@ -27,25 +25,25 @@ public class UserService implements UserServicePort {
     private final UserRedisAdapter userRedisAdapter;
     private final CertificateRepositoryPort certificateRepositoryPort;
     private final UserLogServicePort userLogServicePort;
-    private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepositoryPort userRepositoryPort, UserRedisAdapter userRedisAdapter,
                        CertificateRepositoryPort certificateRepositoryPort, UserLogServicePort userLogServicePort,
-                       UserMapper userMapper, BCryptPasswordEncoder passwordEncoder) {
+                       BCryptPasswordEncoder passwordEncoder) {
         this.userRepositoryPort = userRepositoryPort;
         this.userRedisAdapter = userRedisAdapter;
         this.certificateRepositoryPort = certificateRepositoryPort;
         this.userLogServicePort = userLogServicePort;
-        this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
     public User createUser(User user) {
-        if (userRepositoryPort.existsByEmail(user.getEmail())) throw new UserAlreadyExistsException("Email já está em uso");
-        if (userRepositoryPort.existsByUsername(user.getUsername())) throw new UserAlreadyExistsException("Username já está em uso");
+        if (userRepositoryPort.existsByEmail(user.getEmail())) throw
+                new UserAlreadyExistsException("Email is already in use.");
+        if (userRepositoryPort.existsByUsername(user.getUsername())) throw
+                new UserAlreadyExistsException("Username is already in use");
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserType(UserType.BASIC);
@@ -53,7 +51,7 @@ public class UserService implements UserServicePort {
         User createdUser = userRepositoryPort.save(user);
         userRedisAdapter.invalidateCacheForUsersByType(UserType.BASIC.name());
 
-        userLogServicePort.logAction(String.valueOf(createdUser.getUserId()), "USUÁRIO CRIADO");
+        userLogServicePort.logAction(String.valueOf(createdUser.getUserId()), "USUÁRIO CREATED");
         return createdUser;
     }
 
@@ -80,7 +78,8 @@ public class UserService implements UserServicePort {
 
     @Override public Page<User> getAllUsers(Pageable pageable) { return userRepositoryPort.findAll(pageable); }
     @Override public Optional<User> authenticateUser(String username, String password) {
-        return userRepositoryPort.findByUsername(username).filter(u -> passwordEncoder.matches(password, u.getPassword()));
+        return userRepositoryPort.findByUsername(username).filter(u -> passwordEncoder.matches(password,
+                u.getPassword()));
     }
 
     @Override

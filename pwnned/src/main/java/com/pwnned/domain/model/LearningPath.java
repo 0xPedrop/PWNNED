@@ -2,7 +2,6 @@ package com.pwnned.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pwnned.domain.enums.Difficulty;
-
 import java.util.Set;
 import java.util.Objects;
 
