@@ -45,12 +45,18 @@ This project is constantly evolving. The next major milestone is integrating **G
 
 ---
 
-## 🏆 About the Author
+## 🏆 About the Authors
 
 **Pedro Paulo Delgado Alves**
 * 🎓 Systems Analysis and Development Student at IFPB.
 * 🐞 **Bug Hunter & Pentester:** Passionate about breaking things to build them stronger.
-* 🏅 **Recognition:** First Brazilian to be inducted into the **University of Nebraska Security Hall of Fame** for reporting critical vulnerabilities.
+* 🏅 **Recognition:** First Brazilian to be inducted into the **University of Nebraska Security Hall of Fame** for reporting critical vulnerability.
+
+**João Victor Moura**
+* 🎓 Systems Analysis and Development Student at IFPB.
+
+**Wolgrand Araújo Pinheiro**
+* 🎓 Systems Analysis and Development Student at IFPB.
 
 ---
 
