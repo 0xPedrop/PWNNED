@@ -66,7 +66,7 @@ This project is constantly evolving. The next major milestone is integrating **G
 
 ```bash
 # Clone the repository
-git clone [https://github.com/YOUR_USER/pwnned.git](https://github.com/0xPedrop/pwnned.git)
+git clone [https://github.com/0xPedrop/pwnned.git](https://github.com/0xPedrop/pwnned.git)
 
 # Run with Docker Compose
 docker-compose up --build
