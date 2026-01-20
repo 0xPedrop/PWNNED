@@ -22,7 +22,7 @@ public class UserLearningPathEntity {
     private UserEntity user;
 
     @ManyToOne
-    @JoinColumn(name = "path_id")
+    @JoinColumn(name = "learning_path_id")
     private LearningPathEntity learningPath;
 
 }
