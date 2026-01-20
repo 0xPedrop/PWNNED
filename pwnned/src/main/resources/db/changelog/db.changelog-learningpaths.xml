@@ -17,21 +17,27 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="learning-paths-02-create-join-table-snowflake" author="pwnned">
+    <changeSet id="learning-paths-02-create-join-table-snowflake-v2" author="pwnned">
         <createTable tableName="user_learning_path">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false"
                              foreignKeyName="fk_user_lp_user"
                              referencedTableName="users"
                              referencedColumnNames="user_id"/>
             </column>
-            <column name="learning_path_id" type="BIGINT"> <constraints nullable="false"
-                                                                        foreignKeyName="fk_user_lp_path"
-                                                                        referencedTableName="learning_paths"
-                                                                        referencedColumnNames="learning_path_id"/>
+
+            <column name="learning_path_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="fk_user_lp_path"
+                             referencedTableName="learning_paths"
+                             referencedColumnNames="learning_path_id"/>
             </column>
         </createTable>
-        <addPrimaryKey tableName="user_learning_path" columnNames="user_id, learning_path_id"/>
-    </changeSet>
+        
+        </changeSet>
 
 </databaseChangeLog>
