@@ -4,10 +4,9 @@ import com.pwnned.domain.model.Laboratory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -21,7 +20,7 @@ public class LaboratoryRedisAdapter {
         redisTemplate.opsForValue().set(key, laboratory, 1, TimeUnit.HOURS);
     }
 
-    public Optional<Laboratory> getCachedLaboratory(UUID laboratoryId) {
+    public Optional<Laboratory> getCachedLaboratory(Long laboratoryId) {
         String key = "laboratory:" + laboratoryId;
         Object cachedObject = redisTemplate.opsForValue().get(key);
         if (cachedObject instanceof Laboratory) {
@@ -45,13 +44,12 @@ public class LaboratoryRedisAdapter {
         return Optional.empty();
     }
 
-    public void cacheLaboratoriesByLearningPathId(UUID learningPathId, List<Laboratory> laboratories) {
+    public void cacheLaboratoriesByLearningPathId(Long learningPathId, List<Laboratory> laboratories) {
         String key = "laboratory:learningpath:" + learningPathId;
         redisTemplate.opsForValue().set(key, laboratories, 1, TimeUnit.HOURS);
     }
 
-    @SuppressWarnings("unchecked")
-    public Optional<List<Laboratory>> getCachedLaboratoriesByLearningPathId(UUID learningPathId) {
+    public Optional<List<Laboratory>> getCachedLaboratoriesByLearningPathId(Long learningPathId) {
         String key = "laboratories:learningpath:" + learningPathId;
         Object cachedObject = redisTemplate.opsForValue().get(key);
         if (cachedObject instanceof List) {
@@ -60,7 +58,7 @@ public class LaboratoryRedisAdapter {
         return Optional.empty();
     }
 
-    public void invalidateCacheForLaboratory(UUID laboratoryId) {
+    public void invalidateCacheForLaboratory(Long laboratoryId) {
         String key = "laboratory:" + laboratoryId;
         redisTemplate.delete(key);
     }
@@ -70,8 +68,25 @@ public class LaboratoryRedisAdapter {
         redisTemplate.delete(key);
     }
 
-    public void invalidateCacheForLaboratoriesByLearningPathId(UUID learningPathId) {
+    public void invalidateCacheForLaboratoriesByLearningPathId(Long learningPathId) {
         String key = "laboratories:learningpath:" + learningPathId;
         redisTemplate.delete(key);
+    }
+
+    public void invalidateLaboratoriesByType(String laboratoryType) {
+        String key = "laboratories:type:" + laboratoryType.toUpperCase();
+        redisTemplate.delete(key);
+    }
+
+    public void invalidateAllLaboratoriesCache() {
+        Set<String> keys = redisTemplate.keys("laboratories:*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
+
+        Set<String> individualKeys = redisTemplate.keys("laboratory:*");
+        if (individualKeys != null && !individualKeys.isEmpty()) {
+            redisTemplate.delete(individualKeys);
+        }
     }
 }

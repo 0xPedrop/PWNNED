@@ -3,16 +3,13 @@ package com.pwnned.adapter.input.controller;
 import com.pwnned.adapter.input.dto.LaboratoryDTO;
 import com.pwnned.adapter.input.dto.LearningPathDTO;
 import com.pwnned.adapter.input.dto.PageableDTO;
-import com.pwnned.adapter.input.dto.UserDTO;
 import com.pwnned.adapter.input.mapper.LaboratoryMapper;
 import com.pwnned.adapter.input.mapper.LearningPathMapper;
 import com.pwnned.adapter.input.mapper.PageableMapper;
-import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
-import com.pwnned.domain.model.User;
-import com.pwnned.domain.service.LaboratoryService;
+import com.pwnned.port.input.LaboratoryServicePort;
 import com.pwnned.port.input.LearningPathControllerPort;
 import com.pwnned.port.input.LearningPathServicePort;
 import jakarta.validation.Valid;
@@ -21,24 +18,28 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.UUID;
 
 @RequestMapping("api/v1/learningpaths")
 @RestController
 public class LearningPathController implements LearningPathControllerPort {
 
     private final LearningPathServicePort learningPathServicePort;
-    private final LaboratoryService laboratoryService;
+    private final LaboratoryServicePort laboratoryServicePort;
     private final LearningPathMapper learningPathMapper;
     private final LaboratoryMapper laboratoryMapper;
+    private final PageableMapper pageableMapper;
 
-    public LearningPathController(LearningPathServicePort learningPathServicePort, LaboratoryService laboratoryService, LearningPathMapper learningPathMapper, LaboratoryMapper laboratoryMapper) {
+    public LearningPathController(LearningPathServicePort learningPathServicePort,
+                                  LaboratoryServicePort laboratoryServicePort,
+                                  LearningPathMapper learningPathMapper,
+                                  LaboratoryMapper laboratoryMapper,
+                                  PageableMapper pageableMapper) {
         this.learningPathServicePort = learningPathServicePort;
-        this.laboratoryService = laboratoryService;
+        this.laboratoryServicePort = laboratoryServicePort;
         this.learningPathMapper = learningPathMapper;
         this.laboratoryMapper = laboratoryMapper;
+        this.pageableMapper = pageableMapper;
     }
 
     @Override
@@ -55,19 +56,19 @@ public class LearningPathController implements LearningPathControllerPort {
     public ResponseEntity<PageableDTO> getAllLearningPaths(@PageableDefault(size = 5, sort = "title") Pageable pageable) {
         Page<LearningPathDTO> learningPathDTOS = learningPathServicePort.getAllLearningPaths(pageable)
                 .map(learningPathMapper::toDTO);
-        return ResponseEntity.ok(PageableMapper.INSTANCE.toDTO(learningPathDTOS));
+        return ResponseEntity.ok(pageableMapper.toDTO(learningPathDTOS));
     }
 
     @Override
     @GetMapping("/{learningPathId}")
-    public ResponseEntity<LearningPathDTO> getSingleLearningPath(@PathVariable UUID learningPathId) {
+    public ResponseEntity<LearningPathDTO> getSingleLearningPath(@PathVariable Long learningPathId) {
         LearningPath learningPath = learningPathServicePort.getSingleLearningPath(learningPathId);
         return ResponseEntity.ok(learningPathMapper.toDTO(learningPath));
     }
 
     @Override
     @DeleteMapping("/{learningPathId}")
-    public ResponseEntity<String> deleteLearningPath(@PathVariable UUID learningPathId) {
+    public ResponseEntity<String> deleteLearningPath(@PathVariable Long learningPathId) {
         learningPathServicePort.deleteLearningPath(learningPathId);
         return ResponseEntity.ok("Learning Path " + learningPathId + " deleted");
     }
@@ -91,8 +92,8 @@ public class LearningPathController implements LearningPathControllerPort {
 
     @GetMapping("/{learningPathId}/labs")
     public ResponseEntity<List<LaboratoryDTO>> getLaboratoriesForLearningPath(
-            @PathVariable UUID learningPathId) {
-        List<Laboratory> laboratories = laboratoryService.getLaboratoriesByLearningPathId(learningPathId);
+            @PathVariable Long learningPathId) {
+        List<Laboratory> laboratories = laboratoryServicePort.getLaboratoriesByLearningPathId(learningPathId);
         List<LaboratoryDTO> laboratoryDTOs = laboratories.stream()
                 .map(laboratoryMapper::toDTO)
                 .toList();

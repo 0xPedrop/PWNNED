@@ -2,6 +2,7 @@ package com.pwnned.domain.service;
 
 import com.pwnned.adapter.input.dto.CertificateResponseDTO;
 import com.pwnned.adapter.input.dto.CreateCertificateDTO;
+import com.pwnned.adapter.output.jpa.repository.util.SnowflakeIdGenerator;
 import com.pwnned.adapter.output.redis.CertificateRedisAdapter;
 import com.pwnned.domain.exception.CertificateNotFoundException;
 import com.pwnned.domain.exception.UserNotFoundException;
@@ -15,9 +16,7 @@ import com.pwnned.port.output.UserRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class CertificateService implements CertificateServicePort {
@@ -26,12 +25,17 @@ public class CertificateService implements CertificateServicePort {
     private final CertificateRedisAdapter certificateRedisAdapter;
     private final UserRepositoryPort userRepositoryPort;
     private final LearningPathRepositoryPort learningPathRepositoryPort;
+    private final SnowflakeIdGenerator snowflakeIdGenerator;
 
-    public CertificateService(CertificateRepositoryPort certificateRepositoryPort, CertificateRedisAdapter certificateRedisAdapter, UserRepositoryPort userRepositoryPort, LearningPathRepositoryPort learningPathRepositoryPort) {
+    public CertificateService(CertificateRepositoryPort certificateRepositoryPort,
+                              CertificateRedisAdapter certificateRedisAdapter, UserRepositoryPort userRepositoryPort,
+                              LearningPathRepositoryPort learningPathRepositoryPort,
+                              SnowflakeIdGenerator snowflakeIdGenerator) {
         this.certificateRepositoryPort = certificateRepositoryPort;
         this.certificateRedisAdapter = certificateRedisAdapter;
         this.userRepositoryPort = userRepositoryPort;
         this.learningPathRepositoryPort = learningPathRepositoryPort;
+        this.snowflakeIdGenerator = snowflakeIdGenerator;
     }
 
     @Override
@@ -44,6 +48,8 @@ public class CertificateService implements CertificateServicePort {
                         certificateDTO.learningPathId()));
 
         Certificate certificate = new Certificate(certificateDTO.title());
+        certificate.setCertificateId(snowflakeIdGenerator.nextId());
+
         certificate.setUrl(certificateDTO.url());
         certificate.setUser(user);
         certificate.setLearningPath(learningPath);
@@ -57,7 +63,7 @@ public class CertificateService implements CertificateServicePort {
     }
 
     @Override
-    public void deleteCertificate(UUID certificateId) {
+    public void deleteCertificate(Long certificateId) {
         Certificate certificate = certificateRepositoryPort.findById(certificateId)
                 .orElseThrow(() -> new CertificateNotFoundException("Certificate " + certificateId + " Not Found"));
 

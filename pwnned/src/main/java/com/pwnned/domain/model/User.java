@@ -1,22 +1,23 @@
 package com.pwnned.domain.model;
 
 import com.pwnned.domain.enums.UserType;
-
 import java.util.Set;
-import java.util.UUID;
 import java.util.Objects;
 
 public class User {
-    private UUID userId;
+    private Long userId;
     private String email;
     private String password;
     private String username;
     private UserType userType;
     private Set<Certificate> certificates;
     private Set<LearningPath> learningPathsAcessed;
+    private Integer experiencePoints;
 
-    public User(UUID userId, String email, String password, String username, UserType userType,
-                Set<Certificate> certificates, Set<LearningPath> learningPathsAcessed) {
+    public User() {}
+
+    public User(Long userId, String email, String password, String username, UserType userType,
+                Set<Certificate> certificates, Set<LearningPath> learningPathsAcessed, Integer experiencePoints) {
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -24,16 +25,15 @@ public class User {
         this.userType = userType;
         this.certificates = certificates;
         this.learningPathsAcessed = learningPathsAcessed;
+        this.experiencePoints = experiencePoints;
     }
 
-    public User() {
-    }
 
-    public UUID getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -85,6 +85,14 @@ public class User {
         this.learningPathsAcessed = learningPathsAcessed;
     }
 
+    public Integer getExperiencePoints() {
+        return experiencePoints;
+    }
+
+    public void setExperiencePoints(Integer experiencePoints) {
+        this.experiencePoints = experiencePoints;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,7 +102,5 @@ public class User {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(userId);
-    }
+    public int hashCode() { return Objects.hash(userId); }
 }

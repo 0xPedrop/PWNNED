@@ -1,6 +1,7 @@
 package com.pwnned.domain.service;
 
 import com.pwnned.adapter.input.dto.LaboratoryDTO;
+import com.pwnned.adapter.output.jpa.repository.util.SnowflakeIdGenerator;
 import com.pwnned.adapter.output.redis.LaboratoryRedisAdapter;
 import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.exception.LaboratoryNotFoundException;
@@ -13,40 +14,48 @@ import com.pwnned.port.output.LearningPathRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 public class LaboratoryService implements LaboratoryServicePort {
 
     private final LaboratoryRepositoryPort laboratoryRepositoryPort;
-    private final LaboratoryRedisAdapter  laboratoryRedisAdapter;
+    private final LaboratoryRedisAdapter laboratoryRedisAdapter;
     private final LearningPathRepositoryPort learningPathRepositoryPort;
+    private final SnowflakeIdGenerator snowflakeIdGenerator;
 
     public LaboratoryService(LaboratoryRepositoryPort laboratoryRepositoryPort,
                              LaboratoryRedisAdapter laboratoryRedisAdapter,
-                             LearningPathRepositoryPort learningPathRepositoryPort) {
+                             LearningPathRepositoryPort learningPathRepositoryPort,
+                             SnowflakeIdGenerator snowflakeIdGenerator) {
         this.laboratoryRepositoryPort = laboratoryRepositoryPort;
         this.laboratoryRedisAdapter = laboratoryRedisAdapter;
         this.learningPathRepositoryPort = learningPathRepositoryPort;
+        this.snowflakeIdGenerator = snowflakeIdGenerator;
     }
 
     @Override
+    @Transactional
     public Laboratory createLaboratory(LaboratoryDTO laboratoryDTO) {
         LearningPath learningPath = learningPathRepositoryPort.findById(laboratoryDTO.learningPathId())
-                .orElseThrow(() -> new LearningPathNotFoundException("Learning Path com o ID "
-                        + laboratoryDTO.learningPathId() + " não foi encontrado."));
+                .orElseThrow(() -> new LearningPathNotFoundException("Learning Path ID "
+                        + laboratoryDTO.learningPathId() + " not found"));
 
         Laboratory newLaboratory = new Laboratory();
+        newLaboratory.setLabId(snowflakeIdGenerator.nextId());
         newLaboratory.setTitle(laboratoryDTO.title());
         newLaboratory.setDifficulty(laboratoryDTO.difficulty());
         newLaboratory.setLaboratoryType(laboratoryDTO.laboratoryType());
-
         newLaboratory.setLearningPath(learningPath);
 
-        return laboratoryRepositoryPort.save(newLaboratory);
+        Laboratory savedLaboratory = laboratoryRepositoryPort.save(newLaboratory);
+
+        laboratoryRedisAdapter.invalidateCacheForLaboratoriesByLearningPathId(laboratoryDTO.learningPathId());
+        laboratoryRedisAdapter.invalidateCacheForLaboratoriesByType(laboratoryDTO.laboratoryType().name());
+
+        return savedLaboratory;
     }
 
     @Override
@@ -55,70 +64,65 @@ public class LaboratoryService implements LaboratoryServicePort {
     }
 
     @Override
-    public Laboratory getSingleLaboratory(UUID laboratoryId) {
-        Optional<Laboratory> cachedLaboratory = laboratoryRedisAdapter.getCachedLaboratory(laboratoryId);
+    public Laboratory getSingleLaboratory(Long laboratoryId) {
+        return laboratoryRedisAdapter.getCachedLaboratory(laboratoryId)
+                .orElseGet(() -> {
+                    Laboratory laboratory = laboratoryRepositoryPort.findById(laboratoryId)
+                            .orElseThrow(() -> new LaboratoryNotFoundException("Laboratory not found with ID: " + laboratoryId));
 
-        if (cachedLaboratory.isPresent()) {
-            return cachedLaboratory.get();
-        }
+                    laboratoryRedisAdapter.cacheLaboratory(laboratory);
+                    return laboratory;
+                });
+    }
 
+    @Override
+    @Transactional
+    public void deleteLaboratory(Long laboratoryId) {
         Laboratory laboratory = laboratoryRepositoryPort.findById(laboratoryId)
-                .orElseThrow(() -> new LaboratoryNotFoundException("Laboratory not found with ID: " + laboratoryId));
+                .orElseThrow(() -> new LaboratoryNotFoundException("Laboratory " + laboratoryId + " Not Found"));
 
-        laboratoryRedisAdapter.cacheLaboratory(laboratory);
-        return laboratory;
-    }
+        Long pathId = laboratory.getLearningPath().getLearningPathId();
+        String type = laboratory.getLaboratoryType().name();
 
-    @Override
-    public void deleteLaboratory(UUID laboratoryId) {
-        Optional<Laboratory> laboratory = laboratoryRepositoryPort.findById(laboratoryId);
-        if (laboratory.isEmpty()) throw new LaboratoryNotFoundException("Laboratory "
-                + laboratoryId + " Not Found");
         laboratoryRepositoryPort.deleteById(laboratoryId);
+
         laboratoryRedisAdapter.invalidateCacheForLaboratory(laboratoryId);
+        laboratoryRedisAdapter.invalidateCacheForLaboratoriesByLearningPathId(pathId);
+        laboratoryRedisAdapter.invalidateCacheForLaboratoriesByType(type);
     }
 
     @Override
+    @Transactional
     public void deleteAllLaboratories() {
         laboratoryRepositoryPort.deleteAll();
-        laboratoryRedisAdapter.getCachedLaboratoriesByType(LaboratoryType.STANDART.name());
-        laboratoryRedisAdapter.getCachedLaboratoriesByType(LaboratoryType.SPECIALIZED.name());
+        laboratoryRedisAdapter.invalidateAllLaboratoriesCache();
     }
 
     @Override
     public List<Laboratory> getLaboratoriesByType(LaboratoryType laboratoryType) {
-        Optional<List<Laboratory>> cachedLaboratoriesByType = laboratoryRedisAdapter
-                .getCachedLaboratoriesByType(laboratoryType.name());
-
-        if (cachedLaboratoriesByType.isPresent()) {
-            return cachedLaboratoriesByType.get();
-        }
-
-        List<Laboratory> laboratories = laboratoryRepositoryPort.getLaboratoriesByType(laboratoryType);
-        if (laboratories.isEmpty()) throw new LaboratoryNotFoundException("Laboratories Not Found");
-
-        laboratoryRedisAdapter.cacheLaboratoryByType(laboratoryType.name(), laboratories);
-        return laboratories;
+        return laboratoryRedisAdapter.getCachedLaboratoriesByType(laboratoryType.name())
+                .orElseGet(() -> {
+                    List<Laboratory> laboratories = laboratoryRepositoryPort.getLaboratoriesByType(laboratoryType);
+                    if (!laboratories.isEmpty()) {
+                        laboratoryRedisAdapter.cacheLaboratoryByType(laboratoryType.name(), laboratories);
+                    }
+                    return laboratories;
+                });
     }
 
-    public List<Laboratory> getLaboratoriesByLearningPathId(UUID learningPathId) {
-        Optional<List<Laboratory>> cachedLabs = laboratoryRedisAdapter
-                .getCachedLaboratoriesByLearningPathId(learningPathId);
+    @Override
+    public List<Laboratory> getLaboratoriesByLearningPathId(Long learningPathId) {
+        return laboratoryRedisAdapter.getCachedLaboratoriesByLearningPathId(learningPathId)
+                .orElseGet(() -> {
+                    learningPathRepositoryPort.findById(learningPathId)
+                            .orElseThrow(() -> new LearningPathNotFoundException("Learning Path with ID "
+                                    + learningPathId + " not found."));
 
-        if (cachedLabs.isPresent()) {
-            return cachedLabs.get();
-        }
-
-        learningPathRepositoryPort.findById(learningPathId)
-                .orElseThrow(() -> new LearningPathNotFoundException("Learning Path with ID " + learningPathId
-                        + " not found."));
-
-        List<Laboratory> laboratories = laboratoryRepositoryPort.findByLearningPathId(learningPathId);
-        if (laboratories.isEmpty()) {
-            throw new LaboratoryNotFoundException("Laboratories not found for Learning Path with ID: " + learningPathId);
-        }
-
-        laboratoryRedisAdapter.cacheLaboratoriesByLearningPathId(learningPathId, laboratories);
-        return laboratories;
+                    List<Laboratory> laboratories = laboratoryRepositoryPort.findByLearningPathId(learningPathId);
+                    if (!laboratories.isEmpty()) {
+                        laboratoryRedisAdapter.cacheLaboratoriesByLearningPathId(learningPathId, laboratories);
+                    }
+                    return laboratories;
+                });
     }
 }

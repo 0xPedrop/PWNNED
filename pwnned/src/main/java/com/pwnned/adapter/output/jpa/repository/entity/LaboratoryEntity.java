@@ -7,10 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "laboratories")
@@ -21,11 +17,11 @@ import java.util.UUID;
 public class LaboratoryEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcTypeCode(SqlTypes.UUID)
-    private UUID labId;
+    private Long labId;
 
     private String title;
+
+    @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,6 @@
 package com.pwnned.domain.service;
 
+import com.pwnned.adapter.output.jpa.repository.util.SnowflakeIdGenerator;
 import com.pwnned.adapter.output.redis.LearningPathRedisAdapter;
 import com.pwnned.domain.enums.Difficulty;
 import com.pwnned.domain.exception.LearningPathNotFoundException;
@@ -10,10 +11,8 @@ import com.pwnned.port.output.LearningPathRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class LearningPathService implements LearningPathServicePort {
@@ -21,17 +20,21 @@ public class LearningPathService implements LearningPathServicePort {
     private final LearningPathRepositoryPort learningPathRepositoryPort;
     private final LearningPathRedisAdapter learningPathRedisAdapter;
     private final LaboratoryRepositoryPort laboratoryRepositoryPort;
+    private final SnowflakeIdGenerator snowflakeIdGenerator;
 
     public LearningPathService(LearningPathRepositoryPort learningPathRepositoryPort,
                                LearningPathRedisAdapter learningPathRedisAdapter,
-                               LaboratoryRepositoryPort laboratoryRepositoryPort) {
+                               LaboratoryRepositoryPort laboratoryRepositoryPort,
+                               SnowflakeIdGenerator snowflakeIdGenerator) {
         this.learningPathRepositoryPort = learningPathRepositoryPort;
         this.learningPathRedisAdapter = learningPathRedisAdapter;
         this.laboratoryRepositoryPort = laboratoryRepositoryPort;
+        this.snowflakeIdGenerator = snowflakeIdGenerator;
     }
 
     @Override
     public LearningPath createLearningPath(LearningPath learningPath) {
+        learningPath.setLearningPathId(snowflakeIdGenerator.nextId());
         return learningPathRepositoryPort.save(learningPath);
     }
 
@@ -41,7 +44,7 @@ public class LearningPathService implements LearningPathServicePort {
     }
 
     @Override
-    public LearningPath getSingleLearningPath(UUID learningPathId) {
+    public LearningPath getSingleLearningPath(Long learningPathId) {
         Optional<LearningPath> cachedLearningPath = learningPathRedisAdapter.getCachedLearningPath(learningPathId);
 
         if (cachedLearningPath.isPresent()) {
@@ -57,7 +60,7 @@ public class LearningPathService implements LearningPathServicePort {
     }
 
     @Override
-    public void deleteLearningPath(UUID learningPathId) {
+    public void deleteLearningPath(Long learningPathId) {
         Optional<LearningPath> learningPath = learningPathRepositoryPort.findById(learningPathId);
         if (learningPath.isEmpty()) throw new LearningPathNotFoundException("Learning Path "
                 + learningPathId + " Not Found");
@@ -69,13 +72,11 @@ public class LearningPathService implements LearningPathServicePort {
     @Override
     public void deleteAllLearningPaths(Pageable pageable) {
         Page<LearningPath> learningPaths = learningPathRepositoryPort.findAll(pageable);
-        learningPaths.forEach(lp -> laboratoryRepositoryPort
-                                                    .deleteAllByLearningPathId(lp.getLearningPathId()));
-
+        learningPaths.forEach(lp ->
+                laboratoryRepositoryPort.deleteAllByLearningPathId(lp.getLearningPathId())
+        );
         learningPathRepositoryPort.deleteAll();
-        learningPathRedisAdapter.invalidateCacheForLearningPathsByDifficulty(Difficulty.EASY.name());
-        learningPathRedisAdapter.invalidateCacheForLearningPathsByDifficulty(Difficulty.MEDIUM.name());
-        learningPathRedisAdapter.invalidateCacheForLearningPathsByDifficulty(Difficulty.HARD.name());
+        learningPathRedisAdapter.invalidateAllLearningPathsCache();
     }
 
     @Override

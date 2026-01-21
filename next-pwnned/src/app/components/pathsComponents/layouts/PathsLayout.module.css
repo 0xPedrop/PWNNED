@@ -25,22 +25,3 @@
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
-
-.contentParagraph {
-  margin-bottom: 1.2em;
-  line-height: 1.6;
-}
-
-.codeBlock {
-  background-color: #0f111a;
-  padding: 1em;
-  border-radius: 8px;
-  border: 1px solid #3a3d5e;
-  font-family: "Fira Code", "Courier New", Courier, monospace;
-  overflow-x: auto;
-  font-size: 0.9em;
-}
-
-.codeBlock code {
-  color: #a9b7c6;
-}

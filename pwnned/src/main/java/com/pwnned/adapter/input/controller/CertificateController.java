@@ -2,11 +2,8 @@ package com.pwnned.adapter.input.controller;
 
 import com.pwnned.adapter.input.dto.*;
 import com.pwnned.adapter.input.mapper.CertificateMapper;
-import com.pwnned.adapter.input.mapper.LaboratoryMapper;
 import com.pwnned.adapter.input.mapper.PageableMapper;
-import com.pwnned.adapter.input.mapper.UserMapper;
 import com.pwnned.domain.model.Certificate;
-import com.pwnned.domain.model.User;
 import com.pwnned.port.input.CertificateControllerPort;
 import com.pwnned.port.input.CertificateServicePort;
 import jakarta.validation.Valid;
@@ -16,25 +13,25 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 @RequestMapping("api/v1/certificates")
 @RestController
 public class CertificateController implements CertificateControllerPort {
 
     private final CertificateServicePort certificateServicePort;
     private final CertificateMapper certificateMapper;
+    private final PageableMapper pageableMapper;
 
-    public CertificateController(CertificateServicePort certificateServicePort, CertificateMapper certificateMapper) {
+    public CertificateController(CertificateServicePort certificateServicePort, CertificateMapper certificateMapper,
+                                 PageableMapper pageableMapper) {
         this.certificateServicePort = certificateServicePort;
         this.certificateMapper = certificateMapper;
+        this.pageableMapper = pageableMapper;
     }
 
     @Override
     @PostMapping
-    public ResponseEntity<CertificateResponseDTO> createCertificate(@Valid @RequestBody CreateCertificateDTO certificateDTO) {
+    public ResponseEntity<CertificateResponseDTO> createCertificate(@Valid @RequestBody
+                                                                        CreateCertificateDTO certificateDTO) {
         Certificate createdCertificate = certificateServicePort.createCertificate(certificateDTO);
         CertificateResponseDTO createdCertificateDTO = certificateMapper.toDTO(createdCertificate);
         return ResponseEntity.status(201).body(createdCertificateDTO);
@@ -44,16 +41,15 @@ public class CertificateController implements CertificateControllerPort {
     @GetMapping
     public ResponseEntity<PageableDTO> getAllCertificates(@PageableDefault(size = 5, sort = "title") Pageable pageable) {
         Page<CertificateResponseDTO> certificateDTO = certificateServicePort.getAllCertificates(pageable);
-        return ResponseEntity.ok(PageableMapper.INSTANCE.toDTO(certificateDTO));
+        return ResponseEntity.ok(pageableMapper.toDTO(certificateDTO));
     }
 
     @Override
     @DeleteMapping("/{certificateId}")
-    public ResponseEntity<String> deleteCertificate(UUID certificateId) {
+    public ResponseEntity<String> deleteCertificate(@PathVariable Long certificateId) {
         certificateServicePort.deleteCertificate(certificateId);
         return ResponseEntity.ok("Certificate " + certificateId + " deleted");
     }
-
     @Override
     @DeleteMapping
     public ResponseEntity<String> deleteAllCertificate() {

@@ -4,10 +4,9 @@ import com.pwnned.domain.model.LearningPath;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -21,7 +20,7 @@ public class LearningPathRedisAdapter {
         redisTemplate.opsForValue().set(key, learningPath, 1, TimeUnit.HOURS);
     }
 
-    public Optional<LearningPath> getCachedLearningPath(UUID learningPathId) {
+    public Optional<LearningPath> getCachedLearningPath(Long learningPathId) {
         String key = "learningpath:" + learningPathId;
         Object cachedObject = redisTemplate.opsForValue().get(key);
         if (cachedObject instanceof LearningPath) {
@@ -45,7 +44,7 @@ public class LearningPathRedisAdapter {
         return Optional.empty();
     }
 
-    public void invalidateCacheForLearningPath(UUID learningPathId) {
+    public void invalidateCacheForLearningPath(Long learningPathId) {
         String key = "learningpath:" + learningPathId;
         redisTemplate.delete(key);
     }
@@ -53,5 +52,17 @@ public class LearningPathRedisAdapter {
     public void invalidateCacheForLearningPathsByDifficulty(String difficulty) {
         String key = "learningpaths:difficulty:" + difficulty.toUpperCase();
         redisTemplate.delete(key);
+    }
+
+    public void invalidateAllLearningPathsCache() {
+        Set<String> difficultyKeys = redisTemplate.keys("learningpaths:difficulty:*");
+        if (difficultyKeys != null && !difficultyKeys.isEmpty()) {
+            redisTemplate.delete(difficultyKeys);
+        }
+
+        Set<String> pathKeys = redisTemplate.keys("learningpath:*");
+        if (pathKeys != null && !pathKeys.isEmpty()) {
+            redisTemplate.delete(pathKeys);
+        }
     }
 }

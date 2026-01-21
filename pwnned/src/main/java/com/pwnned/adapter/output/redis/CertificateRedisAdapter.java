@@ -4,7 +4,6 @@ import com.pwnned.domain.model.Certificate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
