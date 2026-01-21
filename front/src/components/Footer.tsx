@@ -45,8 +45,8 @@ const Footer = () => {
           <div className="max-w-2xl mx-auto text-center">
             <h3 className="text-2xl md:text-3xl font-bold mb-3">
               <span className="text-foreground">Antecipe </span>
-              <span className="gradient-text">as</span>
-              <span className="text-foreground"> ameaças</span>
+              <span className="text-foreground">as</span>
+              <span className="gradient-text"> ameaças</span>
             </h3>
             <p className="text-muted-foreground mb-8">
               Receba informações semanais sobre segurança, anúncios de novos cursos e conteúdo exclusivo.
@@ -157,7 +157,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-border mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2025 Pwnned. All rights reserved.
+            © 2026 Pwnned. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-primary transition-colors">Termos</a>

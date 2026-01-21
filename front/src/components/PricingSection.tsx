@@ -42,8 +42,8 @@ const PricingSection = () => {
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="text-foreground">Preço </span>
-            <span className="text-foreground">Transparente</span>
-            <span className="gradient-text"> e Acessível</span>
+            <span className="text-foreground">Transparente e</span>
+            <span className="gradient-text"> Acessível</span>
           </h2>
 
         </div>
