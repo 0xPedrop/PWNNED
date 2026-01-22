@@ -7,19 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Terminal, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import MatrixBackground from "@/components/MatrixBackground";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
-// 1. Schema de Validação para Login
 const loginSchema = z.object({
   email: z
     .string()
     .min(1, "O e-mail é obrigatório")
-    .email("Formato de email inválido"),
+    .email("Formato de email inválido")
+    .trim(), 
   password: z
     .string()
-    .min(8, "A senha é obrigatória")
-    .max(20, "A senha é muito longa (max 20 chars)"), 
+    .min(8, "A senha deve ter no mínimo 8 caracteres"),  
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -45,7 +44,6 @@ const Login = () => {
     },
   });
 
-  // 3. Função de Submit
   const onSubmit = async (data: LoginFormValues) => {
     try {
       await login({ 
