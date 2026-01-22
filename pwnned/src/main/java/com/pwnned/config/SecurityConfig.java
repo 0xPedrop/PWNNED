@@ -46,7 +46,7 @@ public class SecurityConfig {
                 // Libera APENAS o cadastro (POST) em /users
                 .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
                 
-                // Qualquer outra requisição para /users (GET, DELETE, etc) cairá aqui e exigirá login
+                // Qualquer outra requisição para /users seja get, delete ou algo assim vai cair aqui e ser enviado pra /login
                 .anyRequest().authenticated())
             
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
