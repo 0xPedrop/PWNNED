@@ -98,4 +98,14 @@ public class UserController implements UserControllerPort {
         String result = storageRepositoryPort.uploadFile(fileName, file.getInputStream(), file.getContentType());
         return ResponseEntity.ok("Arquivo enviado com sucesso: " + result);
     }
+
+    @Override
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getLoggedUser(org.springframework.security.core.Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        UserDTO userDTO = userMapper.toDTO(user);
+
+        return ResponseEntity.ok(userDTO);
+    }
 }

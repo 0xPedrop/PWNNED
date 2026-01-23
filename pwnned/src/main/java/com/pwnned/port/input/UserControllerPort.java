@@ -19,4 +19,5 @@ public interface UserControllerPort {
     ResponseEntity<String> promoteUser(Long userId);
     ResponseEntity<List<UserDTO>> getUsersByType(@PathVariable UserType userType);
     ResponseEntity<String> uploadPhoto(String userId, MultipartFile file) throws Exception;
+    ResponseEntity<UserDTO> getLoggedUser(org.springframework.security.core.Authentication authentication);
 }
