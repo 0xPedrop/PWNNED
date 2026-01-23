@@ -26,8 +26,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const checkAuth = async (): Promise<boolean> => {
     try {
       const response = await api.get("/auth/validate");
+
+      const userResponse = await api.get("users/me");
+
       setIsAuthenticated(true);
-      setUser(response.data);
+      setUser(userResponse.data);
       return true; // Sucesso
     } catch (error) {
       setIsAuthenticated(false);
@@ -80,3 +83,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
+
+
+export const useAuth = () => {
+  const context = React.useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth deve ser usado dentro de um AuthProvider");
+  }
+  return context;
+}

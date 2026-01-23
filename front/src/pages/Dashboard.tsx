@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Search, Filter, Trophy, Target, Flame, Clock } from "lucide-react";
 import { learningPathsData } from "@/data/learningPaths";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext"
 
 const mockLearningPaths = [
   {
@@ -71,6 +73,10 @@ const mockLearningPaths = [
 ];
 
 const Dashboard = () => {
+  const auth = useContext(AuthContext);
+  const user = auth?.user;
+  const isAuthLoding = auth?.isLoading;
+
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
@@ -108,7 +114,7 @@ const Dashboard = () => {
       <main className="ml-16 md:ml-64 p-6 md:p-8 transition-all duration-300">
         
         <DashboardHeader 
-          title="Welcome back, Hacker" 
+          title={isAuthLoding ? "Carregando..." : `Welcome back, ${user.username || "Hacker"}`} 
           subtitle="Continue your journey to becoming a security expert"
         />
 
