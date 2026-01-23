@@ -1,14 +1,24 @@
 services:
-  pwnned-app:
-    build: .
-    container_name: pwnned-app
+  pwnned-front:
+      build: ./front
+      container_name: pwnned-front
+      ports:
+        - "5173:5173"
+      volumes:
+        - ./front:/app          
+        - /app/node_modules      
+      environment:
+        - VITE_WATCH_USE_POLLING=true 
+      depends_on:
+        - pwnned-backend
+  pwnned-backend:
+    build: ./backend
+    container_name: pwnned-backend
     ports:
       - "8080:8080"
     env_file:
-      - .env
+      - ./backend/.env
     depends_on:
-      #db:
-      #  condition: service_healthy
       mongodb:
         condition: service_started
       redis:
