@@ -77,9 +77,10 @@ public class UserService implements UserServicePort {
     }
 
     @Override public Page<User> getAllUsers(Pageable pageable) { return userRepositoryPort.findAll(pageable); }
-    @Override public Optional<User> authenticateUser(String username, String password) {
-        return userRepositoryPort.findByUsername(username).filter(u -> passwordEncoder.matches(password,
-                u.getPassword()));
+    @Override
+    public Optional<User> authenticateUser(String email, String password) {
+        return userRepositoryPort.findByEmail(email)
+                .filter(u -> passwordEncoder.matches(password, u.getPassword()));
     }
 
     @Override

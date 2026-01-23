@@ -7,14 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Terminal, Eye, EyeOff, ArrowRight, Loader2, Check } from "lucide-react";
 import MatrixBackground from "@/components/MatrixBackground";
-
+import { api } from "@/lib/api"; 
+import { useToast } from "@/hooks/use-toast"; 
 
 const signupSchema = z.object({
   username: z
     .string()
     .min(1, "Username é obrigatório")
-    .min(4, "O nome de usuário deve ter entre 4 e 10 caracteres.s") 
-    .max(10, "O nome de usuário deve ter entre 4 e 10 caracteres."),
+    .min(4, "O nome de usuário deve ter entre 4 e 10 caracteres.") 
+    .max(20, "O nome de usuário deve ter entre 4 e 20 caracteres."), 
   email: z
     .string()
     .min(1, "Email é obrigatório")
@@ -30,11 +31,11 @@ const signupSchema = z.object({
   path: ["confirmPassword"],
 });
 
-
 type SignupFormValues = z.infer<typeof signupSchema>;
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { toast } = useToast(); 
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -62,13 +63,36 @@ const Signup = () => {
   };
 
   const onSubmit = async (data: SignupFormValues) => {
-    // Aqui entra a chamada real para API
-    // await api.post('/signup', data);
-    
-    // Simulação
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    console.log("Dados validados enviados:", data);
-    navigate("/dashboard");
+    try {
+      // Prepara o payload (remove confirmPassword pois o Java não espera isso)
+      const { confirmPassword, ...payload } = data;
+
+      // Chamada Real para a API
+      await api.post("/users", payload);
+      
+      // Sucesso
+      toast({
+        title: "Protocolo de Iniciação Concluído",
+        description: "Usuário registrado no mainframe. Execute o login.",
+        className: "bg-green-900 border-green-500 text-green-100 font-mono",
+      });
+
+      // Redireciona
+      navigate("/login");
+
+    } catch (error: any) {
+      console.error("Erro ao criar usuário:", error);
+      
+      // Tratamento de erro vindo do Backend
+      const serverMessage = error.response?.data?.message || "Falha na conexão com o servidor.";
+      
+      toast({
+        variant: "destructive",
+        title: "System Error",
+        description: `[FALHA] ${serverMessage}`,
+        className: "font-mono",
+      });
+    }
   };
 
   const strengthLabels = ["Weak", "Fair", "Good", "Strong"];
@@ -135,7 +159,7 @@ const Signup = () => {
                   <span className="text-foreground">./create_user.sh </span>
                 </div>
 
-                {/* Início do Formulário Controlado pelo Hook Form */}
+                {/* Início do Formulário */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                   
                   {/* Username */}
@@ -147,11 +171,10 @@ const Signup = () => {
                       type="text"
                       {...register("username")} 
                       placeholder="hackerm4n"
-                      maxLength={10}
+                      maxLength={20}
                       className="font-mono bg-black/20 border-white/10 focus:border-primary/50"
                       autoFocus
                     />
-                    {/* Mensagem de Erro do Zod */}
                     {errors.username && (
                       <span className="text-destructive text-xs font-mono animate-in slide-in-from-left-1">
                         [ERROR] {errors.username.message}
@@ -170,6 +193,7 @@ const Signup = () => {
                       placeholder="hacker@pwnned.io"
                       maxLength={100}
                       className="font-mono bg-black/20 border-white/10 focus:border-primary/50"
+                      autoFocus
                     />
                     {errors.email && (
                       <span className="text-destructive text-xs font-mono animate-in slide-in-from-left-1">
@@ -239,7 +263,6 @@ const Signup = () => {
                         maxLength={20}
                         className="font-mono bg-black/20 border-white/10 focus:border-primary/50"
                       />
-                      {/* Ícone de Check se as senhas baterem e não estiver vazio */}
                       {confirmPasswordValue && passwordValue === confirmPasswordValue && (
                         <Check className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500 animate-in zoom-in" />
                       )}

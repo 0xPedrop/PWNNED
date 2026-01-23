@@ -45,6 +45,9 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
         return userRepository.findByUsername(username).map(e -> userMapper.toModel(e,
                 new CycleAvoidingMappingContext()));
     }
+    @Override public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email).map(entity -> userMapper.toModel(entity, new CycleAvoidingMappingContext()));
+    }
     @Override public void deleteById(Long userId) { userRepository.deleteById(userId); }
     @Override public void deleteAll() { userRepository.deleteAll(); }
     @Override public List<User> getUsersByType(UserType userType) {
