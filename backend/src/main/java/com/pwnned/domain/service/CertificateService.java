@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.pwnned.adapter.input.dto.CertificateResponseDTO;
@@ -40,29 +41,33 @@ public class CertificateService implements CertificateServicePort {
         this.snowflakeIdGenerator = snowflakeIdGenerator;
     }
 
-@Override
+    @Override
     public Certificate createCertificate(CreateCertificateDTO certificateDTO) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long authenticatedUserId = currentUser.getUserId();
+
         if (certificateRepositoryPort.existsByUserIdAndLearningPathId(
-                certificateDTO.userId(), certificateDTO.learningPathId())) {
+                authenticatedUserId, certificateDTO.learningPathId())) {
             throw new RuntimeException("Certificado já emitido para este curso.");
         }
 
-        User user = userRepositoryPort.findById(certificateDTO.userId())
-                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + certificateDTO.userId()));
-
         LearningPath learningPath = learningPathRepositoryPort.findById(certificateDTO.learningPathId())
-                .orElseThrow(() -> new RuntimeException("Learning Path not found with ID: " +
-                        certificateDTO.learningPathId()));
+                .orElseThrow(() -> new RuntimeException("Learning Path not found with ID: " + certificateDTO.learningPathId()));
 
+ 
         Certificate certificate = new Certificate(certificateDTO.title());
         certificate.setCertificateId(snowflakeIdGenerator.nextId());
+        
+        String serial = java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        certificate.setSerialNumber(serial);
+        certificate.setIssueDate(java.time.LocalDate.now());
 
         String url = (certificateDTO.url() == null || certificateDTO.url().isEmpty()) 
-                     ? "https://pwnned.com/verify/" + certificate.getSerialNumber() 
-                     : certificateDTO.url();
+                    ? "http://localhost:5173/verify/" + certificate.getSerialNumber() 
+                    : certificateDTO.url();
         
         certificate.setUrl(url);
-        certificate.setUser(user);
+        certificate.setUser(currentUser); 
         certificate.setLearningPath(learningPath);
 
         return certificateRepositoryPort.save(certificate);

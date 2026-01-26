@@ -52,10 +52,20 @@ public class AuthController {
 
         return ResponseEntity.ok(new AuthResponseDTO("Login realizado com sucesso via Cookie"));
     }
+
     @GetMapping("/validate")
-    public ResponseEntity<String> validateToken(Authentication authentication) {
+    public ResponseEntity<?> validateToken(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
-            return ResponseEntity.ok("Valid Session: " + authentication.getName());
+            // O objeto principal (Principal) no seu JwtAuthenticationFilter é o model User
+            User user = (User) authentication.getPrincipal();
+            
+            // Retornamos um Map para que o Jackson converta automaticamente para JSON
+            java.util.Map<String, Object> userData = new java.util.HashMap<>();
+            userData.put("userId", user.getUserId());
+            userData.put("username", user.getUsername());
+            userData.put("email", user.getEmail());
+            
+            return ResponseEntity.ok(userData);
         }
         return ResponseEntity.status(401).build();
     }

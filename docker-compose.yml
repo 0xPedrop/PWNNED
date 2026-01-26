@@ -1,31 +1,5 @@
 services:
-  pwnned-front:
-      build: ./front
-      container_name: pwnned-front
-      ports:
-        - "5173:5173"
-      volumes:
-        - ./front:/app          
-        - /app/node_modules      
-      environment:
-        - VITE_WATCH_USE_POLLING=true 
-      depends_on:
-        - pwnned-backend
-  pwnned-backend:
-    build: ./backend
-    container_name: pwnned-backend
-    ports:
-      - "8080:8080"
-    env_file:
-      - ./backend/.env
-    depends_on:
-      mongodb:
-        condition: service_started
-      redis:
-        condition: service_started
-      minio:
-        condition: service_healthy
-
+  # --- BANCO DE DADOS POSTGRES ---
   db:
     image: postgis/postgis:15-3.3
     container_name: pwnned-db
@@ -37,10 +11,11 @@ services:
       POSTGRES_PASSWORD: password123
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d pwnned"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
 
+  # --- MONGODB ---
   mongodb:
     image: mongo:latest
     container_name: pwnned-mongo
@@ -50,6 +25,14 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
 
+  # --- REDIS ---
+  redis:
+    image: redis:alpine
+    container_name: pwnned-redis
+    ports:
+      - "6379:6379"
+
+  # --- MINIO ---
   minio:
     image: minio/minio:latest
     container_name: pwnned-minio
@@ -66,8 +49,40 @@ services:
       timeout: 5s
       retries: 3
 
-  redis:
-    image: redis:alpine
-    container_name: pwnned-redis
+  # --- BACKEND JAVA ---
+  pwnned-backend:
+    build: ./backend
+    container_name: pwnned-backend
     ports:
-      - "6379:6379"
+      - "8080:8080"
+    volumes:
+      - ./backend:/app
+      - maven-data:/root/.m2  # Cache das dependências do Java
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      redis:
+        condition: service_started
+
+  # --- FRONTEND REACT ---
+  pwnned-front:
+    build: ./front
+    container_name: pwnned-front
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+    environment:
+      - VITE_WATCH_USE_POLLING=true
+    depends_on:
+      - pwnned-backend
+
+volumes:
+  maven-data: 

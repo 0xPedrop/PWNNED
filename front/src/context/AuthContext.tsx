@@ -1,7 +1,6 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import { api } from "@/lib/api";
 
-// Tipos (Podem ficar aqui ou em types/auth.ts)
 interface LoginCredentials {
   email: string;
   password: string;
@@ -13,9 +12,9 @@ export interface AuthContextType {
   user: any | null;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
+  checkAuth: () => Promise<boolean>;
 }
 
-// Criação do Contexto
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -23,46 +22,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<any | null>(null);
 
-  const checkAuth = async (): Promise<boolean> => {
+  const checkAuth = useCallback(async (): Promise<boolean> => {
     try {
       const response = await api.get("/auth/validate");
+      console.log("Dados do usuário carregados:", response.data); // DEBUG IMPORTANTE
       setIsAuthenticated(true);
       setUser(response.data);
-      return true; // Sucesso
+      return true;
     } catch (error) {
       setIsAuthenticated(false);
       setUser(null);
-      return false; // Falha
+      return false;
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   const login = async (credentials: LoginCredentials) => {
     try {
-      // 1. Faz o POST do login (Gera o Cookie)
       await api.post("/auth/login", {
         email: credentials.email,
         password: credentials.password
       });
       
-      // 2. Verifica imediatamente se o Cookie foi aceito e a sessão é válida
       const isValid = await checkAuth();
-      
-      // 3. Se não for válido (ex: erro de cookie ou endpoint 404), lança erro
       if (!isValid) {
-        throw new Error("Sessão não pôde ser validada. Verifique Cookies ou Backend.");
+        throw new Error("Sessão não pôde ser validada.");
       }
-
     } catch (error) {
       setIsAuthenticated(false);
-      throw error; // Isso vai acionar o Toast de erro no Login.tsx
+      throw error;
     }
   };
+
   const logout = async () => {
     try {
       await api.post("/auth/logout");
@@ -75,7 +71,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout, checkAuth }}>
       {children}
     </AuthContext.Provider>
   );
