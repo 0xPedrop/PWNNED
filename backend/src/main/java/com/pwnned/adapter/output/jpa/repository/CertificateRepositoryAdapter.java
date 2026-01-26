@@ -1,15 +1,17 @@
 package com.pwnned.adapter.output.jpa.repository;
 
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+
 import com.pwnned.adapter.input.dto.CertificateResponseDTO;
 import com.pwnned.adapter.input.mapper.CertificateMapper;
 import com.pwnned.adapter.input.mapper.util.CycleAvoidingMappingContext;
 import com.pwnned.adapter.output.jpa.repository.entity.CertificateEntity;
 import com.pwnned.domain.model.Certificate;
 import com.pwnned.port.output.CertificateRepositoryPort;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
-import java.util.Optional;
 
 @Component
 public class CertificateRepositoryAdapter implements CertificateRepositoryPort {
@@ -63,5 +65,15 @@ public class CertificateRepositoryAdapter implements CertificateRepositoryPort {
     @Override
     public void deleteAllByUserId(Long userId) {
         certificateRepository.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public boolean existsByUserIdAndLearningPathId(Long userId, Long learningPathId) {
+        return certificateRepository.existsByUser_UserIdAndLearningPath_LearningPathId(userId, learningPathId);
+    }
+
+    @Override
+    public void deleteByLearningPathId(Long learningPathId) {
+        certificateRepository.deleteByLearningPath_LearningPathId(learningPathId);
     }
 }

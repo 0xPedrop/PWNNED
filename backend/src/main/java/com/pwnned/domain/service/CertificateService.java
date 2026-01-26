@@ -1,5 +1,11 @@
 package com.pwnned.domain.service;
 
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.pwnned.adapter.input.dto.CertificateResponseDTO;
 import com.pwnned.adapter.input.dto.CreateCertificateDTO;
 import com.pwnned.adapter.output.jpa.repository.util.SnowflakeIdGenerator;
@@ -13,10 +19,6 @@ import com.pwnned.port.input.CertificateServicePort;
 import com.pwnned.port.output.CertificateRepositoryPort;
 import com.pwnned.port.output.LearningPathRepositoryPort;
 import com.pwnned.port.output.UserRepositoryPort;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class CertificateService implements CertificateServicePort {
@@ -38,8 +40,13 @@ public class CertificateService implements CertificateServicePort {
         this.snowflakeIdGenerator = snowflakeIdGenerator;
     }
 
-    @Override
+@Override
     public Certificate createCertificate(CreateCertificateDTO certificateDTO) {
+        if (certificateRepositoryPort.existsByUserIdAndLearningPathId(
+                certificateDTO.userId(), certificateDTO.learningPathId())) {
+            throw new RuntimeException("Certificado já emitido para este curso.");
+        }
+
         User user = userRepositoryPort.findById(certificateDTO.userId())
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + certificateDTO.userId()));
 
@@ -50,13 +57,22 @@ public class CertificateService implements CertificateServicePort {
         Certificate certificate = new Certificate(certificateDTO.title());
         certificate.setCertificateId(snowflakeIdGenerator.nextId());
 
-        certificate.setUrl(certificateDTO.url());
+        String url = (certificateDTO.url() == null || certificateDTO.url().isEmpty()) 
+                     ? "https://pwnned.com/verify/" + certificate.getSerialNumber() 
+                     : certificateDTO.url();
+        
+        certificate.setUrl(url);
         certificate.setUser(user);
         certificate.setLearningPath(learningPath);
 
         return certificateRepositoryPort.save(certificate);
     }
 
+    @Override
+    public boolean exists(Long userId, Long learningPathId) {
+        return certificateRepositoryPort.existsByUserIdAndLearningPathId(userId, learningPathId);
+    }
+    
     @Override
     public Page<CertificateResponseDTO> getAllCertificates(Pageable pageable) {
         return certificateRepositoryPort.findAll(pageable);

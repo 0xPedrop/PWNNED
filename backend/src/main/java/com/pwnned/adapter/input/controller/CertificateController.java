@@ -38,6 +38,13 @@ public class CertificateController implements CertificateControllerPort {
     }
 
     @Override
+    @GetMapping("/exists")
+    public ResponseEntity<Boolean> exists(@RequestParam Long userId, @RequestParam Long learningPathId) {
+        boolean exists = certificateServicePort.exists(userId, learningPathId);
+        return ResponseEntity.ok(exists);
+    }
+
+    @Override
     @GetMapping
     public ResponseEntity<PageableDTO> getAllCertificates(@PageableDefault(size = 5, sort = "title") Pageable pageable) {
         Page<CertificateResponseDTO> certificateDTO = certificateServicePort.getAllCertificates(pageable);
