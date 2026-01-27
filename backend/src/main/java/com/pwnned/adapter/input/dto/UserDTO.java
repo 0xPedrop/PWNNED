@@ -27,8 +27,10 @@ public record UserDTO(
 
         Integer experiencePoints,
 
-        UserType userType) {
+        UserType userType,
+
+        String profileImageUrl) {
     public UserDTO() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null);
     }
 }

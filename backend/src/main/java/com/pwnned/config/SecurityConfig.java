@@ -45,6 +45,8 @@ public class SecurityConfig {
                 
                 // Libera APENAS o cadastro (POST) em /users
                 .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                .requestMatchers("/api/v1/users/*/upload-photo").permitAll()
+                .requestMatchers("/api/v1/users/*/photo").permitAll()
                 
                 // Qualquer outra requisição para /users seja get, delete ou algo assim vai cair aqui e ser enviado pra /login
                 .anyRequest().authenticated())

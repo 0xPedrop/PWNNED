@@ -9,12 +9,15 @@ import com.pwnned.domain.model.User;
 import com.pwnned.port.input.UserLogServicePort;
 import com.pwnned.port.input.UserServicePort;
 import com.pwnned.port.output.CertificateRepositoryPort;
+import com.pwnned.port.output.StorageRepositoryPort;
 import com.pwnned.port.output.UserRepositoryPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -26,15 +29,17 @@ public class UserService implements UserServicePort {
     private final CertificateRepositoryPort certificateRepositoryPort;
     private final UserLogServicePort userLogServicePort;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final StorageRepositoryPort storageRepositoryPort;
 
     public UserService(UserRepositoryPort userRepositoryPort, UserRedisAdapter userRedisAdapter,
                        CertificateRepositoryPort certificateRepositoryPort, UserLogServicePort userLogServicePort,
-                       BCryptPasswordEncoder passwordEncoder) {
+                       BCryptPasswordEncoder passwordEncoder, StorageRepositoryPort storageRepositoryPort) {
         this.userRepositoryPort = userRepositoryPort;
         this.userRedisAdapter = userRedisAdapter;
         this.certificateRepositoryPort = certificateRepositoryPort;
         this.userLogServicePort = userLogServicePort;
         this.passwordEncoder = passwordEncoder;
+        this.storageRepositoryPort = storageRepositoryPort;
     }
 
     @Override
@@ -112,5 +117,39 @@ public class UserService implements UserServicePort {
         userRepositoryPort.findAll(pageable).forEach(u -> certificateRepositoryPort.deleteAllByUserId(u.getUserId()));
         userRepositoryPort.deleteAll();
         userRedisAdapter.invalidateAllUsersCache();
+    }
+
+    @Override
+    @Transactional
+    public String uploadUserProfilePicture(Long userId, MultipartFile file) throws Exception {
+        User user = userRepositoryPort.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        String fileName = "profile_" + userId + "_" + System.currentTimeMillis();
+
+        storageRepositoryPort.uploadFile(fileName, file.getInputStream(), file.getContentType());
+
+        user.setProfileImageUrl(fileName);
+        userRepositoryPort.save(user);
+        userRedisAdapter.invalidateCacheForUser(userId);
+
+        return storageRepositoryPort.generatePresignedUrl(fileName);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserProfilePicture(Long userId) {
+        User user = userRepositoryPort.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (user.getProfileImageUrl() != null) {
+            storageRepositoryPort.deleteFile(user.getProfileImageUrl());
+
+            user.setProfileImageUrl(null);
+            userRepositoryPort.save(user);
+            userRedisAdapter.invalidateCacheForUser(userId);
+
+            userLogServicePort.logAction(String.valueOf(userId), "PROFILE_PHOTO_DELETED");
+        }
     }
 }
