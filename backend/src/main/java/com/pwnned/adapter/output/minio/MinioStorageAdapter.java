@@ -32,6 +32,7 @@ public class MinioStorageAdapter implements StorageRepositoryPort {
         }
     }
 
+    @Override
     public void deleteFile(String fileName) {
         try {
             minioClient.removeObject(
@@ -45,6 +46,7 @@ public class MinioStorageAdapter implements StorageRepositoryPort {
         }
     }
 
+    @Override
     public String generatePresignedUrl(String fileName) {
         try {
             // Gera uma URL válida por 7 dias (tempo máximo padrão do MinIO/S3)
