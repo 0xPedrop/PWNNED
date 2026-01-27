@@ -58,7 +58,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     var user = userRepositoryPort.findByUsername(username).orElse(null);
                     
                     if (user != null && tokenService.isTokenValid(jwt, user.getUsername())) {
-                        // Importante: Spring Security precisa do prefixo ROLE_
                         List<SimpleGrantedAuthority> authorities = Collections.singletonList(
                                 new SimpleGrantedAuthority("ROLE_" + user.getUserType().name())
                         );

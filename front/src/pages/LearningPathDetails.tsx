@@ -93,7 +93,7 @@ const LearningPathDetails = () => {
   };
 
   /**
-   * GERADOR DE PDF ATUALIZADO (DESIGN PREMIUM)
+   * GERADOR DE PDF 
    */
   const generatePDF = (name: string, pathTitle: string, pId: string) => {
     const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
