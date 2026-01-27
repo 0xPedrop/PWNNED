@@ -12,10 +12,21 @@ import java.util.concurrent.TimeUnit;
 public class MinioStorageAdapter implements StorageRepositoryPort {
     private final MinioClient minioClient;
     private final String bucket;
+    private final String accessKey;
+    private final String secretKey;
+    private final String externalEndpoint;
 
-    public MinioStorageAdapter(MinioClient minioClient, @Value("${minio.bucket}") String bucket) {
+    public MinioStorageAdapter(
+            MinioClient minioClient,
+            @Value("${minio.bucket}") String bucket,
+            @Value("${minio.external-endpoint}") String externalEndpoint,
+            @Value("${minio.accessKey}") String accessKey,
+            @Value("${minio.secretKey}") String secretKey) {
         this.minioClient = minioClient;
         this.bucket = bucket;
+        this.externalEndpoint = externalEndpoint;
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
     }
 
     @Override
@@ -48,26 +59,28 @@ public class MinioStorageAdapter implements StorageRepositoryPort {
 
     @Override
     public String generatePresignedUrl(String fileName) {
-        try {
-            // Gera uma URL válida por 7 dias (tempo máximo padrão do MinIO/S3)
-            return minioClient.getPresignedObjectUrl(
-                    GetPresignedObjectUrlArgs.builder()
-                            .method(Method.GET)
-                            .bucket(bucket)
-                            .object(fileName)
-                            .expiry(7, TimeUnit.DAYS)
-                            .build()
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("Error generating URL for file: " + fileName, e);
-        }
+        return "http://localhost:9000/" + bucket + "/" + fileName;
     }
 
-    // Helper method para evitar repetição de código
     private void ensureBucketExists() throws Exception {
         boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
         if (!found) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+            String config = "{\n" +
+                    "    \"Version\": \"2012-10-17\",\n" +
+                    "    \"Statement\": [\n" +
+                    "        {\n" +
+                    "            \"Action\": [\"s3:GetObject\"],\n" +
+                    "            \"Effect\": \"Allow\",\n" +
+                    "            \"Principal\": {\"AWS\": [\"*\"]},\n" +
+                    "            \"Resource\": [\"arn:aws:s3:::" + bucket + "/*\"]\n" +
+                    "        }\n" +
+                    "    ]\n" +
+                    "}";
+
+            minioClient.setBucketPolicy(
+                    SetBucketPolicyArgs.builder().bucket(bucket).config(config).build()
+            );
         }
     }
 }
