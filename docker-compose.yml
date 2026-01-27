@@ -1,5 +1,4 @@
 services:
-  # --- BANCO DE DADOS POSTGRES ---
   db:
     image: postgis/postgis:15-3.3
     container_name: pwnned-db
@@ -15,7 +14,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # --- MONGODB ---
   mongodb:
     image: mongo:latest
     container_name: pwnned-mongo
@@ -25,14 +23,12 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
 
-  # --- REDIS ---
   redis:
     image: redis:alpine
     container_name: pwnned-redis
     ports:
       - "6379:6379"
 
-  # --- MINIO ---
   minio:
     image: minio/minio:latest
     container_name: pwnned-minio
@@ -49,7 +45,6 @@ services:
       timeout: 5s
       retries: 3
 
-  # --- BACKEND JAVA ---
   pwnned-backend:
     build: ./backend
     container_name: pwnned-backend
@@ -57,7 +52,7 @@ services:
       - "8080:8080"
     volumes:
       - ./backend:/app
-      - maven-data:/root/.m2  # Cache das dependências do Java
+      - maven-data:/root/.m2  
     env_file:
       - ./backend/.env
     depends_on:
@@ -70,7 +65,6 @@ services:
       redis:
         condition: service_started
 
-  # --- FRONTEND REACT ---
   pwnned-front:
     build: ./front
     container_name: pwnned-front

@@ -19,7 +19,7 @@ public interface EventMapper {
     GeometryFactory factory = new GeometryFactory(new PrecisionModel(), 4326);
 
     @Mapping(target = "geometry", source = ".", qualifiedByName = "coordsToPoint")
-    @Mapping(target = "distanceToUser", ignore = true) // Ignore para evitar warning de falta de mapeamento no Model
+    @Mapping(target = "distanceToUser", ignore = true) 
     Event toModel(EventDTO eventDTO);
 
     Event toModel(EventEntity eventEntity, @Context CycleAvoidingMappingContext context);
