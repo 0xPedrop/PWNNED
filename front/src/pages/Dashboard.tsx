@@ -82,12 +82,10 @@ const Dashboard = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
 
   useEffect(() => {
-    // Simula carregamento da API
     const timer = setTimeout(() => setIsLoading(false), 1500);
     return () => clearTimeout(timer);
   }, []);
 
-  // Lógica do Filtro
   const filteredPaths = learningPathsData.filter((path) => {
     const matchesSearch = path.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           path.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -98,7 +96,6 @@ const Dashboard = () => {
     return matchesSearch && matchesDifficulty;
   });
 
-  // Estatísticas
   const stats = {
     totalXP: 2750,
     completedPaths: 1,
@@ -110,16 +107,15 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       <DashboardSidebar />
       
-      {/* Ajuste de margem para o sidebar (ml-16 no mobile, ml-64 no desktop) */}
       <main className="ml-16 md:ml-64 p-6 md:p-8 transition-all duration-300">
         
         <DashboardHeader 
-          title={isAuthLoding ? "Carregando..." : `Welcome back, ${user.username || "Hacker"}`} 
+          title={isAuthLoding ? "Carregando..." : `Welcome back, ${user?.username || "Hacker"}`} 
           subtitle="Continue your journey to becoming a security expert"
         />
 
-        {/* Grid de Estatísticas (Stats) */}
-        <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 mb-8">
+        {/* Grid de Estatísticas (Stats) - TOTALMENTE REMOVIDO */}
+        {/* <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 mb-8">
           <Card variant="glass" className="border-none bg-primary/5">
             <CardContent className="p-4 flex items-center gap-3">
               <div className="p-2 rounded-lg bg-primary/10">
@@ -142,14 +138,15 @@ const Dashboard = () => {
                 <p className="text-xs text-muted-foreground">Paths Completed</p>
               </div>
             </CardContent>
-          </Card>
-        </div>
+          </Card> 
+        </div> 
+        */}
 
-        {/* Barra de Busca e Filtros */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <h2 className="text-xl font-semibold text-foreground">Available Learning Paths</h2>
             
-            <div className="flex gap-4 w-full md:w-auto">
+            {/* REMOVIDO: Barra de Pesquisa */}
+            {/* <div className="flex gap-4 w-full md:w-auto">
               <div className="relative w-full md:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -160,9 +157,9 @@ const Dashboard = () => {
                 />
               </div>
             </div>
+            */}
         </div>
 
-        {/* Badges de Dificuldade */}
         <div className="flex gap-2 mb-8 flex-wrap">
           <Badge
             variant={!selectedDifficulty ? "default" : "outline"}
@@ -183,10 +180,8 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Grid de Cursos */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {isLoading ? (
-            // Skeleton Loading
             Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)
           ) : (
             filteredPaths.map((path, index) => (
@@ -195,7 +190,6 @@ const Dashboard = () => {
                 className="animate-in fade-in slide-in-from-bottom-4 duration-500"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                {/* Repassa todas as propriedades do objeto path para o componente */}
                 <CourseCard {...path} />
               </div>
             ))
@@ -204,10 +198,9 @@ const Dashboard = () => {
 
         {!isLoading && filteredPaths.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">Não foram encontrados percursos de aprendizagem que correspondam aos seus critérios.</p>
+            <p className="text-muted-foreground">Não foram encontrados percursos de aprendizagem.</p>
           </div>
         )}
-
       </main>
     </div>
   );

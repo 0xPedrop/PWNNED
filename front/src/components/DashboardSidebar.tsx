@@ -2,23 +2,20 @@ import { Link, useLocation } from "react-router-dom";
 import { 
   Terminal, 
   LayoutDashboard, 
-  BookOpen, 
-  Trophy, 
   User, 
   Settings, 
   LogOut,
   ChevronLeft,
-  ChevronRight,
-  Target
+  ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
+// Lista de itens do menu atualizada
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
-  { icon: Target, label: "Labs", path: "/dashboard/labs" },
-  { icon: Trophy, label: "Achievements", path: "/dashboard/achievements" },
+  /* REMOVIDO: Labs e Achievements */
   { icon: User, label: "Profile", path: "/dashboard/profile" },
   { icon: Settings, label: "Settings", path: "/dashboard/settings" },
 ];
@@ -46,6 +43,7 @@ const DashboardSidebar = () => {
           )}
         </Link>
 
+        {/* Botão de recolher (Collapse) */}
         <Button
           variant="ghost"
           size="icon"
@@ -59,6 +57,7 @@ const DashboardSidebar = () => {
           )}
         </Button>
 
+        {/* Navegação Principal */}
         <nav className="flex-1 space-y-2">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -80,6 +79,7 @@ const DashboardSidebar = () => {
           })}
         </nav>
 
+        {/* Botão de Logout */}
         <div className="border-t border-border pt-4 mt-4">
           <Link
             to="/"

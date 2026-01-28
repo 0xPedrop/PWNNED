@@ -201,7 +201,7 @@ const LearningPathDetails = () => {
         <div className="mb-8">
           <div className="flex wrap items-center gap-3 mb-4">
             <Badge variant={path.difficulty.toLowerCase() as any}>{path.difficulty}</Badge>
-            <Badge variant="glow"><Zap className="h-3 w-3" /> {path.xp} XP</Badge>
+           {/* <Badge variant="glow"><Zap className="h-3 w-3" /> {path.xp} XP</Badge> */}
           </div>
           <h1 className="text-4xl font-bold mb-4">{path.title}</h1>
         </div>
