@@ -5,18 +5,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CreateCertificateDTO(
-        @NotBlank(message = "Title must not be blank")
-        @Size(min = 5, max = 50, message = "Title must be between 5 and 50 characters")
+        @NotBlank(message = "O nome para o certificado não pode estar em branco")
+        @Size(min = 2, max = 100, message = "O nome deve ter entre 2 e 100 caracteres")
         String title,
 
-        @NotBlank(message = "Url must not be blank")
-        String url,
+        String url, 
 
         @NotNull(message = "UserId must not be null")
         Long userId,
 
         @NotNull(message = "LearningPathId must not be null")
         Long learningPathId
-
 ) {
 }

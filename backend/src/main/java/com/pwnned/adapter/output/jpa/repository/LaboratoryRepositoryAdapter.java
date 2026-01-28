@@ -1,17 +1,18 @@
 package com.pwnned.adapter.output.jpa.repository;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
+
 import com.pwnned.adapter.input.mapper.LaboratoryMapper;
 import com.pwnned.adapter.input.mapper.util.CycleAvoidingMappingContext;
 import com.pwnned.adapter.output.jpa.repository.entity.LaboratoryEntity;
 import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.model.Laboratory;
-import com.pwnned.domain.model.User;
 import com.pwnned.port.output.LaboratoryRepositoryPort;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class LaboratoryRepositoryAdapter implements LaboratoryRepositoryPort {

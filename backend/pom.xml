@@ -12,7 +12,7 @@
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>pwnned</name>
-	<description>Demo project for Spring Boot</description>
+	<description>An educational platform designed to democratize access to cybersecurity knowledge.</description>
 	<url/>
 	<licenses>
 		<license/>

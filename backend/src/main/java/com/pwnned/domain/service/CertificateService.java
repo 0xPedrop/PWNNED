@@ -1,5 +1,12 @@
 package com.pwnned.domain.service;
 
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.pwnned.adapter.input.dto.CertificateResponseDTO;
 import com.pwnned.adapter.input.dto.CreateCertificateDTO;
 import com.pwnned.adapter.output.jpa.repository.util.SnowflakeIdGenerator;
@@ -13,10 +20,6 @@ import com.pwnned.port.input.CertificateServicePort;
 import com.pwnned.port.output.CertificateRepositoryPort;
 import com.pwnned.port.output.LearningPathRepositoryPort;
 import com.pwnned.port.output.UserRepositoryPort;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class CertificateService implements CertificateServicePort {
@@ -40,23 +43,41 @@ public class CertificateService implements CertificateServicePort {
 
     @Override
     public Certificate createCertificate(CreateCertificateDTO certificateDTO) {
-        User user = userRepositoryPort.findById(certificateDTO.userId())
-                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + certificateDTO.userId()));
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long authenticatedUserId = currentUser.getUserId();
+
+        if (certificateRepositoryPort.existsByUserIdAndLearningPathId(
+                authenticatedUserId, certificateDTO.learningPathId())) {
+            throw new RuntimeException("Certificado já emitido para este curso.");
+        }
 
         LearningPath learningPath = learningPathRepositoryPort.findById(certificateDTO.learningPathId())
-                .orElseThrow(() -> new RuntimeException("Learning Path not found with ID: " +
-                        certificateDTO.learningPathId()));
+                .orElseThrow(() -> new RuntimeException("Learning Path not found with ID: " + certificateDTO.learningPathId()));
 
+ 
         Certificate certificate = new Certificate(certificateDTO.title());
         certificate.setCertificateId(snowflakeIdGenerator.nextId());
+        
+        String serial = java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        certificate.setSerialNumber(serial);
+        certificate.setIssueDate(java.time.LocalDate.now());
 
-        certificate.setUrl(certificateDTO.url());
-        certificate.setUser(user);
+        String url = (certificateDTO.url() == null || certificateDTO.url().isEmpty()) 
+                    ? "http://localhost:5173/verify/" + certificate.getSerialNumber() 
+                    : certificateDTO.url();
+        
+        certificate.setUrl(url);
+        certificate.setUser(currentUser); 
         certificate.setLearningPath(learningPath);
 
         return certificateRepositoryPort.save(certificate);
     }
 
+    @Override
+    public boolean exists(Long userId, Long learningPathId) {
+        return certificateRepositoryPort.existsByUserIdAndLearningPathId(userId, learningPathId);
+    }
+    
     @Override
     public Page<CertificateResponseDTO> getAllCertificates(Pageable pageable) {
         return certificateRepositoryPort.findAll(pageable);

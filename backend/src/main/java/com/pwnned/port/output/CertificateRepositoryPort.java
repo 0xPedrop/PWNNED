@@ -1,10 +1,12 @@
 package com.pwnned.port.output;
 
-import com.pwnned.adapter.input.dto.CertificateResponseDTO;
-import com.pwnned.domain.model.Certificate;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import java.util.Optional;
+
+import com.pwnned.adapter.input.dto.CertificateResponseDTO;
+import com.pwnned.domain.model.Certificate;
 
 public interface CertificateRepositoryPort {
     Certificate save(Certificate certificate);
@@ -14,4 +16,6 @@ public interface CertificateRepositoryPort {
     void deleteById(Long certificateId);
     void deleteAll();
     void deleteAllByUserId(Long userId);
+    boolean existsByUserIdAndLearningPathId(Long userId, Long learningPathId);
+    void deleteByLearningPathId(Long learningPathId);
 }
