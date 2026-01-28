@@ -33,4 +33,6 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     private Set<CertificateEntity> certificates;
+
+    private String profileImageUrl;
 }

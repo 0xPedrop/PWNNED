@@ -13,6 +13,7 @@ public class User {
     private Set<Certificate> certificates;
     private Set<LearningPath> learningPathsAcessed;
     private Integer experiencePoints;
+    private String profileImageUrl;
 
     public User() {}
 
@@ -91,6 +92,14 @@ public class User {
 
     public void setExperiencePoints(Integer experiencePoints) {
         this.experiencePoints = experiencePoints;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     @Override

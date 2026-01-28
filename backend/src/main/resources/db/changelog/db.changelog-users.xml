@@ -23,4 +23,9 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="add-profile-image-url-to-users" author="pwnned">
+        <addColumn tableName="users">
+            <column name="profile_image_url" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -104,10 +104,26 @@ public class UserController implements UserControllerPort {
 
     @Override
     @PostMapping("/{userId}/upload-photo")
-    public ResponseEntity<String> uploadPhoto(@PathVariable String userId, @RequestParam("file") MultipartFile file)
+    public ResponseEntity<String> uploadPhoto(@PathVariable Long userId, @RequestParam("file") MultipartFile file)
             throws Exception {
-        String fileName = userId + "_" + file.getOriginalFilename();
-        String result = storageRepositoryPort.uploadFile(fileName, file.getInputStream(), file.getContentType());
-        return ResponseEntity.ok("Arquivo enviado com sucesso: " + result);
+        String url = userServicePort.uploadUserProfilePicture(userId, file);
+        return ResponseEntity.ok("Foto atualizada. Link temporário: " + url);
+    }
+
+    @Override
+    @GetMapping("/{userId}/photo")
+    public ResponseEntity<String> getPhotoUrl(@PathVariable Long userId) {
+        User user = userServicePort.getSingleUser(userId);
+        if (user.getProfileImageUrl() == null) return ResponseEntity.notFound().build();
+
+        String url = storageRepositoryPort.generatePresignedUrl(user.getProfileImageUrl());
+        return ResponseEntity.ok(url);
+    }
+
+    @Override
+    @DeleteMapping("/{userId}/photo")
+    public ResponseEntity<Void> deletePhoto(@PathVariable Long userId) {
+        userServicePort.deleteUserProfilePicture(userId);
+        return ResponseEntity.noContent().build();
     }
 }
