@@ -1,0 +1,155 @@
+package com.pwnned.domain.service;
+
+import com.pwnned.adapter.output.redis.UserRedisAdapter;
+import com.pwnned.domain.enums.UserType;
+import com.pwnned.domain.exception.UserAlreadyExistsException;
+import com.pwnned.domain.exception.UserAlreadyPremiumException;
+import com.pwnned.domain.exception.UserNotFoundException;
+import com.pwnned.domain.model.User;
+import com.pwnned.port.input.UserLogServicePort;
+import com.pwnned.port.input.UserServicePort;
+import com.pwnned.port.output.CertificateRepositoryPort;
+import com.pwnned.port.output.StorageRepositoryPort;
+import com.pwnned.port.output.UserRepositoryPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class UserService implements UserServicePort {
+
+    private final UserRepositoryPort userRepositoryPort;
+    private final UserRedisAdapter userRedisAdapter;
+    private final CertificateRepositoryPort certificateRepositoryPort;
+    private final UserLogServicePort userLogServicePort;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final StorageRepositoryPort storageRepositoryPort;
+
+    public UserService(UserRepositoryPort userRepositoryPort, UserRedisAdapter userRedisAdapter,
+                       CertificateRepositoryPort certificateRepositoryPort, UserLogServicePort userLogServicePort,
+                       BCryptPasswordEncoder passwordEncoder, StorageRepositoryPort storageRepositoryPort) {
+        this.userRepositoryPort = userRepositoryPort;
+        this.userRedisAdapter = userRedisAdapter;
+        this.certificateRepositoryPort = certificateRepositoryPort;
+        this.userLogServicePort = userLogServicePort;
+        this.passwordEncoder = passwordEncoder;
+        this.storageRepositoryPort = storageRepositoryPort;
+    }
+
+    @Override
+    @Transactional
+    public User createUser(User user) {
+        if (userRepositoryPort.existsByEmail(user.getEmail())) throw
+                new UserAlreadyExistsException("Email is already in use.");
+        if (userRepositoryPort.existsByUsername(user.getUsername())) throw
+                new UserAlreadyExistsException("Username is already in use");
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUserType(UserType.BASIC);
+
+        User createdUser = userRepositoryPort.save(user);
+        userRedisAdapter.invalidateCacheForUsersByType(UserType.BASIC.name());
+
+        userLogServicePort.logAction(String.valueOf(createdUser.getUserId()), "USUÁRIO CREATED");
+        return createdUser;
+    }
+
+    @Override
+    public User getSingleUser(Long userId) {
+        return userRedisAdapter.getCachedUser(userId)
+                .orElseGet(() -> {
+                    User user = userRepositoryPort.findById(userId)
+                            .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+                    user.setExperiencePoints(userRepositoryPort.getUserExperiencePoints(userId));
+                    userRedisAdapter.cacheUser(user);
+                    return user;
+                });
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepositoryPort.findById(userId).orElseThrow(() -> new UserNotFoundException("User Not Found"));
+        userRepositoryPort.deleteById(userId);
+        userRedisAdapter.invalidateCacheForUser(userId);
+        userRedisAdapter.invalidateCacheForUsersByType(user.getUserType().name());
+    }
+
+    @Override public Page<User> getAllUsers(Pageable pageable) { return userRepositoryPort.findAll(pageable); }
+    @Override
+    public Optional<User> authenticateUser(String email, String password) {
+        return userRepositoryPort.findByEmail(email)
+                .filter(u -> passwordEncoder.matches(password, u.getPassword()));
+    }
+
+    @Override
+    @Transactional
+    public void promoteUser(Long userId) {
+        User user = userRepositoryPort.findById(userId).orElseThrow(() -> new UserNotFoundException("User Not Found"));
+        if (user.getUserType() == UserType.PREMIUM) throw new UserAlreadyPremiumException("Already Premium");
+
+        userRedisAdapter.invalidateCacheForUsersByType(user.getUserType().name());
+        user.setUserType(UserType.PREMIUM);
+        userRepositoryPort.save(user);
+        userRedisAdapter.invalidateCacheForUser(userId);
+        userRedisAdapter.invalidateCacheForUsersByType(UserType.PREMIUM.name());
+    }
+
+    @Override
+    public List<User> getUsersByType(UserType userType) {
+        return userRedisAdapter.getCachedUsersByType(userType.name())
+                .orElseGet(() -> {
+                    List<User> users = userRepositoryPort.getUsersByType(userType);
+                    userRedisAdapter.cacheUsersByType(userType.name(), users);
+                    return users;
+                });
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllUsers(Pageable pageable) {
+        userRepositoryPort.findAll(pageable).forEach(u -> certificateRepositoryPort.deleteAllByUserId(u.getUserId()));
+        userRepositoryPort.deleteAll();
+        userRedisAdapter.invalidateAllUsersCache();
+    }
+
+    @Override
+    @Transactional
+    public String uploadUserProfilePicture(Long userId, MultipartFile file) throws Exception {
+        User user = userRepositoryPort.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        String fileName = "profile_" + userId + "_" + System.currentTimeMillis();
+
+        storageRepositoryPort.uploadFile(fileName, file.getInputStream(), file.getContentType());
+
+        user.setProfileImageUrl(fileName);
+        userRepositoryPort.save(user);
+        userRedisAdapter.invalidateCacheForUser(userId);
+
+        return storageRepositoryPort.generatePresignedUrl(fileName);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserProfilePicture(Long userId) {
+        User user = userRepositoryPort.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (user.getProfileImageUrl() != null) {
+            storageRepositoryPort.deleteFile(user.getProfileImageUrl());
+
+            user.setProfileImageUrl(null);
+            userRepositoryPort.save(user);
+            userRedisAdapter.invalidateCacheForUser(userId);
+
+            userLogServicePort.logAction(String.valueOf(userId), "PROFILE_PHOTO_DELETED");
+        }
+    }
+}
