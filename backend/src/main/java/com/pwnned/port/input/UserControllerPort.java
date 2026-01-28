@@ -25,4 +25,5 @@ public interface UserControllerPort {
             throws Exception;
     public ResponseEntity<String> getPhotoUrl(@PathVariable Long userId);
     ResponseEntity<Void> deletePhoto(@PathVariable Long userId);
+    ResponseEntity<UserDTO> getLoggedUser(org.springframework.security.core.Authentication authentication);
 }

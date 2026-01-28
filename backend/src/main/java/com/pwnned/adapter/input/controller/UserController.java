@@ -126,4 +126,14 @@ public class UserController implements UserControllerPort {
         userServicePort.deleteUserProfilePicture(userId);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getLoggedUser(org.springframework.security.core.Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        UserDTO userDTO = userMapper.toDTO(user);
+
+        return ResponseEntity.ok(userDTO);
+    }
 }
