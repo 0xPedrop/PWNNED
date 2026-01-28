@@ -1,15 +1,11 @@
 import { useState } from "react";
-import  Navbar  from "@/components/Navbar";
-import  Footer  from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { User, Lock, Bell, Upload, Eye, EyeOff } from "lucide-react";
+import { User, Lock, Upload, Eye, EyeOff } from "lucide-react";
 import DashboardSidebar from "@/components/DashboardSidebar";
 
 const Settings = () => {
@@ -21,20 +17,12 @@ const Settings = () => {
   const [profile, setProfile] = useState({
     username: "0xPedrop",
     email: "hacker@pwnned.io",
-    bio: "Security researcher | Bug bounty hunter | CRTA certified",
   });
 
   const [passwords, setPasswords] = useState({
     current: "",
     new: "",
     confirm: "",
-  });
-
-  const [notifications, setNotifications] = useState({
-    email: true,
-    challenges: true,
-    newsletter: false,
-    achievements: true,
   });
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,9 +62,9 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-background">
       <DashboardSidebar />
-      <main className="container mx-auto px-4 pt-24 pb-12">
+      <main className="ml-16 md:ml-64 p-6 md:p-8 transition-all duration-300">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold mb-2">Configurações</h1>
+          <h1 className="text-3xl font-bold mb-2 text-foreground">Configurações</h1>
           <p className="text-muted-foreground mb-8">Gerencie as preferências da sua conta</p>
 
           <Tabs defaultValue="general" className="space-y-6">
@@ -89,18 +77,13 @@ const Settings = () => {
                 <Lock className="h-4 w-4" />
                 Segurança
               </TabsTrigger>
-              <TabsTrigger value="notifications" className="flex items-center gap-2">
-                <Bell className="h-4 w-4" />
-                Notificações
-              </TabsTrigger>
             </TabsList>
-
 
             <TabsContent value="general">
               <Card variant="glass">
                 <CardHeader>
                   <CardTitle>Informação de perfil</CardTitle>
-                  <CardDescription>Atualize dados públicos de pefil</CardDescription>
+                  <CardDescription>Atualize dados públicos de perfil</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Avatar */}
@@ -147,17 +130,6 @@ const Settings = () => {
                     />
                   </div>
 
-                  {/* Bio */}
-                  <div className="space-y-2">
-                    <Label htmlFor="bio">Bio</Label>
-                    <Textarea
-                      id="bio"
-                      value={profile.bio}
-                      onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                      className="min-h-[100px] bg-muted/50 border-border"
-                    />
-                  </div>
-
                   <Button variant="glow" onClick={handleProfileSave}>
                     Save Changes
                   </Button>
@@ -165,7 +137,6 @@ const Settings = () => {
               </Card>
             </TabsContent>
 
-            {/* Security Tab */}
             <TabsContent value="security">
               <Card variant="glass">
                 <CardHeader>
@@ -224,61 +195,6 @@ const Settings = () => {
                   <Button variant="glow" onClick={handlePasswordChange}>
                     Atualizar senha
                   </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Notifications Tab */}
-            <TabsContent value="notifications">
-              <Card variant="glass">
-                <CardHeader>
-                  <CardTitle>Preferências de notificações</CardTitle>
-                  <CardDescription>Escolha quais atualizações você deseja receber.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Notificações por email</p>
-                      <p className="text-sm text-muted-foreground">Receba atualizações por e-mail</p>
-                    </div>
-                    <Switch
-                      checked={notifications.email}
-                      onCheckedChange={(checked) => setNotifications({ ...notifications, email: checked })}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Novos desafios</p>
-                      <p className="text-sm text-muted-foreground">Receba notificações sobre novos laboratórios e desafios.</p>
-                    </div>
-                    <Switch
-                      checked={notifications.challenges}
-                      onCheckedChange={(checked) => setNotifications({ ...notifications, challenges: checked })}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Conquistas</p>
-                      <p className="text-sm text-muted-foreground">Comemore seu progresso com notificações.</p>
-                    </div>
-                    <Switch
-                      checked={notifications.achievements}
-                      onCheckedChange={(checked) => setNotifications({ ...notifications, achievements: checked })}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Newsletter</p>
-                      <p className="text-sm text-muted-foreground">Dicas e informações de segurança semanais</p>
-                    </div>
-                    <Switch
-                      checked={notifications.newsletter}
-                      onCheckedChange={(checked) => setNotifications({ ...notifications, newsletter: checked })}
-                    />
-                  </div>
                 </CardContent>
               </Card>
             </TabsContent>

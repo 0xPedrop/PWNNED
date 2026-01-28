@@ -55,12 +55,14 @@ const CourseCard = ({
           </Badge>
         </div>
         
-        <div className="absolute top-3 right-3">
+        {/* REMOVIDO: Badge de XP que aparecia sobre a imagem do card */}
+        {/* <div className="absolute top-3 right-3">
           <Badge variant="outline" className="flex items-center gap-1 bg-black/40 backdrop-blur-md border-white/10 text-primary animate-pulse-slow">
             <Zap className="h-3 w-3 fill-primary" />
             {xp} XP
           </Badge>
-        </div>
+        </div> 
+        */}
       </div>
 
       <CardHeader className="pb-2 pt-4">
