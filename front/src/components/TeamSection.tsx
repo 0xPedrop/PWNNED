@@ -15,7 +15,7 @@ const team = [
     name: "João Victor",
     role: "Founder & Tech Lead Dev",
     image: "/Joao.jpeg",
-    bio: "PhD in prostitutes and scams",
+    bio: "Fullstack developer and cybersecurity enthusiast",
     socials: {
       linkedin: "https://www.linkedin.com/in/0xjotave/",
       github: "https://github.com/0xJotave"

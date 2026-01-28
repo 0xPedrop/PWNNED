@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Terminal, Send, Github, Twitter, Linkedin, Youtube } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+import { Terminal, Github, Twitter, Linkedin, Youtube, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
+  /* COMENTADO: Lógica de Newsletter
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -15,6 +16,7 @@ const Footer = () => {
       setEmail("");
     }
   };
+  */
 
   const links = {
     platform: [
@@ -39,7 +41,7 @@ const Footer = () => {
 
   return (
     <footer className="relative border-t border-border bg-card/30">
-      {/* Newsletter Section */}
+      {/* COMENTADO: Newsletter Section 
       <div className="border-b border-border">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-2xl mx-auto text-center">
@@ -81,6 +83,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      */}
 
       {/* Main Footer */}
       <div className="container mx-auto px-4 py-12">
