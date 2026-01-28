@@ -4,5 +4,9 @@
     "postcss": "^8.5.6",
     "postcss-nested": "^7.0.2",
     "tailwindcss": "^4.1.12"
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.0.0"
   }
 }

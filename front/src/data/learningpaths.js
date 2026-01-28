@@ -1,6 +1,6 @@
 export const learningPathsData = [
   {
-    id: 1,
+    id: "270263353404952576",
     title: "SQL Injection Mastery",
     description: "Learn to identify and exploit SQL injection vulnerabilities.",
     difficulty: "Medium",
@@ -45,7 +45,7 @@ O atacante envia payloads e observa o comportamento do aplicativo em vez de visu
     ]
   },
   {
-    id: 2,
+    id: "270263701620264960",
     title: "Cross-Site Scripting (XSS)",
     description: "Domine a arte dos ataques XSS. Reflected, Stored, and DOM-based.",
     difficulty: "Easy",
