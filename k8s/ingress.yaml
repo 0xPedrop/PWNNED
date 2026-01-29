@@ -1,0 +1,55 @@
+# 1. O Deployment da página de erro
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: default-backend
+  namespace: pwnned-labs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: default-backend
+  template:
+    metadata:
+      labels:
+        app: default-backend
+    spec:
+      containers:
+      - name: default-backend
+        image: pwnned/default-backend:latest
+        ports:
+        - containerPort: 80
+
+---
+# 2. O Serviço
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-backend
+  namespace: pwnned-labs
+spec:
+  selector:
+    app: default-backend
+  ports:
+  - port: 80
+    targetPort: 80
+
+---
+# 3. O Ingress "Pega-Tudo" (Catch-All)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: catch-all-ingress
+  namespace: pwnned-labs
+spec:
+  rules:
+  # Esta regra sem "host" específico pega tudo que sobrar
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: default-backend
+            port:
+              number: 80

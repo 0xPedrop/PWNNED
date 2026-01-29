@@ -1,0 +1,37 @@
+<%- include('header'); %>
+
+<div class="gov-box">
+    <h2>Consulta de Protocolos e Processos</h2>
+    <p>Utilize o formulário abaixo para verificar o andamento de processos administrativos.</p>
+    
+    <form action="/" method="GET" style="margin: 20px 0;">
+        <label for="q"><strong>Número do Protocolo ou CPF:</strong></label><br>
+        <input type="text" id="q" name="q" value="<%= query %>" placeholder="Ex: 2024.001-X">
+        <button type="submit" class="btn-gov">Consultar</button>
+    </form>
+</div>
+
+<% if (query) { %>
+    <div class="search-results">
+        <h3>Resultado da Busca</h3>
+        <div class="alert-box" style="border: 1px solid #cc0000; background: #ffe6e6; padding: 10px; color: #cc0000;">
+            Erro: O protocolo <strong><%- query %></strong> não foi localizado na base de dados (DB_ERROR_404).
+        </div>
+    </div>
+<% } %>
+
+<div style="margin-top: 40px;">
+    <h3>Serviços Relacionados</h3>
+    <ul>
+        <li><a href="#">Emitir Certidão Negativa</a></li>
+        <li><a href="#">Validação de Documentos</a></li>
+    </ul>
+</div>
+
+<% if (typeof solved !== 'undefined' && solved) { %>
+    <script>
+        showSolvedBadge();
+    </script>
+<% } %>
+
+<%- include('footer'); %>

@@ -1,0 +1,144 @@
+/* * ARQUIVO: labs-source/base-prefeitura/public/css/style.css 
+ * TEMA: Prefeitura Municipal v2.0 (Legacy)
+ */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Times New Roman", Times, serif; /* Fonte clássica de burocracia */
+    background-color: #f4f4f4;
+    background-image: url('../images/bg-noise.png'); /* Se não tiver a img, fica cinza */
+}
+
+/* --- Cabeçalho Azul Institucional --- */
+.gov-header {
+    background: linear-gradient(to bottom, #004080 0%, #002244 100%);
+    color: white;
+    padding: 15px 20px;
+    border-bottom: 5px solid #ffcc00; /* Amarelo 'Atenção' */
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 2px 5px #555;
+}
+
+.gov-logo {
+    width: 80px;
+    height: auto;
+    margin-right: 20px;
+    border: 2px solid white; /* Borda branca grossa na imagem */
+}
+
+.gov-titles h1 {
+    margin: 0;
+    font-size: 28px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.gov-titles p {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+/* --- Barra de Navegação --- */
+.gov-nav {
+    background-color: #e0e0e0;
+    border-bottom: 1px solid #999;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-family: Arial, sans-serif; /* Menu em Arial para "modernizar" */
+}
+
+.gov-nav a {
+    color: #003366;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0 10px;
+    border-right: 1px solid #999;
+}
+
+.gov-nav a:hover {
+    background-color: #ccc;
+    text-decoration: underline;
+}
+
+/* --- Layout Principal (Container) --- */
+.main-container {
+    width: 960px; /* Largura fixa, nada de responsividade */
+    margin: 20px auto;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    min-height: 500px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
+}
+
+/* --- Sidebar de Notícias (Flutuando à direita) --- */
+.sidebar-news {
+    float: right;
+    width: 220px;
+    background-color: #fffbe6; /* Amarelo pálido */
+    border: 1px solid #d4b106;
+    padding: 10px;
+    margin-left: 20px;
+    font-size: 12px;
+}
+
+.sidebar-title {
+    background-color: #d4b106;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    margin: -10px -10px 10px -10px;
+}
+
+.news-item {
+    margin-bottom: 10px;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 5px;
+}
+
+/* --- Elementos de Formulário --- */
+.gov-box {
+    background: #f0f8ff;
+    border: 1px solid #87ceeb;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="password"] {
+    border: 2px solid #ccc;
+    border-radius: 0; /* Canto quadrado */
+    padding: 5px;
+    width: 250px;
+    background: #ffffcc; /* Fundo levemente amarelo nos inputs */
+}
+
+button.btn-gov {
+    background: linear-gradient(#0066cc, #004488);
+    color: white;
+    border: 1px solid #002244;
+    padding: 5px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+}
+
+button.btn-gov:active {
+    background: #002244;
+}
+
+/* --- Rodapé --- */
+.gov-footer {
+    clear: both; /* Limpa o float da sidebar */
+    margin-top: 40px;
+    background-color: #002244;
+    color: #ccc;
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    border-top: 5px solid #ffcc00;
+}
