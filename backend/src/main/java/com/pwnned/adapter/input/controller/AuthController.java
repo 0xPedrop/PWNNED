@@ -45,7 +45,8 @@ public class AuthController {
                 .secure(false)        
                 .path("/")           
                 .maxAge(EXPIRATION_SECONDS)
-                .sameSite("Lax")      
+                .sameSite("Lax")
+                .domain("pwnned.tech")      
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -74,6 +75,7 @@ public class AuthController {
                 .path("/")
                 .maxAge(0) 
                 .sameSite("Lax")
+                .domain("pwnned.tech")
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());

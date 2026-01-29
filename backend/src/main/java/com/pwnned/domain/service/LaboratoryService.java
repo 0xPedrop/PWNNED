@@ -134,10 +134,19 @@ public class LaboratoryService implements LaboratoryServicePort {
     public String startLaboratory(Long laboratoryId, String userId) {
         Laboratory laboratory = getSingleLaboratory(laboratoryId);
 
+
+        String dockerImage = resolveDockerImage(laboratoryId); 
+
         return labOrchestratorAdapter.startLab(
             userId, 
             laboratory.getLaboratoryType().name(), 
-            laboratoryId
+            laboratoryId,
+            dockerImage 
         );
+    }
+    private String resolveDockerImage(Long labId) {
+
+        if (labId == 101L) return "pedropaulodel/lab-xss-reflected:latest";
+        return "pwnned/default-lab:latest"; // Fallback
     }
 }

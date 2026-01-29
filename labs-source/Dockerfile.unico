@@ -1,0 +1,28 @@
+# Usa uma imagem Node.js leve oficial (sem depender da sua base local)
+FROM node:18-alpine
+
+WORKDIR /app
+
+# --- ETAPA 1: Arquivos da Base (Prefeitura) ---
+# Copia o package.json da prefeitura
+COPY base-prefeitura/package.json .
+
+# Instala as dependências
+RUN npm install
+
+# Copia as pastas de estrutura da prefeitura
+COPY base-prefeitura/public ./public
+COPY base-prefeitura/views ./views
+
+# --- ETAPA 2: Arquivos do Lab (XSS Reflected) ---
+# Copia o código do lab (sobrescrevendo o que for necessário)
+COPY xss/01-reflected/server.js .
+
+# Copia a view específica do lab para dentro da pasta de views
+COPY xss/01-reflected/views/index.ejs ./views/index.ejs
+
+# Expõe a porta 80 (que é a que seu server.js usa)
+EXPOSE 80
+
+# Inicia o servidor
+CMD ["node", "server.js"]

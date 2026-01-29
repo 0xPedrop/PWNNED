@@ -19,24 +19,25 @@ public class LabOrchestratorAdapter {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String startLab(String userId, String labType, Long labId) {
-        String url = orchestratorUrl + "/spawn";
+    public String startLab(String userId, String labType, Long labId, String dockerImage) {
+    String url = orchestratorUrl + "/spawn";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Map<String, Object> body = new HashMap<>(); // Mudamos para Object para aceitar Long
-        body.put("userId", userId);
-        body.put("labType", labType);
-        body.put("labId", labId); // <--- ENVIANDO O ID AQUI
+    Map<String, Object> body = new HashMap<>();
+    body.put("userId", userId);
+    body.put("labType", labType);
+    body.put("labId", labId);
+    body.put("image", dockerImage); 
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+    HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
-        try {
-            Map response = restTemplate.postForObject(url, request, Map.class);
-            return (String) response.get("url");
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao comunicar com o Orchestrator: " + e.getMessage());
-        }
+    try {
+        Map response = restTemplate.postForObject(url, request, Map.class);
+        return (String) response.get("url");
+    } catch (Exception e) {
+        throw new RuntimeException("Erro ao comunicar com o Orchestrator: " + e.getMessage());
     }
+}
 }

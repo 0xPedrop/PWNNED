@@ -1,3 +1,4 @@
+// PWNNED/services/labs-orchestrator/src/index.js
 const express = require('express');
 const k8s = require('@kubernetes/client-node');
 const crypto = require('crypto');
@@ -6,29 +7,24 @@ const app = express();
 app.use(express.json());
 
 const kc = new k8s.KubeConfig();
-// Carrega a config automaticamente (funciona local com KUBECONFIG ou na nuvem via ServiceAccount)
 kc.loadFromDefault();
 
-const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 const k8sAppsApi = kc.makeApiClient(k8s.AppsV1Api);
+const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 const k8sNetworkingApi = kc.makeApiClient(k8s.NetworkingV1Api);
 
 const NAMESPACE = process.env.NAMESPACE || 'pwnned-labs';
 const BASE_DOMAIN = process.env.BASE_DOMAIN || 'labs.pwnned.tech';
 
-const imageMapById = {
-    "101": "pedropaulodel/lab-xss-reflected:latest",
-    "102": "pedropaulodel/lab-xss-stored:latest"
-};
+const FIXED_IMAGE = "pedropaulodel/lab-xss-reflected:latest";
 
 app.post('/spawn', async (req, res) => {
+    // Recebe o ID só pra logar, mas não usa pra decidir a imagem
     const { labId, userId } = req.body;
-    const selectedImage = imageMapById[labId];
+    
+    console.log(`Recebido pedido para Lab ID: ${labId}. Forçando lab da Prefeitura.`);
 
-    if (!selectedImage) {
-        return res.status(400).json({ error: 'ID de laboratório inválido' });
-    }
-
+    // Gera hash único
     const sessionHash = crypto.randomBytes(4).toString('hex');
     const labName = `lab-${sessionHash}`;
 
@@ -44,15 +40,15 @@ app.post('/spawn', async (req, res) => {
                     spec: {
                         containers: [{
                             name: 'lab-container',
-                            image: selectedImage,
-                            ports: [{ containerPort: 80 }]
+                            image: FIXED_IMAGE, // <--- USA SEMPRE A SUA IMAGEM
+                            ports: [{ containerPort: 80 }] // Seu server.js roda na 80
                         }]
                     }
                 }
             }
         });
 
-        // 2. Service
+        // 2. Service (Porta 80 -> 80)
         await k8sApi.createNamespacedService(NAMESPACE, {
             metadata: { name: labName },
             spec: {
@@ -61,17 +57,16 @@ app.post('/spawn', async (req, res) => {
             }
         });
 
-        // 3. Ingress 
+        // 3. Ingress
         await k8sNetworkingApi.createNamespacedIngress(NAMESPACE, {
             metadata: {
                 name: labName,
                 annotations: {
-                    "nginx.ingress.kubernetes.io/rewrite-target": "/",
                     "nginx.ingress.kubernetes.io/proxy-body-size": "8m"
                 }
             },
             spec: {
-                ingressClassName: 'nginx', // Essencial para o DOKS reconhecer a rota
+                ingressClassName: 'nginx', 
                 rules: [{
                     host: `${sessionHash}.${BASE_DOMAIN}`,
                     http: {
@@ -94,7 +89,7 @@ app.post('/spawn', async (req, res) => {
 
     } catch (err) {
         console.error('Erro ao subir lab:', err.body || err);
-        res.status(500).json({ error: 'Falha na orquestração do cluster' });
+        res.status(500).json({ error: 'Falha na orquestração' });
     }
 });
 

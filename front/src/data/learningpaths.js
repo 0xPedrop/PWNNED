@@ -1,10 +1,10 @@
 export const learningPathsData = [
   {
     id: "270325750379450368",
+    labId: "102", // ID do Lab de SQLi no Banco
     title: "SQL Injection Mastery",
     description: "Learn to identify and exploit SQL injection vulnerabilities.",
     difficulty: "Medium",
-    // xp: 500, 
     duration: "4h",
     students: 12500,
     modules: 3,
@@ -47,10 +47,10 @@ O atacante envia payloads e observa o comportamento do aplicativo em vez de visu
   },
   {
     id: "270325625460494336",
+    labId: "101", // ID do Lab de XSS no Banco
     title: "Cross-Site Scripting (XSS)",
     description: "Domine a arte dos ataques XSS. Reflected, Stored, and DOM-based.",
     difficulty: "Easy",
-    // xp: 750, // Comentado conforme pedido anteriormente
     duration: "6h",
     students: 8900,
     modules: 3,
