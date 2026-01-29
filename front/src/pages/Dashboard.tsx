@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Search, Filter, Trophy, Target, Flame, Clock } from "lucide-react";
-import { learningPathsData } from "@/data/learningPaths";
+import { learningPathsData } from "@/data/learningpaths";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext"
 

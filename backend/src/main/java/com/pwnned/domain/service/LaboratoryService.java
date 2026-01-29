@@ -1,11 +1,13 @@
 package com.pwnned.domain.service;
 
+import com.pwnned.adapter.output.http.LabOrchestratorAdapter;
 import com.pwnned.adapter.input.dto.LaboratoryDTO;
 import com.pwnned.adapter.output.jpa.repository.util.SnowflakeIdGenerator;
 import com.pwnned.adapter.output.redis.LaboratoryRedisAdapter;
 import com.pwnned.domain.enums.LaboratoryType;
 import com.pwnned.domain.exception.LaboratoryNotFoundException;
 import com.pwnned.domain.exception.LearningPathNotFoundException;
+import com.pwnned.adapter.output.http.LabOrchestratorAdapter;
 import com.pwnned.domain.model.Laboratory;
 import com.pwnned.domain.model.LearningPath;
 import com.pwnned.port.input.LaboratoryServicePort;
@@ -21,6 +23,7 @@ import java.util.List;
 @Service
 public class LaboratoryService implements LaboratoryServicePort {
 
+    private final LabOrchestratorAdapter labOrchestratorAdapter;
     private final LaboratoryRepositoryPort laboratoryRepositoryPort;
     private final LaboratoryRedisAdapter laboratoryRedisAdapter;
     private final LearningPathRepositoryPort learningPathRepositoryPort;
@@ -29,11 +32,13 @@ public class LaboratoryService implements LaboratoryServicePort {
     public LaboratoryService(LaboratoryRepositoryPort laboratoryRepositoryPort,
                              LaboratoryRedisAdapter laboratoryRedisAdapter,
                              LearningPathRepositoryPort learningPathRepositoryPort,
-                             SnowflakeIdGenerator snowflakeIdGenerator) {
+                             SnowflakeIdGenerator snowflakeIdGenerator,
+                             LabOrchestratorAdapter labOrchestratorAdapter) { 
         this.laboratoryRepositoryPort = laboratoryRepositoryPort;
         this.laboratoryRedisAdapter = laboratoryRedisAdapter;
         this.learningPathRepositoryPort = learningPathRepositoryPort;
         this.snowflakeIdGenerator = snowflakeIdGenerator;
+        this.labOrchestratorAdapter = labOrchestratorAdapter; 
     }
 
     @Override
@@ -124,5 +129,15 @@ public class LaboratoryService implements LaboratoryServicePort {
                     }
                     return laboratories;
                 });
+    }
+    @Override
+    public String startLaboratory(Long laboratoryId, String userId) {
+        Laboratory laboratory = getSingleLaboratory(laboratoryId);
+
+        return labOrchestratorAdapter.startLab(
+            userId, 
+            laboratory.getLaboratoryType().name(), 
+            laboratoryId
+        );
     }
 }

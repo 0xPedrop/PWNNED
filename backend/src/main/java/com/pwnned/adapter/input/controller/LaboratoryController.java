@@ -15,6 +15,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.security.core.annotation.AuthenticationPrincipal; 
+import com.pwnned.domain.model.User; 
+import java.util.Map;
 
 @RequestMapping("api/v1/labs")
 @RestController
@@ -77,5 +80,14 @@ public class LaboratoryController implements LaboratoryControllerPort {
                 .map(laboratoryMapper::toDTO)
                 .toList();
         return ResponseEntity.ok(labsDTO);
+    }
+    @PostMapping("/{laboratoryId}/start")
+    public ResponseEntity<Map<String, String>> startLaboratory(@PathVariable Long laboratoryId, @AuthenticationPrincipal User user) {
+        
+        String userIdStr = String.valueOf(user.getUserId()); 
+        
+        String url = laboratoryServicePort.startLaboratory(laboratoryId, userIdStr);
+        
+        return ResponseEntity.ok(Map.of("url", url));
     }
 }

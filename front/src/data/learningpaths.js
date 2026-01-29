@@ -4,7 +4,7 @@ export const learningPathsData = [
     title: "SQL Injection Mastery",
     description: "Learn to identify and exploit SQL injection vulnerabilities.",
     difficulty: "Medium",
-    // xp: 500, // Comentado conforme pedido anteriormente
+    // xp: 500, 
     duration: "4h",
     students: 12500,
     modules: 3,

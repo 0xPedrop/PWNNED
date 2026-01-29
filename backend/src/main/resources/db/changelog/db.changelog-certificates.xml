@@ -5,6 +5,7 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="certificates-snowflake-final" author="pwnned">
+        <validCheckSum>9:ba8ffff103e80f863cd43e8cee119bde</validCheckSum>
         <createTable tableName="certificates">
             <column name="certificate_id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>

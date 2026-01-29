@@ -17,8 +17,8 @@ const NAMESPACE = process.env.NAMESPACE || 'pwnned-labs';
 const BASE_DOMAIN = process.env.BASE_DOMAIN || 'labs.pwnned.tech';
 
 const imageMapById = {
-    "1": "pedropaulodel/lab-xss-reflected:latest",
-    "101": "pedropaulodel/lab-sqli-basics:latest"
+    "101": "pedropaulodel/lab-xss-reflected:latest",
+    "102": "pedropaulodel/lab-xss-stored:latest"
 };
 
 app.post('/spawn', async (req, res) => {

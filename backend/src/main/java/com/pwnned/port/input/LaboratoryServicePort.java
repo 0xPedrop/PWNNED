@@ -15,4 +15,5 @@ public interface LaboratoryServicePort {
     void deleteAllLaboratories();
     List<Laboratory> getLaboratoriesByType(LaboratoryType laboratoryType);
     List<Laboratory> getLaboratoriesByLearningPathId(Long learningPathId);
+    String startLaboratory(Long laboratoryId, String userId);
 }

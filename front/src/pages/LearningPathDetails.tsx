@@ -13,7 +13,7 @@ import {
 import { api } from "@/lib/api"; 
 import { AuthContext } from "@/context/AuthContext"; 
 import jsPDF from "jspdf";
-import { learningPathsData } from "@/data/learningPaths";
+import { learningPathsData } from "@/data/learningpaths";
 
 const LearningPathDetails = () => {
   const { id } = useParams();
