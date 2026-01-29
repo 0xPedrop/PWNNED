@@ -129,44 +129,36 @@ const LearningPathDetails = () => {
     doc.save(`Certificado-${pathTitle}.pdf`);
   };
 
-  const renderContent = (content: string) => {
-    if (!content) return null;
-    const parts = content.split(/(```[\s\S]*?```)/gm);
-
-    return parts.map((part, idx) => {
-      if (part.startsWith('```')) {
-        const lines = part.split('\n');
-        const language = lines[0].replace('```', '').trim() || 'code';
-        const code = lines.slice(1, -1).join('\n').trim();
-        
-        return (
-          <div key={idx} className="my-6 relative group">
-            <div className="absolute -top-2 left-4 px-2 py-0.5 text-[10px] font-mono uppercase bg-primary text-primary-foreground rounded z-10 font-bold tracking-wider shadow-lg shadow-primary/20">
-              {language}
-            </div>
-            <pre className="p-5 rounded-xl bg-[#0a0a0a] border border-white/10 font-mono text-sm text-cyan-400 overflow-x-auto shadow-inner">
-              <code>{code}</code>
-            </pre>
-          </div>
-        );
-      }
-
-      const lines = part.split('\n');
-      return (
-        <div key={idx} className="space-y-3">
-          {lines.map((line, lIdx) => {
-            const trimmedLine = line.trim();
-            if (trimmedLine.startsWith('## ')) return <h2 key={lIdx} className="text-2xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><span className="text-primary">#</span> {trimmedLine.slice(3)}</h2>;
-            if (trimmedLine.startsWith('### ')) return <h3 key={lIdx} className="text-xl font-semibold text-gray-200 mt-6 mb-3">{trimmedLine.slice(4)}</h3>;
-            if (trimmedLine === '') return null;
-            // CORREÇÃO DE COR: text-gray-300 ao invés de muted-foreground para mais contraste
-            return <p key={lIdx} className="text-gray-300 leading-7 text-base">{trimmedLine}</p>;
+  const renderContent = (module: any) => {
+    return module.sections.map((section: any, sIdx: number) => (
+      <div key={sIdx} className="mb-10 last:mb-0">
+        <h2 className="text-2xl font-bold text-primary mb-6 flex items-center gap-3">
+          <span className="h-8 w-1 bg-primary rounded-full" />
+          {section.title}
+        </h2>
+        <div className="space-y-4">
+          {section.content.split(/([\s\S]*?)/gm).map((part: string, pIdx: number) => {
+            if (part.startsWith('')) {
+              const lines = part.split('\n');
+              const lang = lines[0].replace('', '').trim() || 'code';
+              const code = lines.slice(1, -1).join('\n').trim();
+              return (
+                <div key={pIdx} className="my-6 relative">
+                  <div className="absolute -top-2 left-4 px-2 py-0.5 text-[10px] font-mono bg-primary text-primary-foreground rounded uppercase">{lang}</div>
+                  <pre className="p-5 rounded-xl bg-black/60 border border-white/10 font-mono text-sm text-cyan-400 overflow-x-auto shadow-2xl">
+                    <code>{code}</code>
+                  </pre>
+                </div>
+              );
+            }
+            return part.split('\n').map((line, lIdx) => (
+              line.trim() && <p key={lIdx} className="text-muted-foreground leading-relaxed text-lg">{line.trim()}</p>
+            ));
           })}
         </div>
-      );
-    });
+      </div>
+    ));
   };
-
   if (auth?.isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
